@@ -4,4 +4,4 @@
 
 ## 🎮 Unity Game
 
-**A game about urban planning on Unity**
+**A game about building a city on Unity**
