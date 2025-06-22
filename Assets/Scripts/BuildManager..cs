@@ -1,32 +1,75 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BuildManager : MonoBehaviour
 {
     public static BuildManager Instance;
 
-    public GameObject housePrefab;          // Что строим (дом)
-    public GridLayout gridLayout;           // Сетка (объект "Grid")
+    public GridLayout gridLayout;
 
-    private GameObject currentPrefab;       // Теклый выбранный объект для строительства
+    [Header("Префабы зданий")]
+    public GameObject housePrefab;
+    public GameObject roadPrefab;
+
+    private GameObject currentPrefab;
+
+    private bool IsPointerOverUI()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+
+        var results = new System.Collections.Generic.List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        return results.Count > 0;
+    }
+
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        Instance = this;
     }
 
-    public void SelectHouse()
+    void Update()
     {
-        currentPrefab = housePrefab;
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (IsPointerOverUI())
+                return;
+
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cellPos = gridLayout.WorldToCell(mouseWorldPos);
+            PlaceAt(cellPos);
+        }
     }
 
+
+    /// <summary>
+    /// Выбор текущего объекта для строительства
+    /// </summary>
+    public void SelectPrefab(GameObject prefab)
+    {
+        currentPrefab = prefab;
+    }
+
+    /// <summary>
+    /// Установить объект на указанную клетку
+    /// </summary>
     public void PlaceAt(Vector3Int cellPosition)
     {
         if (currentPrefab != null && gridLayout != null)
         {
-            // Переводим координаты клетки в позицию в мире
-            Vector3 worldPos = gridLayout.CellToWorld(cellPosition);
-            Instantiate(currentPrefab, worldPos, Quaternion.identity);
+            // Центр клетки (а не её угол)
+            Vector3 cellWorldPos = gridLayout.CellToWorld(cellPosition);
+            Vector3 offset = gridLayout.cellSize / 2f;
+
+            Instantiate(currentPrefab, cellWorldPos + offset, Quaternion.identity);
         }
     }
+
+    // Можно добавить удобные обёртки для UI-кнопок
+    public void SelectHouse() => SelectPrefab(housePrefab);
+    public void SelectRoad() => SelectPrefab(roadPrefab);
+
+
 }
