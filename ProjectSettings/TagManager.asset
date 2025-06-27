@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Building
   layers:
   - Default
   - TransparentFX
@@ -38,9 +39,6 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: GridOverlay
-    uniqueID: 2968115127
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

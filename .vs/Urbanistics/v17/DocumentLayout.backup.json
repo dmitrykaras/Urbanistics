@@ -1,14 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\git\\Urbanistics\\",
+  "WorkspaceRootPath": "D:\\git\\Urbanistics\\Urbanistics\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|e:\\git\\urbanistics\\assets\\scripts\\buildmanager..cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\buildmanager..cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\git\\Urbanistics\\Assets\\Scripts\\BuildManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\BuildManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\urbanistics\\assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,26 +19,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "BuildManager..cs",
-              "DocumentMoniker": "E:\\git\\Urbanistics\\Assets\\Scripts\\BuildManager..cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\BuildManager..cs",
-              "ToolTip": "E:\\git\\Urbanistics\\Assets\\Scripts\\BuildManager..cs",
-              "RelativeToolTip": "Assets\\Scripts\\BuildManager..cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAQwEsAAAAAAAAAAAAAAA==",
+              "Title": "Builder.cs",
+              "DocumentMoniker": "D:\\git\\Urbanistics\\Urbanistics\\Assets\\Scripts\\Builder.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Builder.cs",
+              "ToolTip": "D:\\git\\Urbanistics\\Urbanistics\\Assets\\Scripts\\Builder.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Builder.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAcwEoAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T15:12:31.463Z",
+              "WhenOpened": "2025-06-27T10:32:26.778Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "BuildManager.cs",
-              "DocumentMoniker": "E:\\git\\Urbanistics\\Assets\\Scripts\\BuildManager.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\BuildManager.cs",
-              "ToolTip": "E:\\git\\Urbanistics\\Assets\\Scripts\\BuildManager.cs",
-              "RelativeToolTip": "Assets\\Scripts\\BuildManager.cs",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T15:06:53.291Z"
             }
           ]
         }
