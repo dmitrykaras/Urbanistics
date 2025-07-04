@@ -1,32 +1,36 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using TMPro; //РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ TextMeshPro
 
 public class Builder : MonoBehaviour
 {
-    [Header("Основные ссылки")]
-    public Camera mainCamera; // Камера
-    public Tilemap buildTilemap; // Сетка
+    [Header("РћСЃРЅРѕРІРЅС‹Рµ СЃСЃС‹Р»РєРё")]
+    public Camera mainCamera; // РљР°РјРµСЂР°
+    public Tilemap buildTilemap; // РЎРµС‚РєР°
 
-    [Header("Данные зданий")]
-    public BuildingData[] buildingDatas; // Все здания с префабами и стоимостью
+    [Header("Р”Р°РЅРЅС‹Рµ Р·РґР°РЅРёР№")]
+    public BuildingData[] buildingDatas; // Р’СЃРµ Р·РґР°РЅРёСЏ СЃ РїСЂРµС„Р°Р±Р°РјРё Рё СЃС‚РѕРёРјРѕСЃС‚СЊСЋ
 
-    [Header("Настройки строительства")]
-    public GameObject ghostBuildingPrefab; // Призрак здания
+    [Header("РќР°СЃС‚СЂРѕР№РєРё СЃС‚СЂРѕРёС‚РµР»СЊСЃС‚РІР°")]
+    public GameObject ghostBuildingPrefab; // РџСЂРёР·СЂР°Рє Р·РґР°РЅРёСЏ
     public AudioClip buildSound;
     public AudioClip destroySound;
+
+    [Header("UI СЂРµСЃСѓСЂСЃРѕРІ")]
+    public TextMeshProUGUI resourceText; //С‚РµРєСЃС‚ РІ РїР°РЅРµР»Рё СЃРІРµСЂС…Сѓ
 
     private AudioSource audioSource;
     private GameObject ghostInstance;
     private int currentBuildingIndex = 0;
     private HashSet<Vector3Int> occupiedCells = new HashSet<Vector3Int>();
 
-    // Ресурсы игрока
+    // Р РµСЃСѓСЂСЃС‹ РёРіСЂРѕРєР°
     private Dictionary<ResourceType, int> playerResources = new Dictionary<ResourceType, int>();
 
-    [Header("Данные Bulldozer Mode")]
+    [Header("Р”Р°РЅРЅС‹Рµ Bulldozer Mode")]
     public Button bulldozerButton;
     private Image bulldozerButtonImage;
     public bool bulldozerMode = false;
@@ -42,11 +46,13 @@ public class Builder : MonoBehaviour
         audioSource = gameObject.AddComponent<AudioSource>();
         UpdateBulldozerButtonColor();
 
-        // Инициализируем ресурсы
+        //РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЂРµСЃСѓСЂСЃС‹
         playerResources[ResourceType.Wood] = 100;
         playerResources[ResourceType.Stone] = 50;
 
         SpawnGhost(buildingDatas[currentBuildingIndex].prefab);
+
+        UpdateResourceUI();
     }
 
     void Update()
@@ -70,20 +76,30 @@ public class Builder : MonoBehaviour
 
                     if (CanAfford(data.cost))
                     {
-                        Instantiate(data.prefab, placePosition, Quaternion.identity);
+                        GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
+
+                        // Р“Р°СЂР°РЅС‚РёСЂРѕРІР°РЅРЅРѕ РґРѕР±Р°РІР»СЏРµРј BuildingInstance, РµСЃР»Рё РµРіРѕ РЅРµС‚
+                        BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
+                        if (bi == null)
+                        {
+                            bi = newBuilding.AddComponent<BuildingInstance>();
+                        }
+
+                        bi.cost = data.cost;  // Р—Р°РїРѕРјРёРЅР°РµРј СЃС‚РѕРёРјРѕСЃС‚СЊ
+
                         DeductResources(data.cost);
                         occupiedCells.Add(cellPosition);
                         PlaySound(buildSound);
-                        Debug.Log("Построено: " + data.prefab.name);
+                        Debug.Log("РџРѕСЃС‚СЂРѕРµРЅРѕ: " + data.prefab.name);
                     }
                     else
                     {
-                        Debug.Log("Недостаточно ресурсов для постройки!");
+                        Debug.Log("РќРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СЂРµСЃСѓСЂСЃРѕРІ РґР»СЏ РїРѕСЃС‚СЂРѕР№РєРё!");
                     }
                 }
                 else
                 {
-                    Debug.Log("Эта клетка уже занята!");
+                    Debug.Log("Р­С‚Р° РєР»РµС‚РєР° СѓР¶Рµ Р·Р°РЅСЏС‚Р°!");
                 }
             }
 
@@ -100,10 +116,29 @@ public class Builder : MonoBehaviour
                 Collider2D hitCollider = Physics2D.OverlapPoint(placePosition);
                 if (hitCollider != null && hitCollider.gameObject.CompareTag("Building"))
                 {
+                    BuildingInstance building = hitCollider.gameObject.GetComponent<BuildingInstance>();
+                    if (building != null)
+                    {
+                        if (building.cost != null)
+                        {
+                            AddResources(building.cost);
+                            Debug.Log("Р РµСЃСѓСЂСЃС‹ РІРѕР·РІСЂР°С‰РµРЅС‹");
+                        }
+                        else
+                        {
+                            Debug.LogWarning("РЎС‚РѕРёРјРѕСЃС‚СЊ Р·РґР°РЅРёСЏ (cost) РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅР° вЂ” СЂРµСЃСѓСЂСЃС‹ РЅРµ РІРѕР·РІСЂР°С‰РµРЅС‹");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("РљРѕРјРїРѕРЅРµРЅС‚ BuildingInstance РЅРµ РЅР°Р№РґРµРЅ");
+                    }
+
+
                     Destroy(hitCollider.gameObject);
                     occupiedCells.Remove(cellPosition);
                     PlaySound(destroySound);
-                    Debug.Log("Здание удалено");
+                    Debug.Log("Р—РґР°РЅРёРµ РїСЂРѕРґР°РЅРѕ Рё СѓРґР°Р»РµРЅРѕ");
                 }
             }
         }
@@ -128,7 +163,7 @@ public class Builder : MonoBehaviour
     {
         if (index < 0 || index >= buildingDatas.Length)
         {
-            Debug.LogWarning("Неверный индекс здания");
+            Debug.LogWarning("РќРµРІРµСЂРЅС‹Р№ РёРЅРґРµРєСЃ Р·РґР°РЅРёСЏ");
             return;
         }
 
@@ -139,7 +174,7 @@ public class Builder : MonoBehaviour
 
         SpawnGhost(buildingDatas[currentBuildingIndex].prefab);
 
-        Debug.Log("Выбрано здание: " + buildingDatas[currentBuildingIndex].prefab.name);
+        Debug.Log("Р’С‹Р±СЂР°РЅРѕ Р·РґР°РЅРёРµ: " + buildingDatas[currentBuildingIndex].prefab.name);
     }
 
     private void SpawnGhost(GameObject buildingPrefab)
@@ -149,7 +184,7 @@ public class Builder : MonoBehaviour
 
         if (ghostPrefab == null)
         {
-            Debug.LogWarning("Не найден призрак для " + buildingPrefab.name + ". Используем обычный префаб с прозрачностью.");
+            Debug.LogWarning("РќРµ РЅР°Р№РґРµРЅ РїСЂРёР·СЂР°Рє РґР»СЏ " + buildingPrefab.name + ". РСЃРїРѕР»СЊР·СѓРµРј РѕР±С‹С‡РЅС‹Р№ РїСЂРµС„Р°Р± СЃ РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊСЋ.");
             ghostInstance = Instantiate(buildingPrefab);
             SetGhostTransparency(ghostInstance);
         }
@@ -197,6 +232,41 @@ public class Builder : MonoBehaviour
         foreach (var item in cost)
         {
             playerResources[item.resourceType] -= item.amount;
+            UpdateResourceUI();
+
         }
     }
+    private void UpdateResourceUI()
+    {
+        if (resourceText == null) return;
+
+        string result = "Р РµСЃСѓСЂСЃС‹: ";
+        List<string> parts = new List<string>();
+
+        foreach (var kvp in playerResources)
+        {
+            parts.Add($"{kvp.Key}: {kvp.Value}");
+        }
+
+        result += string.Join(" | ", parts);
+
+        resourceText.text = result;
+    }
+
+    private void AddResources(ResourceCost[] cost)
+    {
+        foreach (var item in cost)
+        {
+            if (!playerResources.ContainsKey(item.resourceType))
+                playerResources[item.resourceType] = 0;
+
+            playerResources[item.resourceType] += item.amount;
+
+            Debug.Log($"Р’РµСЂРЅСѓР»Рё {item.amount} {item.resourceType}");
+        }
+
+        UpdateResourceUI();
+    }
+
+
 }
