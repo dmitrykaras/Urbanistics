@@ -1,35 +1,38 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using UnityEngine.EventSystems;
-
+using System.Collections.Generic;
 
 public class Builder : MonoBehaviour
 {
-    public Camera mainCamera;
-    public Tilemap buildTilemap;
+    [Header("Основные ссылки")]
+    public Camera mainCamera; // Камера
+    public Tilemap buildTilemap; // Сетка
 
-    public GameObject[] buildingPrefabs;     // Массив префабов зданий
-    public GameObject ghostBuildingPrefab;   // Для текущего здания (призрак)
+    [Header("Данные зданий")]
+    public BuildingData[] buildingDatas; // Все здания с префабами и стоимостью
 
-    public Button bulldozerButton;
-
+    [Header("Настройки строительства")]
+    public GameObject ghostBuildingPrefab; // Призрак здания
     public AudioClip buildSound;
     public AudioClip destroySound;
 
     private AudioSource audioSource;
-    private Image bulldozerButtonImage;
-
     private GameObject ghostInstance;
+    private int currentBuildingIndex = 0;
     private HashSet<Vector3Int> occupiedCells = new HashSet<Vector3Int>();
 
+    // Ресурсы игрока
+    private Dictionary<ResourceType, int> playerResources = new Dictionary<ResourceType, int>();
+
+    [Header("Данные Bulldozer Mode")]
+    public Button bulldozerButton;
+    private Image bulldozerButtonImage;
     public bool bulldozerMode = false;
 
     private Color normalColor = Color.white;
     private Color activeColor = new Color(1f, 0.4f, 0.4f, 1f);
-
-    private int currentBuildingIndex = 0;   // Выбранное здание
 
     void Start()
     {
@@ -37,16 +40,19 @@ public class Builder : MonoBehaviour
             mainCamera = Camera.main;
 
         audioSource = gameObject.AddComponent<AudioSource>();
-
         UpdateBulldozerButtonColor();
 
-        SpawnGhost(buildingPrefabs[currentBuildingIndex]);
+        // Инициализируем ресурсы
+        playerResources[ResourceType.Wood] = 100;
+        playerResources[ResourceType.Stone] = 50;
+
+        SpawnGhost(buildingDatas[currentBuildingIndex].prefab);
     }
 
     void Update()
     {
-            if (EventSystem.current.IsPointerOverGameObject())
-        return;
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector3Int cellPosition = buildTilemap.WorldToCell(mouseWorldPos);
         Vector3 placePosition = buildTilemap.GetCellCenterWorld(cellPosition);
@@ -60,9 +66,20 @@ public class Builder : MonoBehaviour
             {
                 if (!occupiedCells.Contains(cellPosition))
                 {
-                    Instantiate(buildingPrefabs[currentBuildingIndex], placePosition, Quaternion.identity);
-                    occupiedCells.Add(cellPosition);
-                    PlaySound(buildSound);
+                    BuildingData data = buildingDatas[currentBuildingIndex];
+
+                    if (CanAfford(data.cost))
+                    {
+                        Instantiate(data.prefab, placePosition, Quaternion.identity);
+                        DeductResources(data.cost);
+                        occupiedCells.Add(cellPosition);
+                        PlaySound(buildSound);
+                        Debug.Log("Построено: " + data.prefab.name);
+                    }
+                    else
+                    {
+                        Debug.Log("Недостаточно ресурсов для постройки!");
+                    }
                 }
                 else
                 {
@@ -101,14 +118,15 @@ public class Builder : MonoBehaviour
 
     private void UpdateBulldozerButtonColor()
     {
-        if (bulldozerButtonImage == null) return;
+        if (bulldozerButtonImage == null)
+            bulldozerButtonImage = bulldozerButton.GetComponent<Image>();
 
         bulldozerButtonImage.color = bulldozerMode ? activeColor : normalColor;
     }
 
     public void SelectBuilding(int index)
     {
-        if (index < 0 || index >= buildingPrefabs.Length)
+        if (index < 0 || index >= buildingDatas.Length)
         {
             Debug.LogWarning("Неверный индекс здания");
             return;
@@ -116,26 +134,22 @@ public class Builder : MonoBehaviour
 
         currentBuildingIndex = index;
 
-        // Удаляем старый призрак и создаём новый под выбранный префаб
         if (ghostInstance != null)
             Destroy(ghostInstance);
 
-        SpawnGhost(buildingPrefabs[currentBuildingIndex]);
+        SpawnGhost(buildingDatas[currentBuildingIndex].prefab);
 
-        Debug.Log("Выбрано здание: " + buildingPrefabs[currentBuildingIndex].name);
+        Debug.Log("Выбрано здание: " + buildingDatas[currentBuildingIndex].prefab.name);
     }
 
     private void SpawnGhost(GameObject buildingPrefab)
     {
-        // Предполагаем, что у каждого здания есть префаб-призрак с суффиксом "Ghost"
         string ghostName = buildingPrefab.name + "Ghost";
         GameObject ghostPrefab = Resources.Load<GameObject>(ghostName);
 
         if (ghostPrefab == null)
         {
             Debug.LogWarning("Не найден призрак для " + buildingPrefab.name + ". Используем обычный префаб с прозрачностью.");
-
-            // Создаём копию и делаем её полупрозрачной
             ghostInstance = Instantiate(buildingPrefab);
             SetGhostTransparency(ghostInstance);
         }
@@ -155,7 +169,6 @@ public class Builder : MonoBehaviour
             rend.color = c;
         }
 
-        // Отключаем коллайдеры у призрака
         Collider2D[] colliders = obj.GetComponentsInChildren<Collider2D>();
         foreach (var col in colliders)
         {
@@ -166,7 +179,24 @@ public class Builder : MonoBehaviour
     private void PlaySound(AudioClip clip)
     {
         if (clip == null || audioSource == null) return;
-
         audioSource.PlayOneShot(clip);
+    }
+
+    private bool CanAfford(ResourceCost[] cost)
+    {
+        foreach (var item in cost)
+        {
+            if (!playerResources.ContainsKey(item.resourceType) || playerResources[item.resourceType] < item.amount)
+                return false;
+        }
+        return true;
+    }
+
+    private void DeductResources(ResourceCost[] cost)
+    {
+        foreach (var item in cost)
+        {
+            playerResources[item.resourceType] -= item.amount;
+        }
     }
 }

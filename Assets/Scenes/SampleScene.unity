@@ -150,14 +150,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 519420031}
   buildTilemap: {fileID: 664440619}
-  buildingPrefabs:
-  - {fileID: 3623955544866507939, guid: 06a5a73aebcf3b247951b9e58e7c0bde, type: 3}
-  - {fileID: 111414361047037762, guid: c581764b99e13b94eb277b0903406788, type: 3}
-  - {fileID: 8763292472870098485, guid: 5610ca8d3bf4897488ae75055cf35f84, type: 3}
+  buildingDatas:
+  - prefab: {fileID: 3623955544866507939, guid: 06a5a73aebcf3b247951b9e58e7c0bde, type: 3}
+    cost:
+    - resourceType: 0
+      amount: 30
+  - prefab: {fileID: 111414361047037762, guid: c581764b99e13b94eb277b0903406788, type: 3}
+    cost:
+    - resourceType: 0
+      amount: 50
   ghostBuildingPrefab: {fileID: 3623955544866507939, guid: e0e93f576bdf42f47a6410f7edeeb62a, type: 3}
-  bulldozerButton: {fileID: 1716191144}
   buildSound: {fileID: 8300000, guid: 87bce4d23b58edd4494f248ea91a26af, type: 3}
   destroySound: {fileID: 8300000, guid: 85bc8246c6347514996941e8f24aed49, type: 3}
+  bulldozerButton: {fileID: 1716191144}
   bulldozerMode: 0
 --- !u!4 &150676174
 Transform:
