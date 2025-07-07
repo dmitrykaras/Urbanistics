@@ -35,8 +35,13 @@ public class Builder : MonoBehaviour
     private Image bulldozerButtonImage;
     public bool bulldozerMode = false;
 
+    public static Builder Instance { get; private set; } //для ResourceProducer 
+
+
     private Color normalColor = Color.white;
     private Color activeColor = new Color(1f, 0.4f, 0.4f, 1f);
+
+
 
     void Start()
     {
@@ -49,10 +54,14 @@ public class Builder : MonoBehaviour
         //инициализируем ресурсы
         playerResources[ResourceType.Wood] = 100;
         playerResources[ResourceType.Stone] = 50;
+        playerResources[ResourceType.Wool] = 0;
 
         SpawnGhost(buildingDatas[currentBuildingIndex].prefab);
 
         UpdateResourceUI();
+
+        Instance = this; //для ResourceProducer 
+
     }
 
     void Update()
@@ -72,20 +81,37 @@ public class Builder : MonoBehaviour
             {
                 if (!occupiedCells.Contains(cellPosition))
                 {
+                    Collider2D[] colliders = Physics2D.OverlapBoxAll(placePosition, new Vector2(0.5f, 0.5f), 0f);
+                    bool hasGrass = false;
+                    GameObject grassObject = null;
+
+                    foreach (var col in colliders)
+                    {
+                        if (col.CompareTag("Grass"))
+                        {
+                            hasGrass = true;
+                            grassObject = col.gameObject;
+                            break;
+                        }
+                    }
+
+                    if (!hasGrass)
+                    {
+                        Debug.Log("Строить можно только на траве!");
+                        return;
+                    }
+
                     BuildingData data = buildingDatas[currentBuildingIndex];
 
                     if (CanAfford(data.cost))
                     {
+                        // Удаляем траву только при успешной покупке
+                        Destroy(grassObject);
+
                         GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
-
-                        // Гарантированно добавляем BuildingInstance, если его нет
                         BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
-                        if (bi == null)
-                        {
-                            bi = newBuilding.AddComponent<BuildingInstance>();
-                        }
-
-                        bi.cost = data.cost;  // Запоминаем стоимость
+                        if (bi != null)
+                            bi.cost = data.cost;
 
                         DeductResources(data.cost);
                         occupiedCells.Add(cellPosition);
@@ -114,31 +140,33 @@ public class Builder : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 Collider2D hitCollider = Physics2D.OverlapPoint(placePosition);
-                if (hitCollider != null && hitCollider.gameObject.CompareTag("Building"))
+                if (hitCollider != null)
                 {
-                    BuildingInstance building = hitCollider.gameObject.GetComponent<BuildingInstance>();
-                    if (building != null)
+                    if (hitCollider.CompareTag("Building"))
                     {
-                        if (building.cost != null)
+                        BuildingInstance building = hitCollider.GetComponent<BuildingInstance>();
+                        if (building != null && building.cost != null)
                         {
                             AddResources(building.cost);
                             Debug.Log("Ресурсы возвращены");
                         }
                         else
                         {
-                            Debug.LogWarning("Стоимость здания (cost) не установлена — ресурсы не возвращены");
+                            Debug.LogWarning("Компонент BuildingInstance не найден или cost не установлен");
                         }
+
+                        Destroy(hitCollider.gameObject);
+                        occupiedCells.Remove(cellPosition);
+                        PlaySound(destroySound);
+                        Debug.Log("Здание продано и удалено");
                     }
-                    else
+                    else if (hitCollider.CompareTag("Grass"))
                     {
-                        Debug.LogWarning("Компонент BuildingInstance не найден");
+                        Destroy(hitCollider.gameObject);
+                        occupiedCells.Remove(cellPosition); // На случай, если клетка была помечена занятой
+                        PlaySound(destroySound);
+                        Debug.Log("Трава удалена");
                     }
-
-
-                    Destroy(hitCollider.gameObject);
-                    occupiedCells.Remove(cellPosition);
-                    PlaySound(destroySound);
-                    Debug.Log("Здание продано и удалено");
                 }
             }
         }
@@ -192,6 +220,12 @@ public class Builder : MonoBehaviour
         {
             ghostInstance = Instantiate(ghostPrefab);
         }
+
+        //выключает добычу ресурсов у призраков зданий
+        ResourceProducer producer = ghostInstance.GetComponent<ResourceProducer>();
+        if (producer != null) 
+            producer.enabled = false; //выключение добычи
+
     }
 
     private void SetGhostTransparency(GameObject obj)
@@ -266,6 +300,21 @@ public class Builder : MonoBehaviour
         }
 
         UpdateResourceUI();
+    }
+
+    public void AddResource(ResourceType type, int amount)
+    {
+        if (!playerResources.ContainsKey(type))
+            playerResources[type] = 0;
+
+        playerResources[type] += amount;
+        UpdateResourceUI();
+    }
+
+    //вызов функции заполнения всей карты травой
+    public void RegisterOccupiedCell(Vector3Int cell)
+    {
+        occupiedCells.Add(cell);
     }
 
 

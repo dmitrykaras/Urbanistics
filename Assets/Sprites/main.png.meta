@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 3a55550771547a940b8804751c4f7ac8
+guid: 40f2128de9bacb4448f3d5c396aa687b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7932798033344189819
-    second: grass_0
-  - first:
-      213: 917857947829267716
-    second: grass_1
+      213: -7783813424544337531
+    second: main_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -54,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 40
+  spritePixelsToUnits: 128
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -103,35 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: grass_0
+      name: main_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1
-        width: 46
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b75d56418c5f61e60800000000000000
-      internalID: 7932798033344189819
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: grass_1
-      rect:
-        serializedVersion: 2
-        x: 47
+        x: 0
         y: 0
-        width: 33
-        height: 48
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 40de1a6c0f2ecbc00800000000000000
-      internalID: 917857947829267716
+      spriteID: 5813e184ee65af390800000000000000
+      internalID: -7783813424544337531
       vertices: []
       indices: 
       edges: []
@@ -160,8 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      grass_0: 7932798033344189819
-      grass_1: 917857947829267716
+      main_0: -7783813424544337531
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

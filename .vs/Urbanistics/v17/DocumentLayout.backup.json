@@ -3,24 +3,32 @@
   "WorkspaceRootPath": "D:\\git\\Urbanistics\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\buildinginstance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\buildinginstance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\grassspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\grassspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\buildingdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\buildingdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\resourcetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\resourcetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\buildinginstance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\buildinginstance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\resourcecost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\resourcecost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\resourceproducer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\resourceproducer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\resourcetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\resourcetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -35,32 +43,58 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "GrassSpawner.cs",
+              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\GrassSpawner.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GrassSpawner.cs",
+              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\GrassSpawner.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GrassSpawner.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAsAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T08:06:15.798Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ResourceProducer.cs",
+              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceProducer.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceProducer.cs",
+              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceProducer.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ResourceProducer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T07:11:49.388Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "BuildingInstance.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\BuildingInstance.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BuildingInstance.cs",
               "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\BuildingInstance.cs",
               "RelativeToolTip": "Assets\\Scripts\\BuildingInstance.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-04T17:51:24.565Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Builder.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\Builder.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Builder.cs",
               "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\Builder.cs",
               "RelativeToolTip": "Assets\\Scripts\\Builder.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAqwE8AAABTAAAAAAAAAA==",
+              "ViewState": "AgIAALAAAAAAAAAAAAAawDoAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-27T10:32:26.778Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "BuildingData.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\BuildingData.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BuildingData.cs",
@@ -86,13 +120,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "ResourceType.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceType.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceType.cs",
               "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceType.cs",
               "RelativeToolTip": "Assets\\Scripts\\ResourceType.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAAAAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-04T14:46:53.744Z",
               "EditorCaption": ""

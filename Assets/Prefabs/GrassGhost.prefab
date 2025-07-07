@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -201516032858786434}
   m_Layer: 0
   m_Name: GrassGhost
-  m_TagString: Building
+  m_TagString: Grass
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,7 +126,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.359375, y: 0.359375}
+    oldSize: {x: 1.15, y: 1.15}
     newSize: {x: 0.46, y: 0.46}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
