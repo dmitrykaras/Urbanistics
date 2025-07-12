@@ -2,5 +2,5 @@ using UnityEngine;
 
 public class BuildingInstance : MonoBehaviour
 {
-    public ResourceCost[] cost; // здесь будет храниться стоимость
+    public ResourceCost[] cost; //здесь будет храниться стоимость
 }
