@@ -39,6 +39,8 @@ public class Builder : MonoBehaviour
     public Button bulldozerButton;
     private Image bulldozerButtonImage;
     public bool bulldozerMode = false;
+    public GameObject bulldozerGhostPrefab;
+    private GameObject bulldozerGhostInstance;
 
     void Awake()
     {
@@ -55,11 +57,16 @@ public class Builder : MonoBehaviour
         UpdateBulldozerButtonColor();
 
         //инициализируем ресурсы
-        playerResources[ResourceType.Wood] = 999;
-        playerResources[ResourceType.Stone] = 999;
-        playerResources[ResourceType.Wool] = 999;
+        playerResources[ResourceType.Wood] = 100;
+        playerResources[ResourceType.Stone] = 50;
+        playerResources[ResourceType.Wool] = 0;
 
         SpawnGhost(buildingDatas[currentBuildingIndex].prefab); //показывают призрачную модель выбранного здания
+
+        //создаём и загружаем BulldozerGhost
+        GameObject ghost = Resources.Load<GameObject>("BulldozerGhost");
+        if (ghost != null)
+            bulldozerGhostInstance = Instantiate(ghost);
 
         UpdateResourceUI(); //обновляют интерфейс с ресурсами
 
@@ -82,9 +89,22 @@ public class Builder : MonoBehaviour
         //строительство зданий (если не включен режим бульдозера)
         if (!bulldozerMode)
         {
+            //если не выбран Bulldozer, то прятать призрак bulldozerGhost
+            if (bulldozerGhostInstance != null)
+                bulldozerGhostInstance.SetActive(false);
+
             //перемещаем призрачное здание на текущую позицию
-            if (ghostInstance != null)
-                ghostInstance.transform.position = placePosition;
+            ghostInstance.transform.position = placePosition;
+            bool isOccupied = occupiedCells.Contains(cellPosition);
+
+            if (isOccupied)
+            {
+                ghostInstance.SetActive(false); //выкл отображение, если клетка занята
+            }
+            else
+            {
+                ghostInstance.SetActive(true); //вкл, если это не так
+            }
 
             //если нажата левая кнопка мыши
             if (Input.GetMouseButtonDown(0))
@@ -125,15 +145,19 @@ public class Builder : MonoBehaviour
                     Debug.Log("Эта клетка уже занята!");
                 }
             }
-
-            if (ghostInstance != null)
-                ghostInstance.SetActive(true);
         }
         //режим бульдозера
         else
         {
             if (ghostInstance != null)
                 ghostInstance.SetActive(false);
+
+            //если bulldozerGhostInstance существет, то перемещаем призрак под курсором и отображем его
+            if (bulldozerGhostInstance != null)
+            {
+                bulldozerGhostInstance.transform.position = placePosition;
+                bulldozerGhostInstance.SetActive(true);
+            }
 
             if (Input.GetMouseButtonDown(0)) //при нажатии на ЛКМ
             {
