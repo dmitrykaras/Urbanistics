@@ -5,7 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Building
-  - Grass
+  - Bar
+  - Market
   layers:
   - Default
   - TransparentFX

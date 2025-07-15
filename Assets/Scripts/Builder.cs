@@ -130,6 +130,13 @@ public class Builder : MonoBehaviour
 
                         bi.cost = data.cost;  //запоминаем стоимость
 
+                        //если это дом — вызываем PlaceHouse, чтобы заселение было корректным
+                        if (newBuilding.TryGetComponent<House>(out House houseComponent))
+                        {
+                            houseComponent.PlaceHouse();
+                        }
+
+
                         DeductResources(data.cost); //вычитаем ресурсы у игрока
                         occupiedCells.Add(cellPosition); //помечаем клетку как занятую
                         PlaySound(buildSound); //играем звук постройки
@@ -176,6 +183,13 @@ public class Builder : MonoBehaviour
                             Debug.Log("Ресурсы возвращены");
                         }
 
+                        //если это дом — удалим жителей
+                        House house = hitCollider.GetComponent<House>();
+                        if (house != null)
+                        {
+                            house.PlaceHouse(); // Просто вызови метод, не присваивая
+                        }
+
                         //удаляем здание и очищаем клетку
                         Destroy(hitCollider.gameObject); 
                         occupiedCells.Remove(cellPosition);
@@ -193,6 +207,8 @@ public class Builder : MonoBehaviour
                 }
             }
         }
+
+
     }
 
     //переключает режим "бульдозера"
@@ -242,7 +258,6 @@ public class Builder : MonoBehaviour
         if (ghostPrefab == null)
         {
             ///если не найден призрачный префаб, используем оригинальный с прозрачностью
-            Debug.LogWarning("Не найден призрак для " + buildingPrefab.name + ". Используем обычный префаб с прозрачностью");
             ghostInstance = Instantiate(buildingPrefab);
             SetGhostTransparency(ghostInstance);
         }
