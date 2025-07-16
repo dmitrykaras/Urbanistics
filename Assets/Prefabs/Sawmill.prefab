@@ -103,3 +103,5 @@ MonoBehaviour:
   resourceType: 0
   amountPerCycle: 2
   intervalSeconds: 1
+  requiredType: 0
+  requiredPeople: 3

@@ -11,9 +11,14 @@ public class House : MonoBehaviour
     private void Start()
     {
         PopulationManager.Instance.RegisterHouse(this);
+    }
 
-        // Заселяем только если комфорт позволяет
-        CalculateComfortAndPopulate();
+    public void PlaceHouse()
+    {
+        if (isPlaced) return; // не заселять повторно
+        isPlaced = true;
+
+        CalculateComfortAndPopulate(); // запуск расчёта комфорта и заселения
     }
 
     public void AddCitizens(int amount)
@@ -32,25 +37,20 @@ public class House : MonoBehaviour
         PopulationManager.Instance.UpdatePopulationCounts();
     }
 
-    public void PlaceHouse()
-    {
-        isPlaced = true;
-    }
-
     public void RemoveAllCitizens()
     {
         currentPopulation = 0;
         PopulationManager.Instance.UpdatePopulationCounts();
     }
 
-
     public void CalculateComfortAndPopulate()
     {
         int comfort = 0;
 
-        // Обходим радиус 5 клеток вокруг дома
+        // получаем центральную клетку, где стоит дом
         Vector3Int centerCell = Builder.Instance.buildTilemap.WorldToCell(transform.position);
 
+        // обходим радиус 5 клеток
         for (int x = -5; x <= 5; x++)
         {
             for (int y = -5; y <= 5; y++)
@@ -61,18 +61,20 @@ public class House : MonoBehaviour
                 Collider2D collider = Physics2D.OverlapPoint(checkWorld);
                 if (collider != null)
                 {
-                    if (collider.CompareTag("Bar")) comfort++;
-                    if (collider.CompareTag("Market")) comfort++;
+                    ComfortSource source = collider.GetComponent<ComfortSource>();
+                    if (source != null)
+                    {
+                        if (source.type == ComfortType.Bar) comfort++;
+                        if (source.type == ComfortType.Market) comfort++;
+                    }
                 }
             }
         }
 
-        // Рассчитываем максимальное возможное население
-        int maxResidents = 5;
-        if (comfort > 0)
-            maxResidents += 2; // за бар
-        if (comfort > 1)
-            maxResidents += 3; // за рынок
+        // рассчитываем население
+        int maxResidents = 5; // базово
+        if (comfort >= 1) maxResidents += 2; // +2 за бар
+        if (comfort >= 2) maxResidents += 3; // +3 за рынок
 
         AddCitizens(maxResidents);
     }

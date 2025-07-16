@@ -57,9 +57,9 @@ public class Builder : MonoBehaviour
         UpdateBulldozerButtonColor();
 
         //инициализируем ресурсы
-        playerResources[ResourceType.Wood] = 100;
-        playerResources[ResourceType.Stone] = 50;
-        playerResources[ResourceType.Wool] = 0;
+        playerResources[ResourceType.Wood] = 999;
+        playerResources[ResourceType.Stone] = 999;
+        playerResources[ResourceType.Wool] = 999;
 
         SpawnGhost(buildingDatas[currentBuildingIndex].prefab); //показывают призрачную модель выбранного здания
 
@@ -174,27 +174,26 @@ public class Builder : MonoBehaviour
                 {
                     if (hitCollider.CompareTag("Building")) //если клик по зданию, то...
                     {
-                        //получаем компонент BuildingInstance
-                        BuildingInstance building = hitCollider.GetComponent<BuildingInstance>(); 
+                        // 1. Возвращаем ресурсы, если есть
+                        BuildingInstance building = hitCollider.GetComponent<BuildingInstance>();
                         if (building != null && building.cost != null)
                         {
-                            //возвращаем ресурсы игроку
                             AddResources(building.cost);
                             Debug.Log("Ресурсы возвращены");
                         }
 
-                        //если это дом — удалим жителей
+                        // 2. Если это дом — удалим жителей
                         House house = hitCollider.GetComponent<House>();
                         if (house != null)
                         {
-                            house.PlaceHouse(); // Просто вызови метод, не присваивая
+                            house.RemoveAllCitizens(); // удаление жителей ДО уничтожения дома
                         }
 
-                        //удаляем здание и очищаем клетку
-                        Destroy(hitCollider.gameObject); 
+                        // 3. Удаляем здание
+                        Destroy(hitCollider.gameObject);
                         occupiedCells.Remove(cellPosition);
                         PlaySound(destroySound);
-                        Debug.Log("Здание продано и удалено");
+                        Debug.Log("Здание удалено");
                     }
                     //если клик по траве
                     else if (hitCollider.CompareTag("Grass"))
