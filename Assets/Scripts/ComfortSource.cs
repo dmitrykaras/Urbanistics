@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum ComfortType
+public enum ComfortType //здания дающее комфорт
 {
     Bar,
     Market

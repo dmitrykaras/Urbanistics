@@ -141,6 +141,8 @@ public class Builder : MonoBehaviour
                         occupiedCells.Add(cellPosition); //помечаем клетку как занятую
                         PlaySound(buildSound); //играем звук постройки
                         Debug.Log("Построено: " + data.prefab.name);
+
+
                     }
                     else
                     {
@@ -194,14 +196,6 @@ public class Builder : MonoBehaviour
                         occupiedCells.Remove(cellPosition);
                         PlaySound(destroySound);
                         Debug.Log("Здание удалено");
-                    }
-                    //если клик по траве
-                    else if (hitCollider.CompareTag("Grass"))
-                    {
-                        Destroy(hitCollider.gameObject);
-                        occupiedCells.Remove(cellPosition); //на случай, если клетка была помечена занятой
-                        PlaySound(destroySound);
-                        Debug.Log("Трава удалена");
                     }
                 }
             }

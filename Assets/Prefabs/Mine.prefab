@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5965183634726259796}
   - component: {fileID: 7136106286346585819}
   m_Layer: 0
-  m_Name: Main
+  m_Name: Mine
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,7 +105,7 @@ MonoBehaviour:
   amountPerCycle: 1
   intervalSeconds: 1
   requiredType: 0
-  requiredPeople: 3
+  requiredPeople: 15
 --- !u!61 &7136106286346585819
 BoxCollider2D:
   m_ObjectHideFlags: 0

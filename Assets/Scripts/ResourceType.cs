@@ -1,6 +1,6 @@
 public enum ResourceType //список возможных ресурсов
 {
-    Wood,
-    Stone,
-    Wool
+    Wood, //дерево
+    Stone, //камень
+    Wool //шерсть
 }
