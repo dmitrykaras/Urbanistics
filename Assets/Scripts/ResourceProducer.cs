@@ -35,8 +35,9 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
         timer += Time.deltaTime; //увеличивает таймер
         if (timer >= intervalSeconds) //если прошло достаточно времени, то обнулить таймер
         {
-            timer = 0f; 
-            builder?.AddResource(resourceType, amountPerCycle); //если builder найден, добавляем ресурсы указанного типа
+            timer = 0f;
+            //если builder найден, добавляем ресурсы указанного типа
+            ResourceStorage.Instance?.AddResource(resourceType, amountPerCycle);
         }
     }
 

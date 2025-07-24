@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static House;
 
 public class PopulationManager : MonoBehaviour
 {
@@ -38,14 +39,14 @@ public class PopulationManager : MonoBehaviour
         {
             switch (house.currentClass)
             {
-                case CitizenClass.Peasant:
-                    peasants += house.currentPopulation;
+                case HouseClass.Peasant:
+                    peasants += house.currentCitizens ;
                     break;
-                case CitizenClass.Worker:
-                    workers += house.currentPopulation;
+                case HouseClass.Worker:
+                    workers += house.currentCitizens ;
                     break;
-                case CitizenClass.Engineer:
-                    engineers += house.currentPopulation;
+                case HouseClass.Engineer:
+                    engineers += house.currentCitizens ;
                     break;
             }
         }

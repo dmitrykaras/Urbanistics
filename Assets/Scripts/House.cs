@@ -1,12 +1,31 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Resources;
+using UnityEngine;
+
+public enum HouseClass
+{
+    Peasant,
+    Worker,
+    Engineer
+}
 
 public class House : MonoBehaviour
 {
+    public HouseClass houseClass;
+    public int currentPopulation;
+    public HouseClass currentClass = HouseClass.Peasant; //хранит тип жителя
+
     public int capacity = 10; //вместимость здания
-    public CitizenClass currentClass = CitizenClass.Peasant; //хранит тип жителя
-    public int currentPopulation = 0; //население в начале игры
+    public int currentCitizens = 0; //население в начале игры
+
+    public GameObject upgradedPrefab; //улучшенная версия дома
 
     private bool isPlaced = false; //флаг, чтобы не заселять дом дважды
+
+    public GameObject upgradedToWorkerPrefab;
+    public GameObject upgradedToEngineerPrefab;
+
+    public int citizensCount = 0;
 
     //регестрируем дом при его создании
     private void Start()
@@ -27,26 +46,15 @@ public class House : MonoBehaviour
     public void AddCitizens(int amount)
     {
         //заселяем, но не привыаем лимит дома
-        currentPopulation = Mathf.Min(currentPopulation + amount, capacity);
+        currentCitizens  = Mathf.Min(currentCitizens  + amount, capacity);
         PopulationManager.Instance.UpdatePopulationCounts(); //обновляем общее состояние населения в игре
     }
 
-    //улучшение дома
-    public void UpgradeHouse()
-    {
-        //был крестьянин - стал рабочий, был рабочий - стал инженер
-        if (currentClass == CitizenClass.Peasant)
-            currentClass = CitizenClass.Worker;
-        else if (currentClass == CitizenClass.Worker)
-            currentClass = CitizenClass.Engineer;
-
-        PopulationManager.Instance.UpdatePopulationCounts(); //обновляем данные населения
-    }
 
     //метод для удаления жителей при сносе
     public void RemoveAllCitizens()
     {
-        currentPopulation = 0; //становится 0
+        currentCitizens  = 0; //становится 0
         PopulationManager.Instance.UpdatePopulationCounts(); //обновляем
     }
 
@@ -87,4 +95,40 @@ public class House : MonoBehaviour
         //аселяем дом максимально возможным количеством жителей с учётом комфорта
         AddCitizens(maxResidents);
     }
+
+    //улучшение здания
+    public void TryUpgrade()
+    {
+        if (currentPopulation < 10) return;
+
+        switch (houseClass)
+        {
+            case HouseClass.Peasant:
+                if (citizensCount >= 10 && ResourceStorage.Instance.HasEnough(ResourceType.Stone, 10))
+                {
+                    ResourceStorage.Instance.Consume(ResourceType.Stone, 10);
+                    Upgrade(upgradedToWorkerPrefab, HouseClass.Worker);
+                }
+                break;
+            case HouseClass.Worker:
+                if (citizensCount >= 10 && ResourceStorage.Instance.HasEnough(ResourceType.Iron, 10))
+                {
+                    ResourceStorage.Instance.Consume(ResourceType.Iron, 10);
+                    Upgrade(upgradedToEngineerPrefab, HouseClass.Engineer);
+                }
+                break;
+        }
+
+    }
+
+    private void Upgrade(GameObject newPrefab, HouseClass newClass)
+    {
+        Vector3 position = transform.position;
+        Quaternion rotation = transform.rotation;
+        GameObject upgradedHouse = Instantiate(newPrefab, position, rotation);
+
+        Destroy(gameObject); // Удаляем старый дом
+    }
+
+
 }

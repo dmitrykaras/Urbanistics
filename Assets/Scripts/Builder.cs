@@ -24,16 +24,10 @@ public class Builder : MonoBehaviour
     public AudioClip destroySound;
     private AudioSource audioSource; //источник звука
 
-    [Header("UI ресурсов")]
-    public TextMeshProUGUI resourceText; //текст в панели сверху
-
-
     private GameObject ghostInstance; //текущий призрак здания на сцене
     private int currentBuildingIndex = 0; //индекс текущего выбранного здания
     private HashSet<Vector3Int> occupiedCells = new HashSet<Vector3Int>(); //клетки, на которых уже есть здания
-
-    //ресурсы игрока
-    private Dictionary<ResourceType, int> playerResources = new Dictionary<ResourceType, int>();
+    
 
     [Header("Данные Bulldozer Mode")]
     public Button bulldozerButton;
@@ -56,20 +50,13 @@ public class Builder : MonoBehaviour
         audioSource = gameObject.AddComponent<AudioSource>();
         UpdateBulldozerButtonColor();
 
-        //инициализируем ресурсы
-        playerResources[ResourceType.Wood] = 999;
-        playerResources[ResourceType.Stone] = 999;
-        playerResources[ResourceType.Wool] = 999;
-
         SpawnGhost(buildingDatas[currentBuildingIndex].prefab); //показывают призрачную модель выбранного здания
 
         //создаём и загружаем BulldozerGhost
         GameObject ghost = Resources.Load<GameObject>("BulldozerGhost");
         if (ghost != null)
             bulldozerGhostInstance = Instantiate(ghost);
-
-        UpdateResourceUI(); //обновляют интерфейс с ресурсами
-
+        
     }
 
     void Update()
@@ -116,7 +103,7 @@ public class Builder : MonoBehaviour
                     BuildingData data = buildingDatas[currentBuildingIndex];
 
                     //проверяем, хватает ли ресурсов
-                    if (CanAfford(data.cost))
+                    if (ResourceStorage.Instance.CanAfford(data.cost))
                     {
                         //создаём здание
                         GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
@@ -137,7 +124,7 @@ public class Builder : MonoBehaviour
                         }
 
 
-                        DeductResources(data.cost); //вычитаем ресурсы у игрока
+                        ResourceStorage.Instance.DeductResources(data.cost); //вычитаем ресурсы у игрока
                         occupiedCells.Add(cellPosition); //помечаем клетку как занятую
                         PlaySound(buildSound); //играем звук постройки
                         Debug.Log("Построено: " + data.prefab.name);
@@ -180,7 +167,7 @@ public class Builder : MonoBehaviour
                         BuildingInstance building = hitCollider.GetComponent<BuildingInstance>();
                         if (building != null && building.cost != null)
                         {
-                            AddResources(building.cost);
+                            ResourceStorage.Instance.AddResources(building.cost);
                             Debug.Log("Ресурсы возвращены");
                         }
 
@@ -292,79 +279,4 @@ public class Builder : MonoBehaviour
         if (clip == null || audioSource == null) return;
         audioSource.PlayOneShot(clip); //воспроизводим звук
     }
-
-    //проверяет, достаточно ли у игрока ресурсов для постройки!!!
-    private bool CanAfford(ResourceCost[] cost)
-    {
-        foreach (var item in cost)
-        {
-            //проверяем, есть ли указанный тип ресурса у игрока
-            bool hasKey = playerResources.ContainsKey(item.resourceType);
-            int value = hasKey ? playerResources[item.resourceType] : 0;
-
-            Debug.Log($"Нужно: {item.amount} {item.resourceType}, есть: {value}");
-
-            //если ресурса нет или его меньше, чем нужно — постройка невозможна
-            if (!hasKey || value < item.amount) 
-                return false;
-        }
-        return true; //все ресурсы в наличии и в достаточном количестве
-    }
-
-    //списывает ресурсы у игрока при строительстве здания
-    private void DeductResources(ResourceCost[] cost)
-    {
-        foreach (var item in cost)
-        {
-            playerResources[item.resourceType] -= item.amount; //уменьшаем значение указанного ресурса
-        }
-        UpdateResourceUI(); //обновляем интерфейс
-    }
-
-    //обновляет текстовое отображение ресурсов в интерфейсе
-    private void UpdateResourceUI() 
-    {
-        if (resourceText == null) return;
-
-        string result = "Ресурсы: ";
-        List<string> parts = new List<string>();
-
-        //собираем все пары "Тип: Кол-во"
-        foreach (var kvp in playerResources)
-        {
-            parts.Add($"{kvp.Key}: {kvp.Value}");
-        }
-
-        result += string.Join(" | ", parts);
-
-        resourceText.text = result;
-    }
-
-    //возвращает ресурсы игроку
-    private void AddResources(ResourceCost[] cost)
-    {
-        foreach (var item in cost)
-        {
-            //если ресурс не существует — инициализируем его
-            if (!playerResources.ContainsKey(item.resourceType))
-                playerResources[item.resourceType] = 0;
-
-            //прибавляем количество ресурса
-            playerResources[item.resourceType] += item.amount;
-
-            Debug.Log($"Вернули {item.amount} {item.resourceType}");
-        }
-        UpdateResourceUI();
-    }
-
-    //добавляет один конкретный ресурс
-    public void AddResource(ResourceType type, int amount)
-    {
-        if (!playerResources.ContainsKey(type))
-            playerResources[type] = 0;
-
-        playerResources[type] += amount;
-        UpdateResourceUI();
-    }
-
 }

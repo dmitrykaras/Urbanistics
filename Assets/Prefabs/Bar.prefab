@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5261254760099300582}
   - component: {fileID: 3459223525062425856}
   - component: {fileID: -6152772714340823207}
-  - component: {fileID: -7287166114880499864}
   m_Layer: 0
   m_Name: Bar
   m_TagString: Building
@@ -149,20 +148,3 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-7287166114880499864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 933706459440730523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b1088b43ac25534eb546925d69c626c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceType: 0
-  amountPerCycle: 1
-  intervalSeconds: 1
-  requiredType: 0
-  requiredPeople: 15
