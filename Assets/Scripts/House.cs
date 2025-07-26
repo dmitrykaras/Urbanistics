@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Resources;
 using UnityEngine;
+using TMPro;
+
 
 public enum HouseClass
 {
@@ -45,7 +47,7 @@ public class House : MonoBehaviour
     //метод для добавления жителей в дом
     public void AddCitizens(int amount)
     {
-        //заселяем, но не привыаем лимит дома
+        //заселяем, но не привышаем лимит дома
         currentCitizens  = Mathf.Min(currentCitizens  + amount, capacity);
         PopulationManager.Instance.UpdatePopulationCounts(); //обновляем общее состояние населения в игре
     }
@@ -56,9 +58,11 @@ public class House : MonoBehaviour
     {
         currentCitizens  = 0; //становится 0
         PopulationManager.Instance.UpdatePopulationCounts(); //обновляем
+
+
     }
 
-    //метод для вычисления контроля
+    //метод для вычисления комфорта
     public void CalculateComfortAndPopulate()
     {
         int comfort = 0; //переменная для посчёта комфорта
@@ -129,6 +133,5 @@ public class House : MonoBehaviour
 
         Destroy(gameObject); // Удаляем старый дом
     }
-
 
 }

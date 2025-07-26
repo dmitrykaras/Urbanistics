@@ -65,7 +65,14 @@ public class Builder : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
         //получаем мировые координаты мыши
-        Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        if (Input.mousePosition.x < 0 || Input.mousePosition.y < 0 ||
+            Input.mousePosition.x > Screen.width || Input.mousePosition.y > Screen.height)
+        {
+            return; // мышь вне экрана — ничего не делаем
+        }
+
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
 
         //преобразуем в координаты клетки тайлмапа
         Vector3Int cellPosition = buildTilemap.WorldToCell(mouseWorldPos);

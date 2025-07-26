@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static House;
+using TMPro;
+
 
 public class PopulationManager : MonoBehaviour
 {
@@ -21,6 +23,12 @@ public class PopulationManager : MonoBehaviour
     public int usedPeasants = 0;
 
     public int FreePeasants => totalPeasants - usedPeasants;
+
+    //текст для UI
+    public TextMeshProUGUI peasantsText;
+    public TextMeshProUGUI workersText;
+    public TextMeshProUGUI engineersText;
+
 
     //регистрация нового дома
     public void RegisterHouse(House house)
@@ -58,8 +66,9 @@ public class PopulationManager : MonoBehaviour
     //обновление UI
     private void UpdateUI()
     {
-        //например:
-        Debug.Log($"Крестьяне: {peasants}, Рабочие: {workers}, Инженеры: {engineers}");
+        peasantsText.text = $"К: {peasants}";
+        workersText.text = $"Р: {workers}";
+        engineersText.text = $"И: {engineers}";
     }
 
     //возвращает количество свободных жителей указанного класса
@@ -155,5 +164,6 @@ public class PopulationManager : MonoBehaviour
         usedPeasants -= count;
         if (usedPeasants < 0) usedPeasants = 0;
     }
+
 }
 
