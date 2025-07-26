@@ -1579,7 +1579,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragSpeed: 1
-  tilemap: {fileID: 664440619}
+  minCameraPos: {x: 0, y: 0}
+  maxCameraPos: {x: 0, y: 0}
+  mapImage: {fileID: 1732808352}
   zoomSpeed: 5
   minZoom: 3
   maxZoom: 13.5
@@ -4289,6 +4291,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1640181079}
   m_CullTransparentMesh: 1
+--- !u!212 &1732808352 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4620723731213622109, guid: 733fd23a5f5d44e4ba2a38eb6211ccb9, type: 3}
+  m_PrefabInstance: {fileID: 3715297455061065491}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1750610133
 GameObject:
   m_ObjectHideFlags: 0
