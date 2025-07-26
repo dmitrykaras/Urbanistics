@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\git\\Urbanistics\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\populationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\populationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -25,18 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\camerazoom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\camerazoom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\cameradrag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\cameradrag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\buildinginstance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -73,6 +65,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\comfortsource.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\comfortsource.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\git\\Urbanistics\\assets\\scripts\\cameradrag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\scripts\\cameradrag.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\git\\Urbanistics\\assets\\scripts\\camerazoom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\scripts\\camerazoom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -82,11 +82,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Builder.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\Builder.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Builder.cs",
@@ -95,51 +95,11 @@
               "ViewState": "AgIAANIAAAAAAAAAAAAEwOsAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-27T10:32:26.778Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "CameraDrag.cs",
-              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\CameraDrag.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\CameraDrag.cs",
-              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\CameraDrag.cs",
-              "RelativeToolTip": "Assets\\Scripts\\CameraDrag.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADYAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T15:24:06.33Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "CameraZoom.cs",
-              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\CameraZoom.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\CameraZoom.cs",
-              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\CameraZoom.cs",
-              "RelativeToolTip": "Assets\\Scripts\\CameraZoom.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAgwC0AAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T14:55:17.545Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "House.cs",
-              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\House.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\House.cs",
-              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\House.cs",
-              "RelativeToolTip": "Assets\\Scripts\\House.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwB0AAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T15:34:15.193Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "ResourceProducer.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceProducer.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceProducer.cs",
@@ -147,12 +107,11 @@
               "RelativeToolTip": "Assets\\Scripts\\ResourceProducer.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAwBoAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-07T07:11:49.388Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-07T07:11:49.388Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "ResourceStorage.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceStorage.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceStorage.cs",
@@ -160,12 +119,11 @@
               "RelativeToolTip": "Assets\\Scripts\\ResourceStorage.cs",
               "ViewState": "AgIAAEUAAAAAAAAAAAAAwFMAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-24T13:33:06.683Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-24T13:33:06.683Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "PopulationManager.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\PopulationManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\PopulationManager.cs",
@@ -173,12 +131,11 @@
               "RelativeToolTip": "Assets\\Scripts\\PopulationManager.cs",
               "ViewState": "AgIAADMAAAAAAAAAAAAnwEUAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T15:31:47.125Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-15T15:31:47.125Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "PeopleManager.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\PeopleManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\PeopleManager.cs",
@@ -186,25 +143,60 @@
               "RelativeToolTip": "Assets\\Scripts\\PeopleManager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAAAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T15:38:25.319Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-15T15:38:25.319Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 0,
               "Title": "CameraController.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\CameraController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\CameraController.cs",
               "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\CameraController.cs",
               "RelativeToolTip": "Assets\\Scripts\\CameraController.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAAAgwFgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADkAAAAAAAAAAAAgwEYAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-24T15:44:58.59Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 16,
+              "Title": "CameraDrag.cs",
+              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\CameraDrag.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\CameraDrag.cs",
+              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\CameraDrag.cs",
+              "RelativeToolTip": "Assets\\Scripts\\CameraDrag.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA8AAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-15T15:24:06.33Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "CameraZoom.cs",
+              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\CameraZoom.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\CameraZoom.cs",
+              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\CameraZoom.cs",
+              "RelativeToolTip": "Assets\\Scripts\\CameraZoom.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-15T14:55:17.545Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "House.cs",
+              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\House.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\House.cs",
+              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\House.cs",
+              "RelativeToolTip": "Assets\\Scripts\\House.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwB0AAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-15T15:34:15.193Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "BuildingInstance.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\BuildingInstance.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BuildingInstance.cs",
@@ -212,12 +204,11 @@
               "RelativeToolTip": "Assets\\Scripts\\BuildingInstance.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T17:51:24.565Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T17:51:24.565Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 8,
               "Title": "BuildingData.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\BuildingData.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BuildingData.cs",
@@ -225,12 +216,11 @@
               "RelativeToolTip": "Assets\\Scripts\\BuildingData.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T15:19:33.302Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T15:19:33.302Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 9,
               "Title": "BoostingButton.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\BoostingButton.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BoostingButton.cs",
@@ -238,12 +228,11 @@
               "RelativeToolTip": "Assets\\Scripts\\BoostingButton.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAAASwBMAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T15:04:40.938Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T15:04:40.938Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 11,
               "Title": "ResourceManager.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceManager.cs",
@@ -255,7 +244,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 13,
               "Title": "ResourceCost.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceCost.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceCost.cs",
@@ -267,7 +256,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 10,
               "Title": "DropdownManager.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\DropdownManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\DropdownManager.cs",
@@ -279,7 +268,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 12,
               "Title": "UpgradeManager.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\UpgradeManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UpgradeManager.cs",
@@ -291,7 +280,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 14,
               "Title": "DropdownHover.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\DropdownHover.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\DropdownHover.cs",
@@ -303,7 +292,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 15,
               "Title": "ComfortSource.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ComfortSource.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ComfortSource.cs",

@@ -1573,16 +1573,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 089988aced9108e4aa7c2717017376d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragSpeed: 1
   tilemap: {fileID: 664440619}
   zoomSpeed: 5
   minZoom: 3
   maxZoom: 13.5
-  panSpeed: 1
 --- !u!1 &618033908
 GameObject:
   m_ObjectHideFlags: 0
