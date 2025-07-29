@@ -99,7 +99,6 @@ public class Builder : MonoBehaviour
                     {
                         // передаём выбранный дом кнопке улучшения
                         boostingButton.SetTarget(house);
-                        Debug.Log("Дом выбран через Raycast");
                     }
                 }
             }

@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static House;
 using TMPro;
 
 
 public class PopulationManager : MonoBehaviour
 {
-    public static PopulationManager Instance; //только 1 такой объект
+    public static PopulationManager Instance;
 
     //если есть инстанс не назначен - назначаем
     private void Awake()
@@ -19,7 +18,7 @@ public class PopulationManager : MonoBehaviour
 
     public int peasants, workers, engineers; //общее кол-во жителей по классам
 
-    public int totalPeasants = 999; //общее количество крестьян (можно поменять по классу)
+    public int totalPeasants = 999; //общее количество крестьян
     public int usedPeasants = 0;
 
     public int FreePeasants => totalPeasants - usedPeasants;
@@ -66,9 +65,9 @@ public class PopulationManager : MonoBehaviour
     //обновление UI
     private void UpdateUI()
     {
-        peasantsText.text = $"К: {peasants}";
-        workersText.text = $"Р: {workers}";
-        engineersText.text = $"И: {engineers}";
+        peasantsText.text = $"P: {peasants}";
+        workersText.text = $"W: {workers}";
+        engineersText.text = $"E: {engineers}";
     }
 
     //возвращает количество свободных жителей указанного класса
@@ -143,11 +142,11 @@ public class PopulationManager : MonoBehaviour
         var producers = FindObjectsByType<ResourceProducer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         foreach (var producer in producers)
         {
-            producer.TryActivate(); // или .ActivateIfPossible(), если метод называется иначе
+            producer.TryActivate();
         }
     }
 
-    //
+    //проверяет достаточно ли свободных крестьян
     public bool TryUsePeasants(int count)
     {
         if (FreePeasants >= count)
@@ -158,11 +157,11 @@ public class PopulationManager : MonoBehaviour
         return false;
     }
 
-    //
+    //освобождает count крестьян
     public void ReleasePeasants(int count)
     {
         usedPeasants -= count;
-        if (usedPeasants < 0) usedPeasants = 0;
+        if (usedPeasants < 0) usedPeasants = 0; //гарантирует что usedPeasants не станет меньше нуля.
     }
 
 }

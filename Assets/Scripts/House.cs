@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Resources;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 public enum HouseClass
@@ -13,8 +11,6 @@ public enum HouseClass
 public class House : MonoBehaviour
 {
     public HouseClass houseClass;
-
-    public int currentPopulation;
 
     public HouseClass currentClass = HouseClass.Peasant; //хранит тип жителя
 
@@ -48,14 +44,11 @@ public class House : MonoBehaviour
         PopulationManager.Instance.UpdatePopulationCounts(); //обновляем общее состояние населения в игре
     }
 
-
     //метод для удаления жителей при сносе
     public void RemoveAllCitizens()
     {
         currentCitizens  = 0; //становится 0
         PopulationManager.Instance.UpdatePopulationCounts(); //обновляем
-
-
     }
 
     //метод для вычисления комфорта
@@ -88,7 +81,7 @@ public class House : MonoBehaviour
             }
         }
 
-        // рассчитываем население
+        //рассчитываем население
         int maxResidents = 5; //начинаем с 5
         if (comfort >= 1) maxResidents += 2; //+2 за бар
         if (comfort >= 2) maxResidents += 3; //+3 за рынок
@@ -101,46 +94,58 @@ public class House : MonoBehaviour
     //улучшение здания
     public void TryUpgrade()
     {
-        // Проверка: достаточно ли жителей?
-        if (currentPopulation < 10)
+        //проверка, что жителей больше 10
+        if (currentCitizens < 10)
         {
             Debug.Log("Недостаточно жителей для улучшения!");
             return;
         }
 
         // Проверка: хватает ли ресурсов (10 камня)?
-        if (! ResourceStorage.Instance.HasEnough(ResourceType.Stone, 10))
-        {
-            Debug.Log("Недостаточно камня!");
-            return;
-        }
+        //if (! ResourceStorage.Instance.HasEnough(ResourceType.Stone, 10))
+        //{
+        //    Debug.Log("Недостаточно камня!");
+        //    return;
+        //}
 
-        // Забираем ресурсы и производим апгрейд
-        ResourceStorage.Instance.SpendResource(ResourceType.Stone, 10);
+        //забираем ресурсы и производим апгрейд
+        //ResourceStorage.Instance.SpendResource(ResourceType.Stone, 10);
 
-        // Создаём новое здание
+        //создаём новое здание
         GameObject upgraded = Instantiate(upgradedPrefab, transform.position, Quaternion.identity);
 
-        // Удаляем старое
+        //обработка нового дома
+        House upgradedHouse = upgraded.GetComponent<House>();
+        if (upgradedHouse != null)
+        {
+            upgradedHouse.PlaceHouse(); //заселение и комфорт
+            upgradedHouse.currentClass = GetNextClass(currentClass); //переход к следующему классу
+        }
+
+        //удаляем старое
         Destroy(gameObject);
+        RemoveAllCitizens();
         Debug.Log("Дом улучшен!");
     }
 
-    private void Upgrade(GameObject newPrefab, HouseClass newClass)
+    //переход к следующему классу
+    private HouseClass GetNextClass(HouseClass current)
     {
-        Vector3 position = transform.position;
-        Quaternion rotation = transform.rotation;
-        GameObject upgradedHouse = Instantiate(newPrefab, position, rotation);
-
-        Destroy(gameObject); // Удаляем старый дом
+        switch (current)
+        {
+            case HouseClass.Peasant: return HouseClass.Worker;
+            case HouseClass.Worker: return HouseClass.Engineer;
+            default: return current;
+        }
     }
 
+    //выбор здания через метод IsBoostingMode
     private void OnMouseDown()
     {
         if (BoostingManager.Instance.IsBoostingMode())
         {
             TryUpgrade();
-            BoostingManager.Instance.ToggleBoostingMode(); //отключаем режим после одного улучшения
+            //BoostingManager.Instance.ToggleBoostingMode(); //отключаем режим после одного улучшения
         }
     }
 }

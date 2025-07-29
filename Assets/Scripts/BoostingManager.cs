@@ -9,7 +9,7 @@ public class BoostingManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
         else
-            Destroy(gameObject); // или выдавай ошибку
+            Destroy(gameObject);
     }
 
     private bool isBoostingMode = false;
