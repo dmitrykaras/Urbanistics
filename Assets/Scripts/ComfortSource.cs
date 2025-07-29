@@ -15,4 +15,18 @@ public class ComfortSource : MonoBehaviour
         PopulationManager.Instance.RecalculateAllHouses();
     }
 
+    private void OnDestroy()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 20f);
+        foreach (var col in colliders)
+        {
+            var house = col.GetComponent<House>();
+            if (house != null)
+            {
+                PopulationManager.Instance.RecalculateAllHouses();
+            }
+        }
+    }
+
+
 }
