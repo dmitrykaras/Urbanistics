@@ -36,6 +36,9 @@ public class Builder : MonoBehaviour
     public GameObject bulldozerGhostPrefab;
     private GameObject bulldozerGhostInstance;
 
+    public BoostingButton boostingButton; //ссылка на кнопку boosting
+
+
     void Awake()
     {
         Instance = this; //для ResourceProducer 
@@ -83,6 +86,24 @@ public class Builder : MonoBehaviour
         //строительство зданий (если не включен режим бульдозера)
         if (!bulldozerMode)
         {
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+                if (hit.collider != null)
+                {
+                    House house = hit.collider.GetComponent<House>();
+                    if (house != null)
+                    {
+                        // передаём выбранный дом кнопке улучшения
+                        boostingButton.SetTarget(house);
+                        Debug.Log("Дом выбран через Raycast");
+                    }
+                }
+            }
+
             //если не выбран Bulldozer, то прятать призрак bulldozerGhost
             if (bulldozerGhostInstance != null)
                 bulldozerGhostInstance.SetActive(false);

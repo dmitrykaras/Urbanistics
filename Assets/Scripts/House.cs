@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Resources;
 using UnityEngine;
-using TMPro;
 
 
 public enum HouseClass
@@ -14,7 +13,9 @@ public enum HouseClass
 public class House : MonoBehaviour
 {
     public HouseClass houseClass;
+
     public int currentPopulation;
+
     public HouseClass currentClass = HouseClass.Peasant; //хранит тип жителя
 
     public int capacity = 10; //вместимость здания
@@ -23,11 +24,6 @@ public class House : MonoBehaviour
     public GameObject upgradedPrefab; //улучшенная версия дома
 
     private bool isPlaced = false; //флаг, чтобы не заселять дом дважды
-
-    public GameObject upgradedToWorkerPrefab;
-    public GameObject upgradedToEngineerPrefab;
-
-    public int citizensCount = 0;
 
     //регестрируем дом при его создании
     private void Start()
@@ -87,6 +83,7 @@ public class House : MonoBehaviour
                         if (source.type == ComfortType.Bar) comfort++; //увеличиваем коморфт, если есть бар
                         if (source.type == ComfortType.Market) comfort++; //увеличиваем комфорт, если есть рынок
                     }
+                    PopulationManager.Instance.UpdatePopulationCounts();
                 }
             }
         }
@@ -96,33 +93,37 @@ public class House : MonoBehaviour
         if (comfort >= 1) maxResidents += 2; //+2 за бар
         if (comfort >= 2) maxResidents += 3; //+3 за рынок
 
-        //аселяем дом максимально возможным количеством жителей с учётом комфорта
+        //заселяем дом максимально возможным количеством жителей с учётом комфорта
         AddCitizens(maxResidents);
+        PopulationManager.Instance.UpdatePopulationCounts();
     }
 
     //улучшение здания
     public void TryUpgrade()
     {
-        if (currentPopulation < 10) return;
-
-        switch (houseClass)
+        // Проверка: достаточно ли жителей?
+        if (currentPopulation < 10)
         {
-            case HouseClass.Peasant:
-                if (citizensCount >= 10 && ResourceStorage.Instance.HasEnough(ResourceType.Stone, 10))
-                {
-                    ResourceStorage.Instance.Consume(ResourceType.Stone, 10);
-                    Upgrade(upgradedToWorkerPrefab, HouseClass.Worker);
-                }
-                break;
-            case HouseClass.Worker:
-                if (citizensCount >= 10 && ResourceStorage.Instance.HasEnough(ResourceType.Iron, 10))
-                {
-                    ResourceStorage.Instance.Consume(ResourceType.Iron, 10);
-                    Upgrade(upgradedToEngineerPrefab, HouseClass.Engineer);
-                }
-                break;
+            Debug.Log("Недостаточно жителей для улучшения!");
+            return;
         }
 
+        // Проверка: хватает ли ресурсов (10 камня)?
+        if (! ResourceStorage.Instance.HasEnough(ResourceType.Stone, 10))
+        {
+            Debug.Log("Недостаточно камня!");
+            return;
+        }
+
+        // Забираем ресурсы и производим апгрейд
+        ResourceStorage.Instance.SpendResource(ResourceType.Stone, 10);
+
+        // Создаём новое здание
+        GameObject upgraded = Instantiate(upgradedPrefab, transform.position, Quaternion.identity);
+
+        // Удаляем старое
+        Destroy(gameObject);
+        Debug.Log("Дом улучшен!");
     }
 
     private void Upgrade(GameObject newPrefab, HouseClass newClass)
@@ -134,4 +135,12 @@ public class House : MonoBehaviour
         Destroy(gameObject); // Удаляем старый дом
     }
 
+    private void OnMouseDown()
+    {
+        if (BoostingManager.Instance.IsBoostingMode())
+        {
+            TryUpgrade();
+            BoostingManager.Instance.ToggleBoostingMode(); //отключаем режим после одного улучшения
+        }
+    }
 }

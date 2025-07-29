@@ -1,21 +1,17 @@
 using UnityEngine;
 
-//кнопка улучшения зданий
 public class BoostingButton : MonoBehaviour
 {
     private House selectedHouse;
 
-    public void TryBoostSelected()
+    public void OnBoostingButtonClick()
     {
-        //если выбраное здание существует, то улучаем его нажаии
-        if (selectedHouse != null) 
-        {
-            selectedHouse.TryUpgrade();
-        }
+        BoostingManager.Instance.ToggleBoostingMode();
     }
 
     public void SetTarget(House house)
     {
         selectedHouse = house;
+        Debug.Log("Цель установлена: " + house.name);
     }
 }

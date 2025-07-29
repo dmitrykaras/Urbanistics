@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2810225873777295227}
   - component: {fileID: 7221002031925791079}
   - component: {fileID: 2593386982240074007}
-  - component: {fileID: 7516464863572468745}
+  - component: {fileID: 4532699726237253588}
   m_Layer: 0
   m_Name: House
   m_TagString: Building
@@ -135,7 +135,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &7516464863572468745
+--- !u!114 &4532699726237253588
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,6 +147,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cef3748b9aa7fa14186c9d61874cfb60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  capacity: 10
-  currentClass: 0
+  houseClass: 0
   currentPopulation: 0
+  currentClass: 0
+  capacity: 10
+  currentCitizens: 0
+  upgradedPrefab: {fileID: 2830131232320713556, guid: 8cb985e2601d689489c82f9dc2306ec9, type: 3}
+  upgradedToWorkerPrefab: {fileID: 0}
+  upgradedToEngineerPrefab: {fileID: 0}
+  citizensCount: 0
