@@ -54,7 +54,10 @@ public class House : MonoBehaviour
     //метод для вычисления комфорта
     public void CalculateComfortAndPopulate()
     {
-        int comfort = 0; //переменная для посчёта комфорта
+        RemoveAllCitizens(); //очищаем дом от предыдущих жителей перед перерасчётом
+
+        bool hasBar = false;
+        bool hasMarket = false;
 
         //получаем центральную клетку, где стоит дом
         Vector3Int centerCell = Builder.Instance.buildTilemap.WorldToCell(transform.position);
@@ -73,8 +76,8 @@ public class House : MonoBehaviour
                     ComfortSource source = collider.GetComponent<ComfortSource>();
                     if (source != null) //проверяем наличиее компонента
                     {
-                        if (source.type == ComfortType.Bar) comfort++; //увеличиваем коморфт, если есть бар
-                        if (source.type == ComfortType.Market) comfort++; //увеличиваем комфорт, если есть рынок
+                        if (source.type == ComfortType.Bar) hasBar = true; //увеличиваем коморфт, если есть бар
+                        if (source.type == ComfortType.Market) hasMarket = true; //увеличиваем комфорт, если есть рынок
                     }
                     PopulationManager.Instance.UpdatePopulationCounts();
                 }
@@ -83,8 +86,8 @@ public class House : MonoBehaviour
 
         //рассчитываем население
         int maxResidents = 5; //начинаем с 5
-        if (comfort >= 1) maxResidents += 2; //+2 за бар
-        if (comfort >= 2) maxResidents += 3; //+3 за рынок
+        if (hasBar) maxResidents += 2; //+2 за бар
+        if (hasMarket) maxResidents += 3; //+3 за рынок
 
         //заселяем дом максимально возможным количеством жителей с учётом комфорта
         AddCitizens(maxResidents);

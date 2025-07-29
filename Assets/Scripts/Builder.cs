@@ -226,7 +226,7 @@ public class Builder : MonoBehaviour
         UpdateBulldozerButtonColor(); //меняет цвет
     }
 
-    //Обновляет цвет кнопки "бульдозера"
+    //обновляет цвет кнопки "бульдозера"
     private void UpdateBulldozerButtonColor()
     {
         //если ссылка на компонент Image ещё не установлена — ищем её на кнопке

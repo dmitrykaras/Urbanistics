@@ -12,14 +12,15 @@ public class BoostingManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private bool isBoostingMode = false;
+    private bool isBoostingMode = false; //флаг для вкл/выкл режима аппгрейда
 
     public void ToggleBoostingMode()
     {
-        isBoostingMode = !isBoostingMode;
+        isBoostingMode = !isBoostingMode; //вкл/выкл
         Debug.Log("Boosting mode: " + isBoostingMode);
     }
 
+    //
     public bool IsBoostingMode()
     {
         return isBoostingMode;

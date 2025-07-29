@@ -2,6 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+public enum CitizenClass
+{
+    Peasant,   //крестьянин
+    Worker,    //рабочий
+    Engineer   //инженер
+}
 
 public class PopulationManager : MonoBehaviour
 {
@@ -162,6 +168,16 @@ public class PopulationManager : MonoBehaviour
     {
         usedPeasants -= count;
         if (usedPeasants < 0) usedPeasants = 0; //гарантирует что usedPeasants не станет меньше нуля.
+    }
+
+    //пересчёт данных о кол-ве населения
+    public void RecalculateAllHouses()
+    {
+        allHouses.RemoveAll(h => h == null); // удаляет уничтоженные
+        foreach (var house in allHouses)
+        {
+            house.CalculateComfortAndPopulate();
+        }
     }
 
 }
