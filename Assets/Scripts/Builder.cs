@@ -17,8 +17,6 @@ public class Builder : MonoBehaviour
     public BuildingData[] buildingDatas; //все здания с префабами и стоимостью
 
     [Header("Настройки строительства")]
-    public GameObject ghostBuildingPrefab; //призрак здания
-
     //звуки
     public AudioClip buildSound; 
     public AudioClip destroySound;
@@ -32,7 +30,7 @@ public class Builder : MonoBehaviour
     [Header("Данные Bulldozer Mode")]
     public Button bulldozerButton;
     private Image bulldozerButtonImage;
-    public bool bulldozerMode = false;
+    private bool bulldozerMode = false;
     public GameObject bulldozerGhostPrefab;
     private GameObject bulldozerGhostInstance;
 
@@ -214,8 +212,6 @@ public class Builder : MonoBehaviour
                 }
             }
         }
-
-
     }
 
     //переключает режим "бульдозера"
@@ -264,7 +260,7 @@ public class Builder : MonoBehaviour
         GameObject ghostPrefab = Resources.Load<GameObject>(ghostName); 
         if (ghostPrefab == null)
         {
-            ///если не найден призрачный префаб, используем оригинальный с прозрачностью
+            //если не найден призрачный префаб, используем оригинальный с прозрачностью
             ghostInstance = Instantiate(buildingPrefab);
             SetGhostTransparency(ghostInstance);
         }

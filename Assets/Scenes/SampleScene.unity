@@ -316,12 +316,10 @@ MonoBehaviour:
     cost:
     - resourceType: 0
       amount: 30
-  ghostBuildingPrefab: {fileID: 3623955544866507939, guid: e0e93f576bdf42f47a6410f7edeeb62a, type: 3}
   buildSound: {fileID: 8300000, guid: 87bce4d23b58edd4494f248ea91a26af, type: 3}
   destroySound: {fileID: 8300000, guid: 85bc8246c6347514996941e8f24aed49, type: 3}
   bulldozerButton: {fileID: 1943467228}
-  bulldozerMode: 0
-  bulldozerGhostPrefab: {fileID: 0}
+  bulldozerGhostPrefab: {fileID: 8461241525486498166, guid: 5c7bdb2ec920f684c9bd6b4b9387c412, type: 3}
   boostingButton: {fileID: 668188450}
 --- !u!4 &150676174
 Transform:
@@ -2831,6 +2829,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fcc975838e1dde46be8f6cc19b6c10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BoostingButton: {fileID: 668188447}
+  BoostingGhostInstance: {fileID: 2920623597637759096, guid: 7a030ee39e7d927428eccf46dd2545f7, type: 3}
 --- !u!4 &1189702630
 Transform:
   m_ObjectHideFlags: 0
