@@ -27,13 +27,15 @@ public class BoostingManager : MonoBehaviour
             BoostingGhostInstance = Instantiate(ghost);
     }
 
+    //вкл-выкл Boosting mode
     public void ToggleBoostingMode()
     {
         isBoostingMode = !isBoostingMode; //вкл/выкл
-        Debug.Log("Boosting mode: " + isBoostingMode);
+        Debug.Log("Boosting mode: " + (isBoostingMode ? "ON" : "OFF"));
         UpdateBoostingButtonColor();
     }
 
+    //обновлени€ цвета кнопки BoostingButton
     private void UpdateBoostingButtonColor()
     {
         //если ссылка на компонент Image ещЄ не установлена Ч ищем еЄ на кнопке

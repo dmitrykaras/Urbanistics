@@ -97,6 +97,13 @@ public class House : MonoBehaviour
     //улучшение здания
     public void TryUpgrade()
     {
+        //нельзя улучшить инженера
+        if (upgradedPrefab == null)
+        {
+            Debug.Log("Этот дом больше нельзя лучшить. Это максимальный уровень прокачки");
+            return;
+        }
+
         //проверка, что жителей больше 10
         if (currentCitizens < 10)
         {
@@ -124,6 +131,8 @@ public class House : MonoBehaviour
             upgradedHouse.PlaceHouse(); //заселение и комфорт
             upgradedHouse.currentClass = GetNextClass(currentClass); //переход к следующему классу
         }
+
+
 
         //удаляем старое
         Destroy(gameObject);
