@@ -14,24 +14,38 @@ public class BoostingManager : MonoBehaviour
     }
 
     private bool isBoostingMode = false; //флаг для вкл/выкл режима аппгрейда
+    public bool runningBoostingMode = false;
 
     //кнопки и цвета
     private Image BoostingButtonImage;
     public Button BoostingButton;
     public GameObject BoostingGhostInstance;
 
-    private void Start()
+    void Start()
     {
         GameObject ghost = Resources.Load<GameObject>("BoostingGhost");
         if (ghost != null)
             BoostingGhostInstance = Instantiate(ghost);
     }
 
+    void Update()
+    {
+        BoostingGhost();
+    }
+
     //вкл-выкл Boosting mode
     public void ToggleBoostingMode()
     {
         isBoostingMode = !isBoostingMode; //вкл/выкл
-        Debug.Log("Boosting mode: " + (isBoostingMode ? "ON" : "OFF"));
+        if (isBoostingMode)
+        {
+            runningBoostingMode = true;
+        }
+        else
+        {
+            runningBoostingMode = false;
+        }
+            Debug.Log("Boosting mode: " + (isBoostingMode ? "ON" : "OFF"));
         UpdateBoostingButtonColor();
     }
 
@@ -51,9 +65,33 @@ public class BoostingManager : MonoBehaviour
         return isBoostingMode;
     }
 
-            //    if (BoostingManager.Instance.BoostingGhostInstance != null)
-            //{
-            //    BoostingManager.Instance.BoostingGhostInstance.transform.position = placePosition;
-            //    BoostingManager.Instance.BoostingGhostInstance.SetActive(true);
-            //}
+    //активация BoostingGhost
+    public void BoostingGhost()
+    {
+        if (isBoostingMode)
+        {
+            Builder.Instance.DestroyGhost();
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            //преобразуем в координаты клетки тайлмапа
+            Vector3Int cellPosition = Builder.Instance.buildTilemap.WorldToCell(mouseWorldPos);
+
+            //получаем центр клетки в мировых координатах
+            Vector3 placePosition = Builder.Instance.buildTilemap.GetCellCenterWorld(cellPosition);
+
+            if (BoostingGhostInstance != null)
+            {
+                BoostingGhostInstance.transform.position = placePosition;
+                BoostingGhostInstance.SetActive(true);
+            }
+        }
+        else
+        {
+            if (BoostingGhostInstance != null)
+            {
+                BoostingGhostInstance.SetActive(false);
+            }
+        }
+    }
+
 }

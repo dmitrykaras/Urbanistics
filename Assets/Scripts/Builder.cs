@@ -23,7 +23,7 @@ public class Builder : MonoBehaviour
     private AudioSource audioSource; //источник звука
 
     private GameObject ghostInstance; //текущий призрак здания на сцене
-    private int currentBuildingIndex = 0; //индекс текущего выбранного здания
+    public int currentBuildingIndex = 0; //индекс текущего выбранного здания
     private HashSet<Vector3Int> occupiedCells = new HashSet<Vector3Int>(); //клетки, на которых уже есть здания
     
 
@@ -106,64 +106,74 @@ public class Builder : MonoBehaviour
                 bulldozerGhostInstance.SetActive(false);
 
             //перемещаем призрачное здание на текущую позицию
-            ghostInstance.transform.position = placePosition;
-            bool isOccupied = occupiedCells.Contains(cellPosition);
-
-            if (isOccupied)
+            if (ghostInstance != null)
             {
-                ghostInstance.SetActive(false); //выкл отображение, если клетка занята
+                ghostInstance.transform.position = placePosition;
             }
-            else
+            bool isOccupied = occupiedCells.Contains(cellPosition);
+            if (!BoostingManager.Instance.runningBoostingMode)
             {
-                ghostInstance.SetActive(true); //вкл, если это не так
+                if (isOccupied)
+                {
+                    if (ghostInstance != null)
+                        ghostInstance.SetActive(false); //выкл отображение, если клетка занята
+                }
+                else
+                {
+                    if (ghostInstance != null)
+                        ghostInstance.SetActive(true); //вкл, если это не так
+                }
             }
 
             //если нажата левая кнопка мыши
             if (Input.GetMouseButtonDown(0))
             {
-                //проверяем, свободна ли клетка
-                if (!occupiedCells.Contains(cellPosition))
+                if (!BoostingManager.Instance.runningBoostingMode)
                 {
-                    //получаем данные о текущем выбранном здании
-                    BuildingData data = buildingDatas[currentBuildingIndex];
-
-                    //проверяем, хватает ли ресурсов
-                    if (ResourceStorage.Instance.CanAfford(data.cost))
+                    //проверяем, свободна ли клетка
+                    if (!occupiedCells.Contains(cellPosition))
                     {
-                        //создаём здание
-                        GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
+                        //получаем данные о текущем выбранном здании
+                        BuildingData data = buildingDatas[currentBuildingIndex];
 
-                        //гарантированно добавляем BuildingInstance, если его нет
-                        BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
-                        if (bi == null)
+                        //проверяем, хватает ли ресурсов
+                        if (ResourceStorage.Instance.CanAfford(data.cost))
                         {
-                            bi = newBuilding.AddComponent<BuildingInstance>();
+                            //создаём здание
+                            GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
+
+                            //гарантированно добавляем BuildingInstance, если его нет
+                            BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
+                            if (bi == null)
+                            {
+                                bi = newBuilding.AddComponent<BuildingInstance>();
+                            }
+
+                            bi.cost = data.cost;  //запоминаем стоимость
+
+                            //если это дом — вызываем PlaceHouse, чтобы заселение было корректным
+                            if (newBuilding.TryGetComponent<House>(out House houseComponent))
+                            {
+                                houseComponent.PlaceHouse();
+                            }
+
+
+                            ResourceStorage.Instance.DeductResources(data.cost); //вычитаем ресурсы у игрока
+                            occupiedCells.Add(cellPosition); //помечаем клетку как занятую
+                            PlaySound(buildSound); //играем звук постройки
+                            Debug.Log("Построено: " + data.prefab.name);
+
+
                         }
-
-                        bi.cost = data.cost;  //запоминаем стоимость
-
-                        //если это дом — вызываем PlaceHouse, чтобы заселение было корректным
-                        if (newBuilding.TryGetComponent<House>(out House houseComponent))
+                        else
                         {
-                            houseComponent.PlaceHouse();
+                            Debug.Log("Недостаточно ресурсов для постройки!");
                         }
-
-
-                        ResourceStorage.Instance.DeductResources(data.cost); //вычитаем ресурсы у игрока
-                        occupiedCells.Add(cellPosition); //помечаем клетку как занятую
-                        PlaySound(buildSound); //играем звук постройки
-                        Debug.Log("Построено: " + data.prefab.name);
-
-
                     }
                     else
                     {
-                        Debug.Log("Недостаточно ресурсов для постройки!");
+                        Debug.Log("Эта клетка уже занята!");
                     }
-                }
-                else
-                {
-                    Debug.Log("Эта клетка уже занята!");
                 }
             }
         }
@@ -253,7 +263,7 @@ public class Builder : MonoBehaviour
     }
 
     //создаёт "призрачную" версию здания
-    private void SpawnGhost(GameObject buildingPrefab)
+    public void SpawnGhost(GameObject buildingPrefab)
     {
         string ghostName = buildingPrefab.name + "Ghost"; //формируем имя файла-призрака
         //пытаемся загрузить префаб призрака из папки Resources
@@ -301,5 +311,12 @@ public class Builder : MonoBehaviour
     {
         if (clip == null || audioSource == null) return;
         audioSource.PlayOneShot(clip); //воспроизводим звук
+    }
+
+    //убирает все остальны призраки кроме одного
+    public void DestroyGhost()
+    {
+        if (ghostInstance != null)
+            ghostInstance.SetActive(false);
     }
 }

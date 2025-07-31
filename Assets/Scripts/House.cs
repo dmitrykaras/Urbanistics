@@ -167,7 +167,6 @@ public class House : MonoBehaviour
         if (BoostingManager.Instance.IsBoostingMode())
         {
             TryUpgrade();
-            //BoostingManager.Instance.ToggleBoostingMode(); //отключаем режим после одного улучшения
         }
     }
 }
