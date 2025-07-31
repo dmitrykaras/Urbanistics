@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 
 public enum HouseClass
@@ -111,28 +112,37 @@ public class House : MonoBehaviour
             return;
         }
 
-        // Проверка: хватает ли ресурсов (10 камня)?
-        //if (! ResourceStorage.Instance.HasEnough(ResourceType.Stone, 10))
-        //{
-        //    Debug.Log("Недостаточно камня!");
-        //    return;
-        //}
+        //cоздаём список нужных ресурсов
+        List<ResourceCost> upgradeCost = new List<ResourceCost>
+        {
+        new ResourceCost { resourceType = ResourceType.Stone, amount = 10 }
+        };
+
+        if (currentClass == HouseClass.Worker) // или другой критерий
+        {
+            upgradeCost.Add(new ResourceCost { resourceType = ResourceType.Iron, amount = 10 });
+        }
+
+        //проверка хватает ли ресурсов
+        if (!ResourceStorage.Instance.CanAfford(upgradeCost.ToArray()))
+        {
+            Debug.Log("Недостаточно ресурсов для улучшения!");
+            return;
+        }
 
         //забираем ресурсы и производим апгрейд
-        //ResourceStorage.Instance.SpendResource(ResourceType.Stone, 10);
+        ResourceStorage.Instance.DeductResources(upgradeCost.ToArray());
 
         //создаём новое здание
         GameObject upgraded = Instantiate(upgradedPrefab, transform.position, Quaternion.identity);
 
-        //обработка нового дома
+        //настройка нового дома
         House upgradedHouse = upgraded.GetComponent<House>();
         if (upgradedHouse != null)
         {
             upgradedHouse.PlaceHouse(); //заселение и комфорт
             upgradedHouse.currentClass = GetNextClass(currentClass); //переход к следующему классу
         }
-
-
 
         //удаляем старое
         Destroy(gameObject);
