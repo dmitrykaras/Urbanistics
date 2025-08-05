@@ -42,7 +42,19 @@ public class RoadManager : MonoBehaviour
             {
                 Debug.Log("ƒом потер€л доступ к дороге и будет разрушен.");
                 House.Destroy(house.gameObject);
-                //добавить возрат средств за дом
+
+                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector3Int cellPosition = Builder.Instance.buildTilemap.WorldToCell(mouseWorldPos);
+                Vector3 placePosition = Builder.Instance.buildTilemap.GetCellCenterWorld(cellPosition);
+
+                Collider2D hitCollider = Physics2D.OverlapPoint(placePosition);
+
+                BuildingInstance building = hitCollider.GetComponent<BuildingInstance>();
+                if (building != null && building.cost != null)
+                {
+                    ResourceStorage.Instance.AddResources(building.cost);
+                    Debug.Log("–есурсы возвращены");
+                }
             }
         }
     }

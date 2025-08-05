@@ -4,10 +4,12 @@ using UnityEngine.Tilemaps;
 
 public class RoadPainter : MonoBehaviour
 {
+    public static RoadPainter Instance { get; private set; }
+
     [Header("ќсновные настройки")]
     public Tilemap roadTilemap; //Tilemap, на которой рисуем дороги
-    public TileBase roadTile; //сам тайл дороги (можно RuleTile дл€ авто-тайлинга)
-    public Transform ghost; //объект-призрак (спрайт) Ч optional
+    public TileBase RoadPrefab; //сам тайл дороги (можно RuleTile дл€ авто-тайлинга)
+    public Transform RoadGhost; //объект-призрак (спрайт) Ч optional
     public Camera mainCamera;
 
     [Header("Ќастройки")]
@@ -19,39 +21,66 @@ public class RoadPainter : MonoBehaviour
     //ресурсы на тайл
     public ResourceCost[] costPerTile; // если у теб€ есть ResourceCost struct
 
-    private bool isPainting = false; //включение и выключение режима строительства дорог
+    public bool isPainting = false; //включение и выключение режима строительства дорог
     private float lastPlaceTime = 0f;
     private Vector3Int lastPlacedCell = new Vector3Int(int.MinValue, int.MinValue, 0);
+    public bool runningRoadMode = false;
+
+    public GameObject RoadGhostInstance;
 
     private void Start()
     {
         if (mainCamera == null) mainCamera = Camera.main;
-        if (ghost != null) ghost.gameObject.SetActive(false);
+
+        GameObject ghost = Resources.Load<GameObject>("RoadGhost");
+        if (ghost != null)
+            RoadGhostInstance = Instantiate(ghost);
+    }
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
     }
 
     private void Update()
     {
+        RoadGhostRunning(); //обновл€ем каждый кадр призрак RoadGhost
+
         //toggle режим
         if (Input.GetKeyDown(toggleKey))
         {
             isPainting = !isPainting;
             if (!isPainting)
             {
-                if (ghost != null) ghost.gameObject.SetActive(false);
+                if (RoadGhost != null) RoadGhost.gameObject.SetActive(false);
+            }
+
+            if (isPainting)
+            {
+                runningRoadMode = true;
+                Debug.Log("RoadBuildingMode running");
+            }
+            else
+            {
+                runningRoadMode = false;
+                Debug.Log("RoadBuildingMode NOT running");
             }
         }
 
         if (!isPainting) return;
 
-        Vector3 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int cell = Builder.Instance.buildTilemap.WorldToCell(mouseWorld);
-        Vector3 cellCenterWorld = Builder.Instance.buildTilemap.GetCellCenterWorld(cell);
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3Int cellPosition = Builder.Instance.buildTilemap.WorldToCell(mouseWorldPos);
+        Vector3 placePosition = Builder.Instance.buildTilemap.GetCellCenterWorld(cellPosition);
 
-        //показываем ghost под мышью
-        if (ghost != null)
+        //показываем RoadGhost под мышью
+        if (RoadGhost != null)
         {
-            ghost.position = cellCenterWorld;
-            ghost.gameObject.SetActive(true);
+            RoadGhost.position = placePosition;
+            RoadGhost.gameObject.SetActive(true);
         }
 
         bool shouldPaint = !requireHoldMouse || Input.GetMouseButton(0);
@@ -62,7 +91,7 @@ public class RoadPainter : MonoBehaviour
             if (Time.time - lastPlaceTime < placeInterval) return;
 
             //если brushSize > 1, делаем цикл по области
-            List<Vector3Int> cellsToPlace = GetBrushCells(cell, brushSize);
+            List<Vector3Int> cellsToPlace = GetBrushCells(cellPosition, brushSize);
 
             //если нужно Ч суммарна€ проверка ресурсов перед тем, как поставить все клетки
             if (CanPlaceBatch(cellsToPlace))
@@ -80,17 +109,9 @@ public class RoadPainter : MonoBehaviour
             }
             else
             {
-                //можно проиграть звук/показать UI "нет ресурсов"
+                Debug.Log("Ќе хватает ресурсов на постойку дороги");
             }
         }
-
-        //выход правой кнопкой мыши
-        if (Input.GetMouseButtonDown(1))
-        {
-            isPainting = false;
-            if (ghost != null) ghost.gameObject.SetActive(false);
-        }
-
         //регулировка кисти колесом мыши
         int wheel = (int)Input.mouseScrollDelta.y;
         if (wheel != 0)
@@ -148,7 +169,7 @@ public class RoadPainter : MonoBehaviour
         }
 
         //ставим тайл
-        roadTilemap.SetTile(cell, roadTile);
+        roadTilemap.SetTile(cell, RoadPrefab);
 
         //добавл€ем в логическую структуру
         RoadManager.Instance.AddRoad(cell);
@@ -163,5 +184,32 @@ public class RoadPainter : MonoBehaviour
         foreach (var d in dirs)
             roadTilemap.RefreshTile(cell + d);
         roadTilemap.RefreshTile(cell);
+    }
+
+    //настройка призрак RoadGhost 
+    private void RoadGhostRunning()
+    {
+        if (isPainting)
+        {
+            Builder.Instance.DestroyGhost();
+
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cellPosition = Builder.Instance.buildTilemap.WorldToCell(mouseWorldPos);
+            Vector3 placePosition = Builder.Instance.buildTilemap.GetCellCenterWorld(cellPosition);
+
+            if (RoadGhostInstance != null)
+            {
+                RoadGhostInstance.transform.position = placePosition;
+                RoadGhostInstance.SetActive(true);
+            }
+        }
+        else
+        {
+            if (RoadGhostInstance != null)
+            {
+                RoadGhostInstance.SetActive(false);
+            }
+        }
+
     }
 }

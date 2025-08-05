@@ -134,49 +134,52 @@ public class Builder : MonoBehaviour
             {
                 if (!BoostingManager.Instance.runningBoostingMode)
                 {
-                    //проверяем, свободна ли клетка
-                    if (!occupiedCells.Contains(cellPosition))
+                    if (!RoadPainter.Instance.runningRoadMode)
                     {
-                        //получаем данные о текущем выбранном здании
-                        BuildingData data = buildingDatas[currentBuildingIndex];
-
-                        //проверяем, хватает ли ресурсов
-                        if (ResourceStorage.Instance.CanAfford(data.cost))
+                        //проверяем, свободна ли клетка
+                        if (!occupiedCells.Contains(cellPosition))
                         {
-                            //создаём здание
-                            GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
+                            //получаем данные о текущем выбранном здании
+                            BuildingData data = buildingDatas[currentBuildingIndex];
 
-                            //гарантированно добавляем BuildingInstance, если его нет
-                            BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
-                            if (bi == null)
+                            //проверяем, хватает ли ресурсов
+                            if (ResourceStorage.Instance.CanAfford(data.cost))
                             {
-                                bi = newBuilding.AddComponent<BuildingInstance>();
+                                //создаём здание
+                                GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
+
+                                //гарантированно добавляем BuildingInstance, если его нет
+                                BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
+                                if (bi == null)
+                                {
+                                    bi = newBuilding.AddComponent<BuildingInstance>();
+                                }
+
+                                bi.cost = data.cost;  //запоминаем стоимость
+
+                                //если это дом — вызываем PlaceHouse, чтобы заселение было корректным
+                                if (newBuilding.TryGetComponent<House>(out House houseComponent))
+                                {
+                                    houseComponent.PlaceHouse();
+                                }
+
+
+                                ResourceStorage.Instance.DeductResources(data.cost); //вычитаем ресурсы у игрока
+                                occupiedCells.Add(cellPosition); //помечаем клетку как занятую
+                                PlaySound(buildSound); //играем звук постройки
+                                Debug.Log("Построено: " + data.prefab.name);
+
+
                             }
-
-                            bi.cost = data.cost;  //запоминаем стоимость
-
-                            //если это дом — вызываем PlaceHouse, чтобы заселение было корректным
-                            if (newBuilding.TryGetComponent<House>(out House houseComponent))
+                            else
                             {
-                                houseComponent.PlaceHouse();
+                                Debug.Log("Недостаточно ресурсов для постройки!");
                             }
-
-
-                            ResourceStorage.Instance.DeductResources(data.cost); //вычитаем ресурсы у игрока
-                            occupiedCells.Add(cellPosition); //помечаем клетку как занятую
-                            PlaySound(buildSound); //играем звук постройки
-                            Debug.Log("Построено: " + data.prefab.name);
-
-
                         }
                         else
                         {
-                            Debug.Log("Недостаточно ресурсов для постройки!");
+                            Debug.Log("Эта клетка уже занята!");
                         }
-                    }
-                    else
-                    {
-                        Debug.Log("Эта клетка уже занята!");
                     }
                 }
             }
