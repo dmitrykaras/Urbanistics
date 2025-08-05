@@ -34,7 +34,11 @@ public class Builder : MonoBehaviour
     public GameObject bulldozerGhostPrefab;
     private GameObject bulldozerGhostInstance;
 
+    [Header("Улучшения зданий")]
     public BoostingButton boostingButton; //ссылка на кнопку boosting
+
+    [Header("Строительство дорог")]
+    public GameObject roadPrefab; //префаб дороги
 
 
     void Awake()
@@ -318,5 +322,12 @@ public class Builder : MonoBehaviour
     {
         if (ghostInstance != null)
             ghostInstance.SetActive(false);
+    }
+
+    //размещение дороги
+    public void PlaceRoad(Vector3Int cellPos)
+    {
+        Instantiate(roadPrefab, buildTilemap.GetCellCenterWorld(cellPos), Quaternion.identity);
+        RoadManager.Instance.AddRoad(cellPos);
     }
 }

@@ -34,7 +34,19 @@ public class House : MonoBehaviour
         if (isPlaced) return; //не заселять повторно
         isPlaced = true;
 
-        CalculateComfortAndPopulate(); // запуск расчёта комфорта и заселения
+        Vector3Int cellPos = Builder.Instance.buildTilemap.WorldToCell(transform.position);
+
+        if (!HasAdjacentRoad(cellPos))
+        {
+            Debug.Log("Нет дороги рядом. Дом исчезает.");
+            Destroy(gameObject);
+            return;
+            //!!! ДОБАВИТЬ ВОЗВРАТ РЕСУРСОВ ОБЯЗАТЕЛЬНО!!!
+        }
+        else
+        {
+            CalculateComfortAndPopulate(); // запуск расчёта комфорта и заселения
+        }
     }
 
     //метод для добавления жителей в дом
@@ -168,5 +180,26 @@ public class House : MonoBehaviour
         {
             TryUpgrade();
         }
+    }
+
+    //проверка, что рядом есть дорога
+    public bool HasAdjacentRoad(Vector3Int cellPos)
+    {
+        // Чекаем 4 соседние клетки
+        Vector3Int[] directions = new Vector3Int[]
+        {
+            new Vector3Int(1, 0, 0),
+            new Vector3Int(-1, 0, 0),
+            new Vector3Int(0, 1, 0),
+            new Vector3Int(0, -1, 0),
+        };
+
+        foreach (var dir in directions)
+        {
+            if (RoadManager.Instance.IsRoadAt(cellPos + dir))
+                return true;
+        }
+
+        return false;
     }
 }
