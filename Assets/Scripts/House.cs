@@ -29,23 +29,21 @@ public class House : MonoBehaviour
     }
 
     //метод вызывается, если объект на сцене
-    public void PlaceHouse()
+    public bool PlaceHouse()
     {
-        if (isPlaced) return; //не заселять повторно
+        if (isPlaced) return true;
         isPlaced = true;
 
         Vector3Int cellPos = Builder.Instance.buildTilemap.WorldToCell(transform.position);
 
         if (!HasAdjacentRoad(cellPos))
         {
-            Debug.Log("Нет дороги рядом. Дом исчезает.");
-            Builder.Instance.DestroySpecificBuilding(this.gameObject);
-            return;
+            Debug.Log("Нет дороги рядом. Дом не будет поставлен.");
+            return false;
         }
-        else
-        {
-            CalculateComfortAndPopulate(); // запуск расчёта комфорта и заселения
-        }
+
+        CalculateComfortAndPopulate();
+        return true;
     }
 
     //метод для добавления жителей в дом

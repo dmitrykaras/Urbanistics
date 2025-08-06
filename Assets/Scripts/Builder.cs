@@ -38,8 +38,7 @@ public class Builder : MonoBehaviour
     public BoostingButton boostingButton; //ссылка на кнопку boosting
 
     [Header("Строительство дорог")]
-    public GameObject roadPrefab; //префаб дороги
-
+    public TileBase roadTile; 
 
     void Awake()
     {
@@ -132,54 +131,54 @@ public class Builder : MonoBehaviour
             //если нажата левая кнопка мыши
             if (Input.GetMouseButtonDown(0))
             {
-                if (!BoostingManager.Instance.runningBoostingMode)
+                if (!BoostingManager.Instance.runningBoostingMode && !RoadPainter.Instance.runningRoadMode)
                 {
-                    if (!RoadPainter.Instance.runningRoadMode)
+                    //проверяем, свободна ли клетка
+                    if (!occupiedCells.Contains(cellPosition))
                     {
-                        //проверяем, свободна ли клетка
-                        if (!occupiedCells.Contains(cellPosition))
+                        //получаем данные о текущем выбранном здании
+                        BuildingData data = buildingDatas[currentBuildingIndex];
+
+                        //проверяем, хватает ли ресурсов
+                        if (ResourceStorage.Instance.CanAfford(data.cost))
                         {
-                            //получаем данные о текущем выбранном здании
-                            BuildingData data = buildingDatas[currentBuildingIndex];
+                            //создаём здание
+                            GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
 
-                            //проверяем, хватает ли ресурсов
-                            if (ResourceStorage.Instance.CanAfford(data.cost))
+                            //гарантированно добавляем BuildingInstance, если его нет
+                            BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
+                            if (bi == null) bi = newBuilding.AddComponent<BuildingInstance>();
+
+                            bi.cost = data.cost;  //запоминаем стоимость
+
+                            //если это дом — вызываем PlaceHouse, чтобы заселение было корректным
+                            bool placementOk = true;
+                            if (newBuilding.TryGetComponent<House>(out House houseComponent))
                             {
-                                //создаём здание
-                                GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
+                                placementOk = houseComponent.PlaceHouse();
+                            }
 
-                                //гарантированно добавляем BuildingInstance, если его нет
-                                BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
-                                if (bi == null)
-                                {
-                                    bi = newBuilding.AddComponent<BuildingInstance>();
-                                }
-
-                                bi.cost = data.cost;  //запоминаем стоимость
-
-                                //если это дом — вызываем PlaceHouse, чтобы заселение было корректным
-                                if (newBuilding.TryGetComponent<House>(out House houseComponent))
-                                {
-                                    houseComponent.PlaceHouse();
-                                }
-
-
+                            if (!placementOk)
+                            {
+                                //размещение не удалось — просто уничтожаем префаб
+                                Destroy(newBuilding);
+                            }
+                            else
+                            {
                                 ResourceStorage.Instance.DeductResources(data.cost); //вычитаем ресурсы у игрока
                                 occupiedCells.Add(cellPosition); //помечаем клетку как занятую
                                 PlaySound(buildSound); //играем звук постройки
                                 Debug.Log("Построено: " + data.prefab.name);
-
-
-                            }
-                            else
-                            {
-                                Debug.Log("Недостаточно ресурсов для постройки!");
                             }
                         }
                         else
                         {
-                            Debug.Log("Эта клетка уже занята!");
+                            Debug.Log("Недостаточно ресурсов для постройки!");
                         }
+                    }
+                    else
+                    {
+                        Debug.Log("Эта клетка уже занята!");
                     }
                 }
             }
@@ -199,7 +198,31 @@ public class Builder : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0)) //при нажатии на ЛКМ
             {
+                TileBase tile = buildTilemap.GetTile(cellPosition);
+                if (tile != null && roadTile != null && tile == roadTile)
+                {
+                    Debug.Log($"Найдена дорога на {cellPosition} — удаляем тайл дороги.");
+
+                    // Удаляем тайл с tilemap
+                    buildTilemap.SetTile(cellPosition, null);
+
+                    // Уведомляем менеджер дорог (если у тебя есть RoadManager для данных)
+                    if (RoadManager.Instance != null)
+                    {
+                        RoadManager.Instance.RemoveRoad(cellPosition);
+                    }
+
+                    PlaySound(destroySound);
+
+                    // После удаления дороги проверяем отрезанные дома
+                    RoadManager.Instance.CheckDisconnectedBuildings();
+
+                    return; // ВАЖНО! Прерываем дальнейшее выполнение, чтобы не удалять здание
+                }
+
+                // Если дорога не удалена, только тогда пытаемся удалить здание
                 DestroyHouse();
+
             }
         }
     }
@@ -238,15 +261,15 @@ public class Builder : MonoBehaviour
         }
     }
 
-    // удаление по GameObject (удобно, если вызываем из House или по ссылке на объект)
+    // удаление по GameObject
     public void DestroySpecificBuilding(GameObject buildingGO)
     {
         if (buildingGO == null) return;
 
-        // определяем cell по позиции самого здания
+        //определяем cell по позиции самого здания
         Vector3Int buildingCell = buildTilemap.WorldToCell(buildingGO.transform.position);
 
-        // вернуть ресурсы
+        //вернуть ресурсы
         BuildingInstance bi = buildingGO.GetComponent<BuildingInstance>();
         if (bi != null && bi.cost != null)
         {
@@ -254,14 +277,14 @@ public class Builder : MonoBehaviour
             Debug.Log("Ресурсы возвращены");
         }
 
-        // если дом — удалить жителей
+        //если дом — удалить жителей
         House house = buildingGO.GetComponent<House>();
         if (house != null)
         {
             house.RemoveAllCitizens();
         }
 
-        // отключаем коллайдер, удаляем из occupiedCells и уничтожаем объект
+        //отключаем коллайдер, удаляем из occupiedCells и уничтожаем объект
         Collider2D col = buildingGO.GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
@@ -359,10 +382,13 @@ public class Builder : MonoBehaviour
     }
 
     //воспроизводит однократный звук
-    private void PlaySound(AudioClip clip)
+    public void PlaySound(AudioClip clip)
     {
         if (clip == null || audioSource == null) return;
-        audioSource.PlayOneShot(clip); //воспроизводим звук
+
+        audioSource.clip = clip;
+        audioSource.Stop();  // остановить предыдущий звук
+        audioSource.Play();  // запустить заново
     }
 
     //убирает все остальны призраки кроме одного
@@ -372,10 +398,4 @@ public class Builder : MonoBehaviour
             ghostInstance.SetActive(false);
     }
 
-    //размещение дороги
-    public void PlaceRoad(Vector3Int cellPos)
-    {
-        Instantiate(roadPrefab, buildTilemap.GetCellCenterWorld(cellPos), Quaternion.identity);
-        RoadManager.Instance.AddRoad(cellPos);
-    }
 }

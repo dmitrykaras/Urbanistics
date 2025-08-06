@@ -22,7 +22,6 @@ public class RoadManager : MonoBehaviour
     public void RemoveRoad(Vector3Int position)
     {
         roadPositions.Remove(position);
-        CheckDisconnectedBuildings();
     }
 
     public bool IsRoadAt(Vector3Int position)
@@ -33,6 +32,7 @@ public class RoadManager : MonoBehaviour
     //проверка отрезанных зданий после удаления дороги
     public void CheckDisconnectedBuildings()
     {
+        Debug.Log("CheckDisconnectedBuildings вызван");
         House[] allHouses = Object.FindObjectsByType<House>(FindObjectsSortMode.None);
 
         foreach (var house in allHouses)
@@ -41,10 +41,8 @@ public class RoadManager : MonoBehaviour
             if (!house.HasAdjacentRoad(cellPos))
             {
                 Debug.Log("Дом потерял доступ к дороге и будет разрушен.");
-                Builder.Instance.DestroyHouse();
+                Builder.Instance.DestroySpecificBuilding(house.gameObject);
             }
         }
     }
-
-
 }

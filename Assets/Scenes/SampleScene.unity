@@ -362,7 +362,7 @@ MonoBehaviour:
   bulldozerButton: {fileID: 1943467228}
   bulldozerGhostPrefab: {fileID: 8461241525486498166, guid: 5c7bdb2ec920f684c9bd6b4b9387c412, type: 3}
   boostingButton: {fileID: 668188450}
-  roadPrefab: {fileID: 8763292472870098485, guid: 5610ca8d3bf4897488ae75055cf35f84, type: 3}
+  roadTile: {fileID: 11400000, guid: 2419ce2e93d5d4744a432d1431db4e83, type: 2}
 --- !u!4 &150676174
 Transform:
   m_ObjectHideFlags: 0
@@ -1668,9 +1668,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb79d4bd2a4fff84ba0e5545d9ed86b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roadTilemap: {fileID: 664440619}
-  RoadPrefab: {fileID: 11400000, guid: 2419ce2e93d5d4744a432d1431db4e83, type: 2}
-  RoadGhost: {fileID: 0}
+  buildTilemap: {fileID: 664440619}
+  RoadTile: {fileID: 11400000, guid: 2419ce2e93d5d4744a432d1431db4e83, type: 2}
+  RoadGhost: {fileID: 3588717631637192380, guid: 48849ec242abcdb48b473ae069ef2c0f, type: 3}
   mainCamera: {fileID: 519420031}
   toggleKey: 114
   brushSize: 1
@@ -1680,6 +1680,7 @@ MonoBehaviour:
   isPainting: 0
   runningRoadMode: 0
   RoadGhostInstance: {fileID: 0}
+  sand: {fileID: 8300000, guid: 3c23d34d20b23c141ad297e1ebe83d16, type: 3}
 --- !u!4 &589910873
 Transform:
   m_ObjectHideFlags: 0
