@@ -356,6 +356,10 @@ MonoBehaviour:
     cost:
     - resourceType: 0
       amount: 30
+  - prefab: {fileID: 474128540802789157, guid: 881acd94539da2446913d89043d9f93b, type: 3}
+    cost:
+    - resourceType: 0
+      amount: 30
   buildSound: {fileID: 8300000, guid: 87bce4d23b58edd4494f248ea91a26af, type: 3}
   destroySound: {fileID: 8300000, guid: 85bc8246c6347514996941e8f24aed49, type: 3}
   currentBuildingIndex: 0
@@ -1637,7 +1641,7 @@ MonoBehaviour:
   maxCameraPos: {x: 0, y: 0}
   mapImage: {fileID: 1732808352}
   zoomSpeed: 5
-  minZoom: 3
+  minZoom: 1
   maxZoom: 13.5
 --- !u!1 &589910871
 GameObject:
@@ -4286,7 +4290,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
