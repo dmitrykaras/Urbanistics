@@ -41,20 +41,7 @@ public class RoadManager : MonoBehaviour
             if (!house.HasAdjacentRoad(cellPos))
             {
                 Debug.Log("Дом потерял доступ к дороге и будет разрушен.");
-                House.Destroy(house.gameObject);
-
-                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector3Int cellPosition = Builder.Instance.buildTilemap.WorldToCell(mouseWorldPos);
-                Vector3 placePosition = Builder.Instance.buildTilemap.GetCellCenterWorld(cellPosition);
-
-                Collider2D hitCollider = Physics2D.OverlapPoint(placePosition);
-
-                BuildingInstance building = hitCollider.GetComponent<BuildingInstance>();
-                if (building != null && building.cost != null)
-                {
-                    ResourceStorage.Instance.AddResources(building.cost);
-                    Debug.Log("Ресурсы возвращены");
-                }
+                Builder.Instance.DestroyHouse();
             }
         }
     }

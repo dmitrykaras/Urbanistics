@@ -39,9 +39,8 @@ public class House : MonoBehaviour
         if (!HasAdjacentRoad(cellPos))
         {
             Debug.Log("Нет дороги рядом. Дом исчезает.");
-            Destroy(gameObject);
+            Builder.Instance.DestroySpecificBuilding(this.gameObject);
             return;
-            //!!! ДОБАВИТЬ ВОЗВРАТ РЕСУРСОВ ОБЯЗАТЕЛЬНО!!!
         }
         else
         {

@@ -210,6 +210,5 @@ public class RoadPainter : MonoBehaviour
                 RoadGhostInstance.SetActive(false);
             }
         }
-
     }
 }

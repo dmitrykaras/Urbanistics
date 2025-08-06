@@ -199,37 +199,82 @@ public class Builder : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0)) //при нажатии на ЛКМ
             {
-                //проверяем, есть ли коллайдер на месте клика
-                Collider2D hitCollider = Physics2D.OverlapPoint(placePosition); 
-                if (hitCollider != null)
-                {
-                    if (hitCollider.CompareTag("Building")) //если клик по зданию, то...
-                    {
-                        // 1. Возвращаем ресурсы, если есть
-                        BuildingInstance building = hitCollider.GetComponent<BuildingInstance>();
-                        if (building != null && building.cost != null)
-                        {
-                            ResourceStorage.Instance.AddResources(building.cost);
-                            Debug.Log("Ресурсы возвращены");
-                        }
-
-                        // 2. Если это дом — удалим жителей
-                        House house = hitCollider.GetComponent<House>();
-                        if (house != null)
-                        {
-                            house.RemoveAllCitizens(); // удаление жителей ДО уничтожения дома
-                        }
-
-                        // 3. Удаляем здание
-                        Destroy(hitCollider.gameObject);
-                        occupiedCells.Remove(cellPosition);
-                        PlaySound(destroySound);
-                        Debug.Log("Здание удалено");
-                    }
-                }
+                DestroyHouse();
             }
         }
     }
+
+    public void DestroyHouse()
+    {
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3Int cellPosition = buildTilemap.WorldToCell(mouseWorldPos);
+        Vector3 placePosition = buildTilemap.GetCellCenterWorld(cellPosition);
+        Collider2D hitCollider = Physics2D.OverlapPoint(placePosition);
+        if (hitCollider != null)
+        { 
+            if (hitCollider.CompareTag("Building")) //если клик по зданию, то...
+            {
+                // 1. Возвращаем ресурсы, если есть
+                BuildingInstance building = hitCollider.GetComponent<BuildingInstance>();
+                if (building != null && building.cost != null)
+                {
+                    ResourceStorage.Instance.AddResources(building.cost);
+                    Debug.Log("Ресурсы возвращены");
+                }
+
+                // 2. Если это дом — удалим жителей
+                House house = hitCollider.GetComponent<House>();
+                if (house != null)
+                {
+                    house.RemoveAllCitizens(); // удаление жителей ДО уничтожения дома
+                }
+
+                // 3. Удаляем здание
+                Destroy(hitCollider.gameObject);
+                occupiedCells.Remove(cellPosition);
+                PlaySound(destroySound);
+                Debug.Log("Здание удалено");
+            }
+        }
+    }
+
+    // удаление по GameObject (удобно, если вызываем из House или по ссылке на объект)
+    public void DestroySpecificBuilding(GameObject buildingGO)
+    {
+        if (buildingGO == null) return;
+
+        // определяем cell по позиции самого здания
+        Vector3Int buildingCell = buildTilemap.WorldToCell(buildingGO.transform.position);
+
+        // вернуть ресурсы
+        BuildingInstance bi = buildingGO.GetComponent<BuildingInstance>();
+        if (bi != null && bi.cost != null)
+        {
+            ResourceStorage.Instance.AddResources(bi.cost);
+            Debug.Log("Ресурсы возвращены");
+        }
+
+        // если дом — удалить жителей
+        House house = buildingGO.GetComponent<House>();
+        if (house != null)
+        {
+            house.RemoveAllCitizens();
+        }
+
+        // отключаем коллайдер, удаляем из occupiedCells и уничтожаем объект
+        Collider2D col = buildingGO.GetComponent<Collider2D>();
+        if (col != null) col.enabled = false;
+
+        if (occupiedCells.Remove(buildingCell))
+            Debug.Log($"Клетка {buildingCell} освобождена из occupiedCells");
+        else
+            Debug.LogWarning($"Попытка удалить клетку {buildingCell} из occupiedCells — её там не было");
+
+        Destroy(buildingGO);
+        PlaySound(destroySound);
+        Debug.Log("Здание удалено (DestroySpecificBuilding)");
+    }
+
 
     //переключает режим "бульдозера"
     public void ToggleBulldozerMode()
