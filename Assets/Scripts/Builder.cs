@@ -132,6 +132,10 @@ public class Builder : MonoBehaviour
                 {
                     if (!occupiedCells.Contains(cellPosition))
                     {
+                        if (RoadPainter.Instance.buildTilemap.GetTile(cellPosition) != null)
+                        {
+                            RoadPainter.Instance.buildTilemap.SetTile(cellPosition, null);
+                        }
                         // Проверка дороги
                         if (House.HasAdjacentRoad(cellPosition))
                         {
