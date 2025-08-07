@@ -75,7 +75,6 @@ public class Builder : MonoBehaviour
 
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-
         //преобразуем в координаты клетки тайлмапа
         Vector3Int cellPosition = buildTilemap.WorldToCell(mouseWorldPos);
 
@@ -131,47 +130,47 @@ public class Builder : MonoBehaviour
             {
                 if (!BoostingManager.Instance.runningBoostingMode && !RoadPainter.Instance.runningRoadMode)
                 {
-                    //проверяем, свободна ли клетка
                     if (!occupiedCells.Contains(cellPosition))
                     {
-                        //получаем данные о текущем выбранном здании
-                        BuildingData data = buildingDatas[currentBuildingIndex];
-
-                        //проверяем, хватает ли ресурсов
-                        if (ResourceStorage.Instance.CanAfford(data.cost))
+                        // Проверка дороги
+                        if (House.HasAdjacentRoad(cellPosition))
                         {
-                            //создаём здание
-                            GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
+                            BuildingData data = buildingDatas[currentBuildingIndex];
 
-                            //гарантированно добавляем BuildingInstance, если его нет
-                            BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
-                            if (bi == null) bi = newBuilding.AddComponent<BuildingInstance>();
-
-                            bi.cost = data.cost;  //запоминаем стоимость
-
-                            //если это дом — вызываем PlaceHouse, чтобы заселение было корректным
-                            bool placementOk = true;
-                            if (newBuilding.TryGetComponent<House>(out House houseComponent))
+                            if (ResourceStorage.Instance.CanAfford(data.cost))
                             {
-                                placementOk = houseComponent.PlaceHouse();
-                            }
+                                GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
 
-                            if (!placementOk)
-                            {
-                                //размещение не удалось — просто уничтожаем префаб
-                                Destroy(newBuilding);
+                                BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
+                                if (bi == null) bi = newBuilding.AddComponent<BuildingInstance>();
+                                bi.cost = data.cost;
+
+                                bool placementOk = true;
+                                if (newBuilding.TryGetComponent<House>(out House houseComponent))
+                                {
+                                    placementOk = houseComponent.PlaceHouse();
+                                }
+
+                                if (!placementOk)
+                                {
+                                    Destroy(newBuilding);
+                                }
+                                else
+                                {
+                                    ResourceStorage.Instance.DeductResources(data.cost);
+                                    occupiedCells.Add(cellPosition);
+                                    PlaySound(buildSound);
+                                    Debug.Log("Построено: " + data.prefab.name);
+                                }
                             }
                             else
                             {
-                                ResourceStorage.Instance.DeductResources(data.cost); //вычитаем ресурсы у игрока
-                                occupiedCells.Add(cellPosition); //помечаем клетку как занятую
-                                PlaySound(buildSound); //играем звук постройки
-                                Debug.Log("Построено: " + data.prefab.name);
+                                Debug.Log("Недостаточно ресурсов для постройки!");
                             }
                         }
                         else
                         {
-                            Debug.Log("Недостаточно ресурсов для постройки!");
+                            Debug.Log("Невозможно построить: нет дороги рядом.");
                         }
                     }
                     else

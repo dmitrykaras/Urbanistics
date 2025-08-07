@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoadManager : MonoBehaviour
@@ -37,7 +38,7 @@ public class RoadManager : MonoBehaviour
         foreach (var house in allHouses)
         {
             Vector3Int cellPos = Builder.Instance.buildTilemap.WorldToCell(house.transform.position);
-            if (!house.HasAdjacentRoad(cellPos))
+            if (!House.HasAdjacentRoad(cellPos))
             {
                 Debug.Log("ƒом потер€л доступ к дороге и будет разрушен.");
                 Builder.Instance.DestroySpecificBuilding(house.gameObject);

@@ -180,7 +180,7 @@ public class House : MonoBehaviour
     }
 
     //проверка, что рядом есть дорога
-    public bool HasAdjacentRoad(Vector3Int cellPos)
+    public static bool HasAdjacentRoad(Vector3Int cellPos)
     {
         //чекаем 4 соседние клетки
         Vector3Int[] directions = new Vector3Int[]
