@@ -1,5 +1,3 @@
-using Mono.Cecil.Cil;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -26,7 +24,6 @@ public class RoadPainter : MonoBehaviour
     [Header("Остальные настройки")]
     public bool isPainting = false; //включение и выключение режима строительства дорог
     private float lastPlaceTime = 0f;
-    private Vector3Int lastPlacedCell = new Vector3Int(int.MinValue, int.MinValue, 0);
     public bool runningRoadMode = false;
 
     public GameObject RoadGhostInstance;
@@ -59,7 +56,7 @@ public class RoadPainter : MonoBehaviour
         if (Input.GetKeyDown(toggleKey))
         {
             isPainting = !isPainting;
-            Debug.Log("Bulldozer mode: " + (isPainting ? "ON" : "OFF"));
+            Debug.Log("RoadBuilderMode: " + (isPainting ? "ON" : "OFF"));
             if (!isPainting)
             {
                 if (RoadGhost != null) RoadGhost.gameObject.SetActive(false);
@@ -137,21 +134,8 @@ public class RoadPainter : MonoBehaviour
         //добавляем в логическую структуру
         RoadManager.Instance.AddRoad(cell);
 
-        //обновим соседние тайлы
-        //UpdateNeighbors(cell);
-
         Builder.Instance.PlaySound(sand);
-        Debug.Log("звук");
     }
-
-    //доделать когде-то
-    //private void UpdateNeighbors(Vector3Int cell)
-    //{
-    //    Vector3Int[] dirs = { new Vector3Int(1, 0, 0), new Vector3Int(-1, 0, 0), new Vector3Int(0, 1, 0), new Vector3Int(0, -1, 0) };
-    //    foreach (var d in dirs)
-    //        buildTilemap.RefreshTile(cell + d);
-    //    buildTilemap.RefreshTile(cell);
-    //}
 
     //настройка призрак RoadGhost 
     private void RoadGhostRunning()

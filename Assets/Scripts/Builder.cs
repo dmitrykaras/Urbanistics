@@ -3,7 +3,6 @@ using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using TMPro; //для использования TextMeshPro
 
 public class Builder : MonoBehaviour
 {
@@ -42,12 +41,11 @@ public class Builder : MonoBehaviour
 
     void Awake()
     {
-        Instance = this; //для ResourceProducer 
+        Instance = this;
     }
 
     void Start()
     {
-
         if (mainCamera == null)
             mainCamera = Camera.main;
 
@@ -203,10 +201,10 @@ public class Builder : MonoBehaviour
                 {
                     Debug.Log($"Найдена дорога на {cellPosition} — удаляем тайл дороги.");
 
-                    // Удаляем тайл с tilemap
+                    //удаляем тайл с tilemap
                     buildTilemap.SetTile(cellPosition, null);
 
-                    // Уведомляем менеджер дорог (если у тебя есть RoadManager для данных)
+                    //уведомляем менеджер дорог (если у тебя есть RoadManager для данных)
                     if (RoadManager.Instance != null)
                     {
                         RoadManager.Instance.RemoveRoad(cellPosition);
@@ -214,13 +212,13 @@ public class Builder : MonoBehaviour
 
                     PlaySound(destroySound);
 
-                    // После удаления дороги проверяем отрезанные дома
+                    //после удаления дороги проверяем отрезанные дома
                     RoadManager.Instance.CheckDisconnectedBuildings();
 
-                    return; // ВАЖНО! Прерываем дальнейшее выполнение, чтобы не удалять здание
+                    return;
                 }
 
-                // Если дорога не удалена, только тогда пытаемся удалить здание
+                //если дорога не удалена, только тогда пытаемся удалить здание
                 DestroyHouse();
 
             }

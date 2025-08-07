@@ -32,7 +32,6 @@ public class RoadManager : MonoBehaviour
     //проверка отрезанных зданий после удаления дороги
     public void CheckDisconnectedBuildings()
     {
-        Debug.Log("CheckDisconnectedBuildings вызван");
         House[] allHouses = Object.FindObjectsByType<House>(FindObjectsSortMode.None);
 
         foreach (var house in allHouses)

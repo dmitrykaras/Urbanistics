@@ -182,7 +182,7 @@ public class House : MonoBehaviour
     //проверка, что рядом есть дорога
     public bool HasAdjacentRoad(Vector3Int cellPos)
     {
-        // Чекаем 4 соседние клетки
+        //чекаем 4 соседние клетки
         Vector3Int[] directions = new Vector3Int[]
         {
             new Vector3Int(1, 0, 0),
