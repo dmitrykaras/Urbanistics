@@ -212,7 +212,7 @@ public class Builder : MonoBehaviour
                     PlaySound(destroySound);
 
                     //после удаления дороги проверяем отрезанные дома
-                    RoadManager.Instance.CheckDisconnectedBuildings();
+                    RoadManager.Instance.CheckBuildingsRoadAccess();
 
                     return;
                 }

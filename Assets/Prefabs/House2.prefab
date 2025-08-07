@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9089953405747738231}
   m_Layer: 0
   m_Name: House2
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,11 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   houseClass: 1
-  currentPopulation: 0
   currentClass: 1
   capacity: 10
   currentCitizens: 0
   upgradedPrefab: {fileID: 8577309829468374578, guid: ac3154d231e38194d9649c373fcbe66b, type: 3}
-  upgradedToWorkerPrefab: {fileID: 0}
-  upgradedToEngineerPrefab: {fileID: 0}
-  citizensCount: 0

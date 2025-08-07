@@ -31,17 +31,16 @@ public class RoadManager : MonoBehaviour
     }
 
     //проверка отрезанных зданий после удаления дороги
-    public void CheckDisconnectedBuildings()
+    public void CheckBuildingsRoadAccess()
     {
-        House[] allHouses = Object.FindObjectsByType<House>(FindObjectsSortMode.None);
-
-        foreach (var house in allHouses)
+        GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
+        foreach (GameObject building in buildings)
         {
-            Vector3Int cellPos = Builder.Instance.buildTilemap.WorldToCell(house.transform.position);
+            Vector3Int cellPos = Builder.Instance.buildTilemap.WorldToCell(building.transform.position);
             if (!House.HasAdjacentRoad(cellPos))
             {
                 Debug.Log("Дом потерял доступ к дороге и будет разрушен.");
-                Builder.Instance.DestroySpecificBuilding(house.gameObject);
+                Builder.Instance.DestroySpecificBuilding(building.gameObject);
             }
         }
     }
