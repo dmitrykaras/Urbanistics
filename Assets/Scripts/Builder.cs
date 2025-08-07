@@ -299,6 +299,13 @@ public class Builder : MonoBehaviour
     //переключает режим "бульдозера"
     public void ToggleBulldozerMode()
     {
+        if (RoadPainter.Instance.isPainting)
+        {
+            RoadPainter.Instance.isPainting = false;
+            if (!RoadPainter.Instance.isPainting)
+                Debug.Log("RoadBuilderMode: OFF");
+        }
+
         bulldozerMode = !bulldozerMode; //вкл - выкл
         Debug.Log("Bulldozer mode: " + (bulldozerMode ? "ON" : "OFF"));
         UpdateBulldozerButtonColor(); //меняет цвет

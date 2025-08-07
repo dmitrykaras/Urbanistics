@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
 public class RoadPainter : MonoBehaviour
@@ -50,6 +51,9 @@ public class RoadPainter : MonoBehaviour
 
     private void Update()
     {
+        //если мышка наведена на UI, то игнорировать ввод
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         RoadGhostRunning(); //обновляем каждый кадр призрак RoadGhost
 
         //toggle режим
