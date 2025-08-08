@@ -146,9 +146,9 @@ public class PopulationManager : MonoBehaviour
     public void TryActivateAllProducers()
     {
         var producers = FindObjectsByType<ResourceProducer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (var producer in producers)
+        foreach (var p in producers)
         {
-            producer.TryActivate();
+            p.UpdateWork();
         }
     }
 
@@ -177,6 +177,18 @@ public class PopulationManager : MonoBehaviour
         foreach (var house in allHouses)
         {
             house.CalculateComfortAndPopulate();
+        }
+    }
+
+    //проверка хватает ли людей
+    public bool CanAssignWorkers(CitizenClass type, int amount)
+    {
+        switch (type)
+        {
+            case CitizenClass.Peasant: return peasants >= amount;
+            case CitizenClass.Worker: return workers >= amount;
+            case CitizenClass.Engineer: return engineers >= amount;
+            default: return false;
         }
     }
 

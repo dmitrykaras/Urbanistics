@@ -13,66 +13,78 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
 
     private Builder builder;
 
-    public CitizenClass requiredType = CitizenClass.Peasant; //класс требуемый для работа
+    public CitizenClass requiredType = CitizenClass.Peasant; //класс требуемый для работы
     public int requiredPeople = 3; //кол-во нужное для работы здания
     private bool isActive = false; //флаг, работает ли здание сейчас
 
     private Tilemap tilemap;
 
+    private float conditionCheckTimer = 0f;
+    public float conditionCheckInterval = 0.5f; //как часто проверяем наличие склада/дороги
 
-    //метод при старте объекта
     void Start()
     {
-        builder = Object.FindFirstObjectByType<Builder>(); //находит активный объект с компонентом builder на сцене
+        builder = Object.FindFirstObjectByType<Builder>();
+        isActive = false;
+        timer = 0f;
+        conditionCheckTimer = 0f;
 
-        //пытаемся назначить работников нужного класса и количества
-        isActive = PopulationManager.Instance.TryAssignWorkers(requiredType, requiredPeople);
-        if (!isActive)
-        {
-            Debug.Log("Недостаточно людей, здание не работает");
-            enabled = false; //отключаем Update, чтобы не тратить ресурсы
-        }
+        Vector3Int cellStart = Builder.Instance.buildTilemap.WorldToCell(transform.position);
+        if (House.HasAdjacentRoad(cellStart) && IsStorageNearby(cellStart))
+            TryActivate();
     }
 
-    //метод, который возвращает каждый кадр
     void Update()
     {
-        timer += Time.deltaTime; //увеличивает таймер
-        if (timer >= intervalSeconds) //если прошло достаточно времени, то обнулить таймер
-        {
-            timer = 0f;
-            //если builder найден, добавляем ресурсы указанного типа
-            ResourceStorage.Instance?.AddResource(resourceType, amountPerCycle);
-        }
+        UpdateWork();
+    }
 
+    public void UpdateWork()
+    {
+        conditionCheckTimer += Time.deltaTime;
         Vector3Int cell = Builder.Instance.buildTilemap.WorldToCell(transform.position);
 
-        bool nearStorage = IsStorageNearby(cell);
-        bool hasRoad = House.HasAdjacentRoad(cell); // уже должен быть
+        if (conditionCheckTimer >= conditionCheckInterval)
+        {
+            conditionCheckTimer = 0f;
 
-        if (hasRoad && nearStorage)
-        {
-            TryActivate();
+            bool nearStorage = IsStorageNearby(cell);
+            bool hasRoad = House.HasAdjacentRoad(cell);
+
+            // Ключевое изменение: проверяем isActive, если уже активно — не надо CanAssignWorkers
+            bool canWork = nearStorage && hasRoad && (isActive || PopulationManager.Instance.CanAssignWorkers(requiredType, requiredPeople));
+
+            Debug.Log($"{name} Check: hasRoad={hasRoad}, nearStorage={nearStorage}, isActive={isActive}, canWork={canWork}");
+
+            if (canWork)
+            {
+                TryActivate();
+            }
+            else
+            {
+                Deactivate();
+            }
         }
-        else
+
+        if (!isActive) return;
+
+        timer += Time.deltaTime;
+        if (timer >= intervalSeconds)
         {
-            Deactivate();
+            timer -= intervalSeconds; // лучше вычитать, чтобы не терять остаток времени
+            ResourceStorage.Instance?.AddResource(resourceType, amountPerCycle);
         }
     }
 
     //метод для попытки активации здания
     public void TryActivate()
     {
-        //если здание уже активно, ничего не делаем
-        if (isActive)
-            return;
+        if (isActive) return;
 
-        //пытаемся назначить работников и активировать здание
         if (PopulationManager.Instance.TryAssignWorkers(requiredType, requiredPeople))
         {
             isActive = true;
             Debug.Log($"{gameObject.name} начал работу: назначено {requiredPeople} {requiredType}");
-            enabled = true; // если скрипт был отключен, включаем его
         }
     }
 
@@ -81,7 +93,7 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
     {
         if (!isActive) return;
 
-        PopulationManager.Instance.ReleasePeasants(requiredPeople);
+        PopulationManager.Instance.ReleaseWorkers(requiredType, requiredPeople);
         isActive = false;
         Debug.Log($"Здание {name} деактивировано, работники освобождены");
     }
@@ -89,34 +101,28 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
     //вспомогательный метод, который проверит, есть ли дорога в конкретной клетке
     public bool IsRoadAtCell(Vector3Int cell)
     {
-        Tilemap buildTilemap = Builder.Instance.buildTilemap;
-        return buildTilemap.HasTile(cell);
+        return RoadManager.Instance.IsRoadAt(cell);
     }
 
     //проверка расстояния от здания до склада по дороге
     public bool IsStorageNearby(Vector3Int startCell, int maxDistance = 20)
     {
-        Queue<Vector3Int> queue = new Queue<Vector3Int>();
+        Queue<(Vector3Int cell, int dist)> queue = new Queue<(Vector3Int, int)>();
         HashSet<Vector3Int> visited = new HashSet<Vector3Int>();
 
-        queue.Enqueue(startCell);
+        queue.Enqueue((startCell, 0));
         visited.Add(startCell);
 
         while (queue.Count > 0)
         {
-            Vector3Int current = queue.Dequeue();
+            var (current, dist) = queue.Dequeue();
 
-            //проверяем, есть ли склад в этой клетке
             if (IsStorageAtCell(current))
-            {
-                return true; // Склад найден
-            }
+                return true;
 
-            //прекращаем, если превышен лимит
-            if (Vector3Int.Distance(current, startCell) > maxDistance)
+            if (dist >= maxDistance)
                 continue;
 
-            //перебираем соседние клетки
             foreach (Vector3Int dir in directions)
             {
                 Vector3Int neighbor = current + dir;
@@ -124,12 +130,12 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
                 if (!visited.Contains(neighbor) && IsRoadAtCell(neighbor))
                 {
                     visited.Add(neighbor);
-                    queue.Enqueue(neighbor);
+                    queue.Enqueue((neighbor, dist + 1));
                 }
             }
         }
 
-        return false; //склад не найден в пределах
+        return false;
     }
 
     //стандартные направления 
@@ -147,19 +153,13 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
         Tilemap buildTilemap = Builder.Instance.buildTilemap;
         Vector3 worldPos = buildTilemap.GetCellCenterWorld(cell);
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(worldPos, 0.1f);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(worldPos, 1.0f);
+
         foreach (var col in colliders)
         {
-            if (col.CompareTag("Building"))
-            {
-                if (col.GetComponent<Storage>() != null)
-                    return true;
-            }
+            if (col.CompareTag("Building") && col.GetComponent<Storage>() != null)
+                return true;
         }
         return false;
     }
-
-
-
-
 }

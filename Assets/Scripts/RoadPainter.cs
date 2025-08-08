@@ -109,10 +109,6 @@ public class RoadPainter : MonoBehaviour
                     Debug.Log("Не хватает ресурсов на постройку дороги");
                 }
             }
-            else
-            {
-                Debug.Log("Здесь уже есть дорога");
-            }
         }
 
     }

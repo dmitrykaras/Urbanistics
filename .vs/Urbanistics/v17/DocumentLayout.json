@@ -3,20 +3,16 @@
   "WorkspaceRootPath": "D:\\git\\Urbanistics\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\resourceproducer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\resourceproducer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\roadmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\roadmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\populationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\populationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\house.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\house.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\roadpainter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\roadpainter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,46 +22,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 261,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Builder.cs",
-              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\Builder.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Builder.cs",
-              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\Builder.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Builder.cs",
-              "ViewState": "AgIAAHkAAAAAAAAAAAApwIoAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-07T22:22:35.494Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "RoadManager.cs",
-              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\RoadManager.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\RoadManager.cs",
-              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\RoadManager.cs",
-              "RelativeToolTip": "Assets\\Scripts\\RoadManager.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAADwvy0AAAAEAAAAAAAAAA==",
+              "Title": "PopulationManager.cs",
+              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\PopulationManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PopulationManager.cs",
+              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\PopulationManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PopulationManager.cs",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAAAJYAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-07T13:39:12.43Z",
+              "WhenOpened": "2025-08-08T23:04:32.598Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "RoadPainter.cs",
-              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\RoadPainter.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\RoadPainter.cs",
-              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\RoadPainter.cs",
-              "RelativeToolTip": "Assets\\Scripts\\RoadPainter.cs",
-              "ViewState": "AgIAAIMAAAAAAAAAAAAcwDcAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "ResourceProducer.cs",
+              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceProducer.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceProducer.cs",
+              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceProducer.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ResourceProducer.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAAAD4AAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-07T13:38:25.006Z"
+              "WhenOpened": "2025-08-08T22:35:40.618Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -75,9 +58,10 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\House.cs",
               "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\House.cs",
               "RelativeToolTip": "Assets\\Scripts\\House.cs",
-              "ViewState": "AgIAAKYAAAAAAAAAAAAqwLwAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAQwBsAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-07T13:41:31.582Z"
+              "WhenOpened": "2025-08-07T13:41:31.582Z",
+              "EditorCaption": ""
             }
           ]
         }
