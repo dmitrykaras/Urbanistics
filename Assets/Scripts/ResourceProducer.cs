@@ -22,6 +22,8 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
     private float conditionCheckTimer = 0f;
     public float conditionCheckInterval = 3.0f; //как часто проверяем наличие склада/дороги
 
+    private bool flagMassage = false;
+
     void Start()
     {
         builder = Object.FindFirstObjectByType<Builder>();
@@ -49,17 +51,16 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
             {
                 conditionCheckTimer = 0f;
 
-                bool nearStorage = IsStorageNearby(cell);
-                bool hasRoad = House.HasAdjacentRoad(cell);
-
                 bool canWork = HasRequiredConditions();
-
-                Debug.Log($"{name} Check: hasRoad={hasRoad}, nearStorage={nearStorage}, isActive={isActive}, canWork={canWork}");
 
                 if (canWork && !isActive)
                 {
                     TryActivate();
                 }
+            }
+            if (!flagMassage)
+            {
+                DebugMassage();
             }
         }
         else ResourceAdd();
@@ -69,8 +70,7 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
     public bool HasRequiredConditions()
     {
         Vector3Int cell = Builder.Instance.buildTilemap.WorldToCell(transform.position);
-        return House.HasAdjacentRoad(cell)
-            && IsStorageNearby(cell)
+        return IsStorageNearby(cell, 20)
             && PopulationManager.Instance.CanAssignWorkers(requiredType, requiredPeople);
     }
 
@@ -143,7 +143,6 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
                 }
             }
         }
-
         return false;
     }
 
@@ -170,5 +169,14 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
                 return true;
         }
         return false;
+    }
+
+    //сообщение, который будет один раз выводится на экран
+    private void DebugMassage()
+    {
+        flagMassage = true;
+        Vector3Int cell = Builder.Instance.buildTilemap.WorldToCell(transform.position);
+        if (!IsStorageNearby(cell, 20)) Debug.Log("Здание не работает. Склада рядом нет");
+        if (!HasRequiredConditions()) Debug.Log("Здание не работает. Не хватает свободных рук");
     }
 }

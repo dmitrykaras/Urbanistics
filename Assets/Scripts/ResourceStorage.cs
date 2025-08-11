@@ -133,8 +133,6 @@ public class ResourceStorage : MonoBehaviour
             bool hasKey = resources.ContainsKey(item.resourceType);
             int value = hasKey ? resources[item.resourceType] : 0;
 
-            Debug.Log($"Нужно: {item.amount} {item.resourceType}, есть: {value}");
-
             //если ресурса нет или его меньше, чем нужно — постройка невозможна
             if (!hasKey || value < item.amount)
                 return false;

@@ -164,7 +164,6 @@ public class Builder : MonoBehaviour
                                     ResourceStorage.Instance.DeductResources(data.cost);
                                     occupiedCells.Add(cellPosition);
                                     PlaySound(buildSound);
-                                    Debug.Log("Построено: " + data.prefab.name);
                                 }
                             }
                             else
@@ -204,6 +203,9 @@ public class Builder : MonoBehaviour
                 {
                     Debug.Log($"Найдена дорога на {cellPosition} — удаляем тайл дороги.");
 
+                    //приостанавливает все добывающее здания
+                    PopulationManager.Instance.DeactivateAllResourceProducers();
+
                     //удаляем тайл с tilemap
                     buildTilemap.SetTile(cellPosition, null);
 
@@ -220,7 +222,6 @@ public class Builder : MonoBehaviour
 
                     return;
                 }
-
                 //если дорога не удалена, только тогда пытаемся удалить здание
                 DestroyHouse();
 
@@ -260,6 +261,13 @@ public class Builder : MonoBehaviour
                 occupiedCells.Remove(cellPosition);
                 PlaySound(destroySound);
                 Debug.Log("Здание удалено");
+
+                // 4. Если склад, то приостановить все добывающее здания
+                Storage storage = hitCollider.GetComponent<Storage>();
+                if (storage != null)
+                {
+                    PopulationManager.Instance.DeactivateAllResourceProducers();
+                }
             }
         }
     }
@@ -343,8 +351,6 @@ public class Builder : MonoBehaviour
             Destroy(ghostInstance); //удаляем предыдущий призрачный объект, если был
 
         SpawnGhost(buildingDatas[currentBuildingIndex].prefab); //создаём новый призрак выбранного здания
-
-        Debug.Log("Выбрано здание: " + buildingDatas[currentBuildingIndex].prefab.name);
     }
 
     //создаёт "призрачную" версию здания
