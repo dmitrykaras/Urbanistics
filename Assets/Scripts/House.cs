@@ -22,10 +22,17 @@ public class House : MonoBehaviour
 
     private bool isPlaced = false; //флаг, чтобы не заселять дом дважды
 
+    public CitizenClass residentType; //класс жителей, который живёт в этом доме
+
+
+    void Update()
+    {
+        if (isPlaced)
+        CalculateComfortAndPopulate();
+    }
     //регестрируем дом при его создании
     private void Start()
     {
-        //НАДО НЕ ПРИ ЕГО ЗДАНИИ, А ЕСЛИ ОН УЖЕ СТОИТ
         PopulationManager.Instance.RegisterHouse(this); //регестрация дома
     }
 
@@ -65,6 +72,8 @@ public class House : MonoBehaviour
     //метод для вычисления комфорта
     public void CalculateComfortAndPopulate()
     {
+        int previousResidents = currentCitizens;
+
         RemoveAllCitizens(); //очищаем дом от предыдущих жителей перед перерасчётом
 
         bool hasBar = false;
@@ -90,7 +99,6 @@ public class House : MonoBehaviour
                         if (source.type == ComfortType.Bar) hasBar = true; //увеличиваем коморфт, если есть бар
                         if (source.type == ComfortType.Market) hasMarket = true; //увеличиваем комфорт, если есть рынок
                     }
-                    PopulationManager.Instance.RecalculatePopulation();
                 }
             }
         }
@@ -102,6 +110,8 @@ public class House : MonoBehaviour
 
         //заселяем дом максимально возможным количеством жителей с учётом комфорта
         AddCitizens(maxResidents);
+
+        PopulationManager.Instance.RecalculatePopulation();
     }
 
     //улучшение здания
@@ -200,4 +210,11 @@ public class House : MonoBehaviour
 
         return false;
     }
+
+    //
+    public void RecalculationIfBoosting()
+    {
+
+    }
+
 }

@@ -264,10 +264,10 @@ public class Builder : MonoBehaviour
 
                 // 4. Если склад, то приостановить все добывающее здания
                 Storage storage = hitCollider.GetComponent<Storage>();
-                if (storage != null)
-                {
-                    PopulationManager.Instance.DeactivateAllResourceProducers();
-                }
+                if (storage != null) PopulationManager.Instance.DeactivateAllResourceProducers();
+
+                ComfortSource comfortSource = hitCollider.GetComponent<ComfortSource>();
+                if (comfortSource != null) PopulationManager.Instance.DeactivateAllResourceProducers();
             }
         }
     }

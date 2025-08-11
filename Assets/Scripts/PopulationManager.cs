@@ -56,10 +56,12 @@ public class PopulationManager : MonoBehaviour
             }
         }
 
-
-        CheckWorkerOverflow(CitizenClass.Peasant, ref workingPeasants, totalPeasants);
-        CheckWorkerOverflow(CitizenClass.Worker, ref workingWorkers, totalWorkers);
-        CheckWorkerOverflow(CitizenClass.Engineer, ref workingEngineers, totalEngineers);
+        if (freePeasants > totalPeasants || freePeasants == 0)
+            freePeasants = totalPeasants;
+        if (freeWorkers > totalWorkers || freeWorkers == 0)
+            freeWorkers = totalWorkers;
+        if (freeEngineers > totalEngineers || freeEngineers == 0)
+            freeEngineers = totalEngineers;
 
         UpdateUI();
     }

@@ -7,16 +7,8 @@
       "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\resourcestorage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\resourcestorage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\resourcecost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\resourcecost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\resourceproducer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\resourceproducer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\house.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\house.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\populationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -30,34 +22,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 261,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ResourceStorage.cs",
-              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceStorage.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceStorage.cs",
-              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceStorage.cs",
-              "RelativeToolTip": "Assets\\Scripts\\ResourceStorage.cs",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAqwIgAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T16:24:38.651Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ResourceCost.cs",
-              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceCost.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceCost.cs",
-              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceCost.cs",
-              "RelativeToolTip": "Assets\\Scripts\\ResourceCost.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAYAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T16:24:37.062Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -66,35 +32,35 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\Builder.cs",
               "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\Builder.cs",
               "RelativeToolTip": "Assets\\Scripts\\Builder.cs",
-              "ViewState": "AgIAAJIAAAAAAAAAAAAQwKQAAABEAAAAAAAAAA==",
+              "ViewState": "AgIAAO4AAAAAAAAAAAAcwAsBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T16:07:40.204Z",
+              "WhenOpened": "2025-08-11T16:51:17.703Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ResourceProducer.cs",
-              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceProducer.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\ResourceProducer.cs",
-              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\ResourceProducer.cs",
-              "RelativeToolTip": "Assets\\Scripts\\ResourceProducer.cs",
-              "ViewState": "AgIAAJQAAAAAAAAAAAASwLAAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T15:54:01.729Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "PopulationManager.cs",
               "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\PopulationManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\PopulationManager.cs",
               "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\PopulationManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\PopulationManager.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAowA8AAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAmwD0AAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T00:08:47.407Z",
+              "WhenOpened": "2025-08-11T16:32:37.473Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "House.cs",
+              "DocumentMoniker": "D:\\git\\Urbanistics\\Assets\\Scripts\\House.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\House.cs",
+              "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\House.cs",
+              "RelativeToolTip": "Assets\\Scripts\\House.cs",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAuwGEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-11T16:29:01.735Z",
               "EditorCaption": ""
             }
           ]
