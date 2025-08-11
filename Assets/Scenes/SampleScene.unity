@@ -1039,8 +1039,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 7.1, y: 27.576}
-  m_SizeDelta: {x: 70.3923, y: 27.576}
+  m_AnchoredPosition: {x: 1.6467, y: 27.576}
+  m_SizeDelta: {x: 239.59, y: 27.576}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &290414845
 MonoBehaviour:
@@ -1062,7 +1062,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'P: 0'
+  m_text: "\rPeasants: 0 Free: 0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2008,8 +2008,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 7.5182, y: -27.575989}
-  m_SizeDelta: {x: 71.2286, y: 27.576}
+  m_AnchoredPosition: {x: 1.6456, y: -27.575989}
+  m_SizeDelta: {x: 239.59, y: 27.576}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &618033910
 MonoBehaviour:
@@ -2031,7 +2031,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'E: 0'
+  m_text: "\rEngineers: 0 Free: 0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3929,8 +3929,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 398.8661, y: 118.17801}
-  m_SizeDelta: {x: 80.8593, y: 89.884}
+  m_AnchoredPosition: {x: 317.8518, y: 118.17801}
+  m_SizeDelta: {x: 242.8876, y: 89.884}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1392619322
 MonoBehaviour:
@@ -4320,11 +4320,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allHouses: []
-  peasants: 0
-  workers: 0
-  engineers: 0
   totalPeasants: 999
-  usedPeasants: 0
+  totalWorkers: 0
+  totalEngineers: 0
+  freePeasants: 0
+  freeWorkers: 0
+  freeEngineers: 0
   peasantsText: {fileID: 290414845}
   workersText: {fileID: 1524161137}
   engineersText: {fileID: 618033910}
@@ -4377,8 +4378,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.41982, y: 0.000013232}
-  m_SizeDelta: {x: 70.3912, y: 27.576}
+  m_AnchoredPosition: {x: 1.6467, y: 0.000013232}
+  m_SizeDelta: {x: 239.59, y: 27.576}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1524161137
 MonoBehaviour:
@@ -4400,7 +4401,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'W: 0'
+  m_text: "\rWorkers: 0 Free: 0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

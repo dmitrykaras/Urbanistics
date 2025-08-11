@@ -25,6 +25,7 @@ public class House : MonoBehaviour
     //регестрируем дом при его создании
     private void Start()
     {
+        //НАДО НЕ ПРИ ЕГО ЗДАНИИ, А ЕСЛИ ОН УЖЕ СТОИТ
         PopulationManager.Instance.RegisterHouse(this); //регестрация дома
     }
 
@@ -51,14 +52,14 @@ public class House : MonoBehaviour
     {
         //заселяем, но не привышаем лимит дома
         currentCitizens  = Mathf.Min(currentCitizens  + amount, capacity);
-        PopulationManager.Instance.UpdatePopulationCounts(); //обновляем общее состояние населения в игре
+        PopulationManager.Instance.RecalculatePopulation(); //обновляем общее состояние населения в игре
     }
 
     //метод для удаления жителей при сносе
     public void RemoveAllCitizens()
     {
         currentCitizens  = 0; //становится 0
-        PopulationManager.Instance.UpdatePopulationCounts(); //обновляем
+        PopulationManager.Instance.RecalculatePopulation(); //обновляем
     }
 
     //метод для вычисления комфорта
@@ -89,7 +90,7 @@ public class House : MonoBehaviour
                         if (source.type == ComfortType.Bar) hasBar = true; //увеличиваем коморфт, если есть бар
                         if (source.type == ComfortType.Market) hasMarket = true; //увеличиваем комфорт, если есть рынок
                     }
-                    PopulationManager.Instance.UpdatePopulationCounts();
+                    PopulationManager.Instance.RecalculatePopulation();
                 }
             }
         }
@@ -101,7 +102,6 @@ public class House : MonoBehaviour
 
         //заселяем дом максимально возможным количеством жителей с учётом комфорта
         AddCitizens(maxResidents);
-        PopulationManager.Instance.UpdatePopulationCounts();
     }
 
     //улучшение здания
@@ -157,6 +157,7 @@ public class House : MonoBehaviour
         Destroy(gameObject);
         RemoveAllCitizens();
         Debug.Log("Дом улучшен!");
+        PopulationManager.Instance.DeactivateAllResourceProducers();
     }
 
     //переход к следующему классу

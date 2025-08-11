@@ -16,7 +16,7 @@ public class UpgradeManager : MonoBehaviour
         isUpgradeMode = true;
     }
 
-    private void Update()
+    void Update()
     {
         if (!isUpgradeMode) return;
 

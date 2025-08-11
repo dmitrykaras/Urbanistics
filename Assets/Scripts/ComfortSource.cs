@@ -12,7 +12,7 @@ public class ComfortSource : MonoBehaviour
 
     private void Start()
     {
-        PopulationManager.Instance.RecalculateAllHouses();
+        PopulationManager.Instance.RecalculatePopulation();
     }
 
     private void OnDestroy()
@@ -23,10 +23,8 @@ public class ComfortSource : MonoBehaviour
             var house = col.GetComponent<House>();
             if (house != null)
             {
-                PopulationManager.Instance.RecalculateAllHouses();
+                PopulationManager.Instance.RecalculatePopulation();
             }
         }
     }
-
-
 }

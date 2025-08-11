@@ -49,7 +49,7 @@ public class RoadPainter : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void Update()
+    void Update()
     {
         //если мышка наведена на UI, то игнорировать ввод
         if (EventSystem.current.IsPointerOverGameObject()) return;

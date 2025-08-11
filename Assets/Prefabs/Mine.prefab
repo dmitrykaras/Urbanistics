@@ -106,6 +106,8 @@ MonoBehaviour:
   intervalSeconds: 1
   requiredType: 0
   requiredPeople: 15
+  isActive: 0
+  conditionCheckInterval: 0.5
 --- !u!61 &7136106286346585819
 BoxCollider2D:
   m_ObjectHideFlags: 0

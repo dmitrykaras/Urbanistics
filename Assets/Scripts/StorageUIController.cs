@@ -15,7 +15,7 @@ public class StorageUIController : MonoBehaviour
         uiPanel.SetActive(false);
     }
 
-    private void Update()
+    void Update()
     {
         //обновляем каждый кадр чтобы было видно ресурсы в реальном времени
         if (uiPanel.activeSelf)

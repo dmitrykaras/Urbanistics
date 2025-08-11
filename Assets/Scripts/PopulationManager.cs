@@ -13,184 +13,190 @@ public class PopulationManager : MonoBehaviour
 {
     public static PopulationManager Instance;
 
-    //если есть инстанс не назначен - назначаем
     private void Awake()
     {
         if (Instance == null) Instance = this;
-        else Destroy(gameObject); //если уже есть другой, то удаляем этот
+        else Destroy(gameObject);
     }
 
-    public List<House> allHouses = new List<House>(); //список всех домов
+    //все дома для подсчёта населения
+    public List<House> allHouses = new List<House>();
 
-    public int peasants, workers, engineers; //общее кол-во жителей по классам
+    [Header("Параметры населения")]
+    public int totalPeasants, totalWorkers, totalEngineers; //общее население по классам
 
-    public int totalPeasants = 999; //общее количество крестьян
-    public int usedPeasants = 0;
+    public int freePeasants, freeWorkers, freeEngineers; //свободное население по классам
 
-    public int FreePeasants => totalPeasants - usedPeasants;
+    public int workingPeasants, workingWorkers, workingEngineers;
 
-    //текст для UI
+
+    [Header("Текст в UI")]
     public TextMeshProUGUI peasantsText;
     public TextMeshProUGUI workersText;
     public TextMeshProUGUI engineersText;
 
-
-    //регистрация нового дома
-    public void RegisterHouse(House house)
+    //пересчёт общего и свободного населения
+    public void RecalculatePopulation()
     {
-        allHouses.Add(house);
-        UpdatePopulationCounts();
-        TryActivateAllProducers();
-    }
-
-    //пересчёт суммарного кол-ва жителей по классам
-    public void UpdatePopulationCounts()
-    {
-        peasants = workers = engineers = 0; //обнуляем
+        totalPeasants = totalWorkers = totalEngineers = 0;
 
         foreach (var house in allHouses)
         {
             switch (house.currentClass)
             {
                 case HouseClass.Peasant:
-                    peasants += house.currentCitizens ;
+                    totalPeasants += house.currentCitizens;
                     break;
                 case HouseClass.Worker:
-                    workers += house.currentCitizens ;
+                    totalWorkers += house.currentCitizens;
                     break;
                 case HouseClass.Engineer:
-                    engineers += house.currentCitizens ;
+                    totalEngineers += house.currentCitizens;
                     break;
             }
         }
 
-        UpdateUI(); //обновляем UI
-        TryActivateAllProducers(); //пытаемся активировать добываюшее здание
+
+        CheckWorkerOverflow(CitizenClass.Peasant, ref workingPeasants, totalPeasants);
+        CheckWorkerOverflow(CitizenClass.Worker, ref workingWorkers, totalWorkers);
+        CheckWorkerOverflow(CitizenClass.Engineer, ref workingEngineers, totalEngineers);
+
+        UpdateUI();
     }
+
+    //регистрация нового дома и пересчёт населения
+    public void RegisterHouse(House house)
+    {
+        if (!allHouses.Contains(house))
+        {
+            allHouses.Add(house);
+            freePeasants += house.currentCitizens;
+            RecalculatePopulation();
+        }
+    }
+
+    //удаление дома
+    public void UnregisterHouse(House house)
+    {
+        if (allHouses.Contains(house))
+        {
+            allHouses.Remove(house);
+            freePeasants -= house.currentCitizens;
+            if (freePeasants < 0) freePeasants = 0;
+            RecalculatePopulation();
+        }
+    }
+
+    //для всех добывающих зданий isActive = false (GENIUS SOLUTION)
+    public void DeactivateAllResourceProducers()
+    {
+        var producers = Object.FindObjectsByType<ResourceProducer>(FindObjectsSortMode.None);
+
+        foreach (var prod in producers)
+        {
+            if (prod.isActive)
+            {
+                prod.Deactivate();
+            }
+        }
+    }
+
+    //если здания требуют больше работников, чем есть в городе, то отключать здания, чтобы компенсировать нехватку
+    private void CheckWorkerOverflow(CitizenClass type, ref int working, int total)
+    {
+        if (working > total)
+        {
+            int overflow = working - total;
+            working = total; // оставляем максимум доступных
+            NotifyBuildingsWorkersLost(type, overflow);
+        }
+    }
+
+    //вызывается, если кол-во населения снизилось по какой-то причине
+    private void NotifyBuildingsWorkersLost(CitizenClass type, int lostCount)
+    {
+        foreach (var prod in FindObjectsByType<ResourceProducer>(FindObjectsSortMode.None))
+        {
+            if (prod.requiredType == type && prod.isActive)
+            {
+                prod.ForceDeactivate();
+                lostCount -= prod.requiredPeople;
+                if (lostCount <= 0) break;
+            }
+        }
+    }
+
 
     //обновление UI
     private void UpdateUI()
     {
-        peasantsText.text = $"P: {peasants}";
-        workersText.text = $"W: {workers}";
-        engineersText.text = $"E: {engineers}";
+        if (peasantsText != null)
+            peasantsText.text = $"Peasants: {totalPeasants} Free: {freePeasants}";
+        if (workersText != null)
+            workersText.text = $"Workers: {totalWorkers} Free: {freeWorkers}";
+        if (engineersText != null)
+            engineersText.text = $"Engineers: {totalEngineers} Free: {freeEngineers}";
     }
 
-    //возвращает количество свободных жителей указанного класса
-    public int GetFreeCitizens(CitizenClass citizenClass)
+    //проверка, хватает ли свободных работников указанного класса
+    public bool CanAssignWorkers(CitizenClass type, int amount)
     {
-        //в дальнейшем — если появится распределение по занятости
-        return citizenClass switch
+        return GetFreeWorkers(type) >= amount;
+    }
+
+    //получить количество свободных для класса
+    public int GetFreeWorkers(CitizenClass type)
+    {
+        return type switch
         {
-            CitizenClass.Peasant => peasants,
-            CitizenClass.Worker => workers,
-            CitizenClass.Engineer => engineers,
-            _ => 0,
+            CitizenClass.Peasant => freePeasants,
+            CitizenClass.Worker => freeWorkers,
+            CitizenClass.Engineer => freeEngineers,
+            _ => 0
         };
     }
 
-    //пытается выделить нужное количество людей указанного класса
+    //попытка назначить работников (забронировать)
     public bool TryAssignWorkers(CitizenClass type, int amount)
     {
+        if (!CanAssignWorkers(type, amount))
+            return false;
+
         switch (type)
         {
             case CitizenClass.Peasant:
-                if (peasants >= amount)
-                {
-                    peasants -= amount;
-                    UpdateUI();
-                    return true;
-                }
+                freePeasants -= amount;
                 break;
             case CitizenClass.Worker:
-                if (workers >= amount)
-                {
-                    workers -= amount;
-                    UpdateUI();
-                    return true;
-                }
+                freeWorkers -= amount;
                 break;
             case CitizenClass.Engineer:
-                if (engineers >= amount)
-                {
-                    engineers -= amount;
-                    UpdateUI();
-                    return true;
-                }
+                freeEngineers -= amount;
                 break;
         }
 
-        return false; //недостаточно свободных людей нужного класса
+        UpdateUI();
+        return true;
     }
 
-    //возвращает людей обратно (если работник освободился)
+    //освободить работников (вернуть в свободные)
     public void ReleaseWorkers(CitizenClass type, int amount)
     {
         switch (type)
         {
             case CitizenClass.Peasant:
-                peasants += amount;
+                freePeasants += amount;
+                freePeasants = Mathf.Min(freePeasants, totalPeasants);
                 break;
             case CitizenClass.Worker:
-                workers += amount;
+                freeWorkers += amount;
+                freeWorkers = Mathf.Min(freeWorkers, totalWorkers);
                 break;
             case CitizenClass.Engineer:
-                engineers += amount;
+                freeEngineers += amount;
+                freeEngineers = Mathf.Min(freeEngineers, totalEngineers);
                 break;
         }
-
         UpdateUI();
     }
-
-    //функуция для обноружения новой рабочей силы
-    public void TryActivateAllProducers()
-    {
-        var producers = FindObjectsByType<ResourceProducer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (var p in producers)
-        {
-            p.UpdateWork();
-        }
-    }
-
-    //проверяет достаточно ли свободных крестьян
-    public bool TryUsePeasants(int count)
-    {
-        if (FreePeasants >= count)
-        {
-            usedPeasants += count;
-            return true;
-        }
-        return false;
-    }
-
-    //освобождает count крестьян
-    public void ReleasePeasants(int count)
-    {
-        usedPeasants -= count;
-        if (usedPeasants < 0) usedPeasants = 0; //гарантирует что usedPeasants не станет меньше нуля.
-    }
-
-    //пересчёт данных о кол-ве населения
-    public void RecalculateAllHouses()
-    {
-        allHouses.RemoveAll(h => h == null); // удаляет уничтоженные
-        foreach (var house in allHouses)
-        {
-            house.CalculateComfortAndPopulate();
-        }
-    }
-
-    //проверка хватает ли людей
-    public bool CanAssignWorkers(CitizenClass type, int amount)
-    {
-        switch (type)
-        {
-            case CitizenClass.Peasant: return peasants >= amount;
-            case CitizenClass.Worker: return workers >= amount;
-            case CitizenClass.Engineer: return engineers >= amount;
-            default: return false;
-        }
-    }
-
 }
-

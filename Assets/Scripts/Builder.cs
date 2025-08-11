@@ -136,7 +136,7 @@ public class Builder : MonoBehaviour
                         {
                             RoadPainter.Instance.buildTilemap.SetTile(cellPosition, null);
                         }
-                        // Проверка дороги
+                        //проверка дороги
                         if (House.HasAdjacentRoad(cellPosition))
                         {
                             BuildingData data = buildingDatas[currentBuildingIndex];
@@ -207,7 +207,7 @@ public class Builder : MonoBehaviour
                     //удаляем тайл с tilemap
                     buildTilemap.SetTile(cellPosition, null);
 
-                    //уведомляем менеджер дорог (если у тебя есть RoadManager для данных)
+                    //уведомляем менеджер дорог
                     if (RoadManager.Instance != null)
                     {
                         RoadManager.Instance.RemoveRoad(cellPosition);
@@ -250,7 +250,9 @@ public class Builder : MonoBehaviour
                 House house = hitCollider.GetComponent<House>();
                 if (house != null)
                 {
-                    house.RemoveAllCitizens(); // удаление жителей ДО уничтожения дома
+                    PopulationManager.Instance.DeactivateAllResourceProducers();
+                    PopulationManager.Instance.UnregisterHouse(house);
+                    house.RemoveAllCitizens(); //удаление жителей ДО уничтожения дома
                 }
 
                 // 3. Удаляем здание
