@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System.Collections.Generic;
 
 public class Builder : MonoBehaviour
 {
@@ -228,6 +229,7 @@ public class Builder : MonoBehaviour
         }
     }
 
+    //метод для уничтожения дома
     public void DestroyHouse()
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -236,9 +238,9 @@ public class Builder : MonoBehaviour
         Collider2D hitCollider = Physics2D.OverlapPoint(placePosition);
         if (hitCollider != null)
         { 
-            if (hitCollider.CompareTag("Building")) //если клик по зданию, то...
+            if (hitCollider.CompareTag("Building"))
             {
-                // 1. Возвращаем ресурсы, если есть
+                //возвращаем ресурсы, если есть
                 BuildingInstance building = hitCollider.GetComponent<BuildingInstance>();
                 if (building != null && building.cost != null)
                 {
@@ -246,32 +248,53 @@ public class Builder : MonoBehaviour
                     Debug.Log("Ресурсы возвращены");
                 }
 
-                // 2. Если это дом — удалим жителей
+                //возврат средств за класс жителей и удаляем жителей
                 House house = hitCollider.GetComponent<House>();
                 if (house != null)
                 {
+                    List<ResourceCost> extraRefund = new List<ResourceCost>();
+
+                    if (house.currentClass == HouseClass.Worker)
+                    {
+                        extraRefund.Add(new ResourceCost { resourceType = ResourceType.Stone, amount = 10 });
+                    }
+                    else if (house.currentClass == HouseClass.Engineer)
+                    {
+                        extraRefund.Add(new ResourceCost { resourceType = ResourceType.Iron, amount = 10 });
+                    }
+
+                    //всегда возвращаем 30 древесины
+                    extraRefund.Add(new ResourceCost { resourceType = ResourceType.Wood, amount = 30 });
+
+                    //добавляем в хранилище
+                    ResourceStorage.Instance.AddResources(extraRefund.ToArray());
+
+                    Debug.Log($"Дополнительно возвращено: {string.Join(", ", extraRefund.Select(r => $"{r.amount} {r.resourceType}"))}");
+
+                    //удаляем жителей
                     PopulationManager.Instance.DeactivateAllResourceProducers();
                     PopulationManager.Instance.UnregisterHouse(house);
-                    house.RemoveAllCitizens(); //удаление жителей ДО уничтожения дома
+                    house.RemoveAllCitizens();
                 }
 
-                // 3. Удаляем здание
+                //удаляем здание
                 Destroy(hitCollider.gameObject);
                 occupiedCells.Remove(cellPosition);
                 PlaySound(destroySound);
                 Debug.Log("Здание удалено");
 
-                // 4. Если склад, то приостановить все добывающее здания
+                //если склад, то приостановить все добывающее здания
                 Storage storage = hitCollider.GetComponent<Storage>();
                 if (storage != null) PopulationManager.Instance.DeactivateAllResourceProducers();
 
+                //если источник комфорта, то приостановить все добывающее здания
                 ComfortSource comfortSource = hitCollider.GetComponent<ComfortSource>();
                 if (comfortSource != null) PopulationManager.Instance.DeactivateAllResourceProducers();
             }
         }
     }
 
-    // удаление по GameObject
+    //удаление по GameObject
     public void DestroySpecificBuilding(GameObject buildingGO)
     {
         if (buildingGO == null) return;
@@ -285,13 +308,6 @@ public class Builder : MonoBehaviour
         {
             ResourceStorage.Instance.AddResources(bi.cost);
             Debug.Log("Ресурсы возвращены");
-        }
-
-        //если дом — удалить жителей
-        House house = buildingGO.GetComponent<House>();
-        if (house != null)
-        {
-            house.RemoveAllCitizens();
         }
 
         //отключаем коллайдер, удаляем из occupiedCells и уничтожаем объект

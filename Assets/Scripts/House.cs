@@ -210,11 +210,4 @@ public class House : MonoBehaviour
 
         return false;
     }
-
-    //
-    public void RecalculationIfBoosting()
-    {
-
-    }
-
 }
