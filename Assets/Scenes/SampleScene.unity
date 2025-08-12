@@ -368,7 +368,9 @@ MonoBehaviour:
   destroySound: {fileID: 8300000, guid: 85bc8246c6347514996941e8f24aed49, type: 3}
   currentBuildingIndex: 0
   bulldozerButton: {fileID: 1943467228}
+  bulldozerMode: 0
   bulldozerGhostPrefab: {fileID: 8461241525486498166, guid: 5c7bdb2ec920f684c9bd6b4b9387c412, type: 3}
+  bulldozerGhostInstance: {fileID: 0}
   boostingButton: {fileID: 668188450}
   roadTile: {fileID: 11400000, guid: 2419ce2e93d5d4744a432d1431db4e83, type: 2}
 --- !u!4 &150676174
@@ -379,12 +381,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150676172}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00383, y: 0.01468, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -431.25665, y: -234.80275, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2130132431}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &150676175
 MonoBehaviour:
@@ -1451,6 +1453,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 880601472}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OnAnyUIButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &395443651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1956,7 +1970,6 @@ MonoBehaviour:
   requireHoldMouse: 1
   costPerTile: []
   isPainting: 0
-  runningRoadMode: 0
   RoadGhostInstance: {fileID: 0}
   sand: {fileID: 8300000, guid: 3c23d34d20b23c141ad297e1ebe83d16, type: 3}
 --- !u!4 &589910873
@@ -2781,6 +2794,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 880601472}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OnAnyUIButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &865247137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2955,6 +2980,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 876554116}
   m_CullTransparentMesh: 1
+--- !u!1 &880601470
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 880601471}
+  - component: {fileID: 880601472}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &880601471
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880601470}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2130132431}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &880601472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880601470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31bc7f7e5cf9fd34c85ccaa765b803c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &940941290
 GameObject:
   m_ObjectHideFlags: 0
@@ -3139,6 +3208,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 880601472}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OnAnyUIButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3412,6 +3493,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 880601472}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OnAnyUIButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1135184095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3528,6 +3621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fcc975838e1dde46be8f6cc19b6c10f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBoostingMode: 0
   runningBoostingMode: 0
   BoostingButton: {fileID: 668188447}
   BoostingGhostInstance: {fileID: 2920623597637759096, guid: 7a030ee39e7d927428eccf46dd2545f7, type: 3}
@@ -4326,6 +4420,9 @@ MonoBehaviour:
   freePeasants: 0
   freeWorkers: 0
   freeEngineers: 0
+  workingPeasants: 0
+  workingWorkers: 0
+  workingEngineers: 0
   peasantsText: {fileID: 290414845}
   workersText: {fileID: 1524161137}
   engineersText: {fileID: 618033910}
@@ -5152,14 +5249,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 150676173}
-        m_TargetAssemblyTypeName: Builder, Assembly-CSharp
-        m_MethodName: SelectBuilding
-        m_Mode: 3
+      - m_Target: {fileID: 589910872}
+        m_TargetAssemblyTypeName: RoadPainter, Assembly-CSharp
+        m_MethodName: ToggleRoadPainter
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5373,6 +5470,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 6
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 880601472}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OnAnyUIButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5965,6 +6074,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 880601472}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OnAnyUIButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1943799620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6406,6 +6527,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 880601472}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OnAnyUIButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2033707529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6501,7 +6634,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Main
+  m_text: Mine
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6615,6 +6748,8 @@ Transform:
   - {fileID: 1189702630}
   - {fileID: 1551786639}
   - {fileID: 1175551400}
+  - {fileID: 880601471}
+  - {fileID: 150676174}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3715297455061065491
@@ -6688,7 +6823,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1937407268}
-  - {fileID: 150676174}
   - {fileID: 213819102}
   - {fileID: 335115573}
   - {fileID: 3715297455061065491}

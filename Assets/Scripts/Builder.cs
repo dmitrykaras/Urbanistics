@@ -29,9 +29,9 @@ public class Builder : MonoBehaviour
     [Header("Данные Bulldozer Mode")]
     public Button bulldozerButton;
     private Image bulldozerButtonImage;
-    private bool bulldozerMode = false;
+    public bool bulldozerMode = false;
     public GameObject bulldozerGhostPrefab;
-    private GameObject bulldozerGhostInstance;
+    public GameObject bulldozerGhostInstance;
 
     [Header("Улучшения зданий")]
     public BoostingButton boostingButton; //ссылка на кнопку boosting
@@ -58,7 +58,7 @@ public class Builder : MonoBehaviour
         GameObject ghost = Resources.Load<GameObject>("BulldozerGhost");
         if (ghost != null)
             bulldozerGhostInstance = Instantiate(ghost);
-        
+
     }
 
     void Update()
@@ -84,7 +84,6 @@ public class Builder : MonoBehaviour
         //строительство зданий (если не включен режим бульдозера)
         if (!bulldozerMode)
         {
-
             if (Input.GetMouseButtonDown(0))
             {
                 Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -111,7 +110,7 @@ public class Builder : MonoBehaviour
                 ghostInstance.transform.position = placePosition;
             }
             bool isOccupied = occupiedCells.Contains(cellPosition);
-            if (!BoostingManager.Instance.runningBoostingMode)
+            if (!BoostingManager.Instance.isBoostingMode)
             {
                 if (isOccupied)
                 {
@@ -128,7 +127,7 @@ public class Builder : MonoBehaviour
             //если нажата левая кнопка мыши
             if (Input.GetMouseButtonDown(0))
             {
-                if (!BoostingManager.Instance.runningBoostingMode && !RoadPainter.Instance.runningRoadMode)
+                if (!BoostingManager.Instance.isBoostingMode && !RoadPainter.Instance.isPainting)
                 {
                     if (!occupiedCells.Contains(cellPosition))
                     {
@@ -313,20 +312,16 @@ public class Builder : MonoBehaviour
     //переключает режим "бульдозера"
     public void ToggleBulldozerMode()
     {
-        if (RoadPainter.Instance.isPainting)
-        {
-            RoadPainter.Instance.isPainting = false;
-            if (!RoadPainter.Instance.isPainting)
-                Debug.Log("RoadBuilderMode: OFF");
-        }
-
         bulldozerMode = !bulldozerMode; //вкл - выкл
         Debug.Log("Bulldozer mode: " + (bulldozerMode ? "ON" : "OFF"));
         UpdateBulldozerButtonColor(); //меняет цвет
+
+        if (RoadPainter.Instance.isPainting) RoadPainter.Instance.DisableRoadMode();
+        if (BoostingManager.Instance.isBoostingMode) BoostingManager.Instance.DisableBoostingMode();
     }
 
     //обновляет цвет кнопки "бульдозера"
-    private void UpdateBulldozerButtonColor()
+    public void UpdateBulldozerButtonColor()
     {
         //если ссылка на компонент Image ещё не установлена — ищем её на кнопке
         if (bulldozerButtonImage == null) 
@@ -414,4 +409,15 @@ public class Builder : MonoBehaviour
             ghostInstance.SetActive(false);
     }
 
+    //выключение режима бульдозера
+    public void DisableBulldozerMode()
+    {
+        if (bulldozerMode)
+        {
+            bulldozerMode = false;
+            Debug.Log("BulldozerMode: " + (bulldozerMode ? "ON" : "OFF"));
+            UpdateBulldozerButtonColor();
+            bulldozerGhostInstance.SetActive(false);
+        }
+    }
 }

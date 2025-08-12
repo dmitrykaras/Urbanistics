@@ -25,7 +25,6 @@ public class RoadPainter : MonoBehaviour
     [Header("Остальные настройки")]
     public bool isPainting = false; //включение и выключение режима строительства дорог
     private float lastPlaceTime = 0f;
-    public bool runningRoadMode = false;
 
     public GameObject RoadGhostInstance;
 
@@ -55,26 +54,6 @@ public class RoadPainter : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
         RoadGhostRunning(); //обновляем каждый кадр призрак RoadGhost
-
-        //toggle режим
-        if (Input.GetKeyDown(toggleKey))
-        {
-            isPainting = !isPainting;
-            Debug.Log("RoadBuilderMode: " + (isPainting ? "ON" : "OFF"));
-            if (!isPainting)
-            {
-                if (RoadGhost != null) RoadGhost.gameObject.SetActive(false);
-            }
-
-            if (isPainting)
-            {
-                runningRoadMode = true;
-            }
-            else
-            {
-                runningRoadMode = false;
-            }
-        }
 
         if (!isPainting) return;
 
@@ -111,6 +90,14 @@ public class RoadPainter : MonoBehaviour
             }
         }
 
+    }
+
+    public void ToggleRoadPainter()
+    {
+        isPainting = !isPainting;
+        Debug.Log("RoadBuilderMode: " + (isPainting ? "ON" : "OFF"));
+        if (Builder.Instance.bulldozerMode) Builder.Instance.DisableBulldozerMode();
+        if (BoostingManager.Instance.isBoostingMode) BoostingManager.Instance.DisableBoostingMode();
     }
 
     //ставим дорогу
@@ -160,6 +147,17 @@ public class RoadPainter : MonoBehaviour
             {
                 RoadGhostInstance.SetActive(false);
             }
+        }
+    }
+
+    //выключение режима строительства дорог
+    public void DisableRoadMode()
+    {
+        if (isPainting)
+        {
+            isPainting = false;
+            Debug.Log("RoadBuilderMode: " + (isPainting ? "ON" : "OFF"));
+            RoadGhostInstance.SetActive(false);
         }
     }
 }

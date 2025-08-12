@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BoostingManager : MonoBehaviour
@@ -13,7 +14,7 @@ public class BoostingManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private bool isBoostingMode = false; //флаг дл€ вкл/выкл режима аппгрейда
+    public bool isBoostingMode = false; //флаг дл€ вкл/выкл режима аппгрейда
     public bool runningBoostingMode = false;
 
     //кнопки и цвета
@@ -30,6 +31,9 @@ public class BoostingManager : MonoBehaviour
 
     void Update()
     {
+        //если мышка наведена на UI, то игнорировать ввод
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+
         BoostingGhost();
     }
 
@@ -37,20 +41,15 @@ public class BoostingManager : MonoBehaviour
     public void ToggleBoostingMode()
     {
         isBoostingMode = !isBoostingMode; //вкл/выкл
-        if (isBoostingMode)
-        {
-            runningBoostingMode = true;
-        }
-        else
-        {
-            runningBoostingMode = false;
-        }
-            Debug.Log("Boosting mode: " + (isBoostingMode ? "ON" : "OFF"));
+        Debug.Log("Boosting mode: " + (isBoostingMode ? "ON" : "OFF"));
         UpdateBoostingButtonColor();
+
+        if (RoadPainter.Instance.isPainting) RoadPainter.Instance.DisableRoadMode();
+        if (Builder.Instance.bulldozerMode) Builder.Instance.DisableBulldozerMode();
     }
 
     //обновлени€ цвета кнопки BoostingButton
-    private void UpdateBoostingButtonColor()
+    public void UpdateBoostingButtonColor()
     {
         //если ссылка на компонент Image ещЄ не установлена Ч ищем еЄ на кнопке
         if (BoostingButtonImage == null)
@@ -94,4 +93,15 @@ public class BoostingManager : MonoBehaviour
         }
     }
 
+    //выключение режима улучшени€ зданий
+    public void DisableBoostingMode()
+    {
+        if (isBoostingMode)
+        {
+            isBoostingMode = false;
+            Debug.Log("BoostingMode: " + (isBoostingMode ? "ON" : "OFF"));
+            UpdateBoostingButtonColor();
+            BoostingGhostInstance.SetActive(false);
+        }
+    }
 }
