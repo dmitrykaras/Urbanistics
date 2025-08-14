@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|d:\\git\\urbanistics\\assets\\scripts\\house.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|D:\\git\\Urbanistics\\assets\\scripts\\house.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1305157B-8075-CAA9-A45C-7C08267C5879}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\house.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -30,8 +30,7 @@
               "RelativeToolTip": "Assets\\Scripts\\House.cs",
               "ViewState": "AgIAAHUAAAAAAAAAAAAxwI4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-12T21:41:30.256Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-12T21:41:30.256Z"
             },
             {
               "$type": "Document",
@@ -41,7 +40,7 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\Builder.cs",
               "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\Builder.cs",
               "RelativeToolTip": "Assets\\Scripts\\Builder.cs",
-              "ViewState": "AgIAACkBAAAAAAAAAAA5wDoBAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAACMAAAAAAAAAAAAUwDEAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-11T17:02:01.397Z",
               "EditorCaption": ""

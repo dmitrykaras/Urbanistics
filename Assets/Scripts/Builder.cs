@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -54,243 +55,196 @@ public class Builder : MonoBehaviour
         UpdateBulldozerButtonColor();
 
         SpawnGhost(buildingDatas[currentBuildingIndex].prefab); //показывают призрачную модель выбранного здания
-
-        //создаём и загружаем BulldozerGhost
-        GameObject ghost = Resources.Load<GameObject>("BulldozerGhost");
-        if (ghost != null)
-            bulldozerGhostInstance = Instantiate(ghost);
-
     }
 
     void Update()
     {
-        //если мышка наведена на UI, то игнорировать ввод
-        if (EventSystem.current.IsPointerOverGameObject()) return;
-
-        //получаем мировые координаты мыши
-        if (Input.mousePosition.x < 0 || Input.mousePosition.y < 0 ||
-            Input.mousePosition.x > Screen.width || Input.mousePosition.y > Screen.height)
-        {
-            return; // мышь вне экрана — ничего не делаем
-        }
-
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (ShouldIgnoreInput()) return; //игнор ввода
 
         //преобразуем в координаты клетки тайлмапа
-        Vector3Int cellPosition = buildTilemap.WorldToCell(mouseWorldPos);
+        Vector3Int cellPosition = GetMouseCellPosition();
 
         //получаем центр клетки в мировых координатах
         Vector3 placePosition = buildTilemap.GetCellCenterWorld(cellPosition);
 
-        //строительство зданий (если не включен режим бульдозера)
-        if (!bulldozerMode)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-
-                if (hit.collider != null)
-                {
-                    House house = hit.collider.GetComponent<House>();
-                    if (house != null)
-                    {
-                        // передаём выбранный дом кнопке улучшения
-                        boostingButton.SetTarget(house);
-                    }
-                }
-            }
-
-            //если не выбран Bulldozer, то прятать призрак bulldozerGhost
-            if (bulldozerGhostInstance != null)
-                bulldozerGhostInstance.SetActive(false);
-
-            //перемещаем призрачное здание на текущую позицию
-            if (ghostInstance != null)
-            {
-                ghostInstance.transform.position = placePosition;
-            }
-            bool isOccupied = occupiedCells.Contains(cellPosition);
-            if (!BoostingManager.Instance.isBoostingMode)
-            {
-                if (isOccupied)
-                {
-                    if (ghostInstance != null)
-                        ghostInstance.SetActive(false); //выкл отображение, если клетка занята
-                }
-                else
-                {
-                    if (ghostInstance != null)
-                        ghostInstance.SetActive(true); //вкл, если это не так
-                }
-            }
-
-            //если нажата левая кнопка мыши
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (!BoostingManager.Instance.isBoostingMode && !RoadPainter.Instance.isPainting)
-                {
-                    if (!occupiedCells.Contains(cellPosition))
-                    {
-                        if (RoadPainter.Instance.buildTilemap.GetTile(cellPosition) != null)
-                        {
-                            RoadPainter.Instance.buildTilemap.SetTile(cellPosition, null);
-                        }
-                        //проверка дороги
-                        if (House.HasAdjacentRoad(cellPosition))
-                        {
-                            BuildingData data = buildingDatas[currentBuildingIndex];
-
-                            if (ResourceStorage.Instance.CanAfford(data.cost))
-                            {
-                                GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
-
-                                BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
-                                if (bi == null) bi = newBuilding.AddComponent<BuildingInstance>();
-                                bi.cost = data.cost;
-
-                                bool placementOk = true;
-                                if (newBuilding.TryGetComponent<House>(out House houseComponent))
-                                {
-                                    placementOk = houseComponent.PlaceHouse();
-                                }
-
-                                if (!placementOk)
-                                {
-                                    Destroy(newBuilding);
-                                }
-                                else
-                                {
-                                    ResourceStorage.Instance.DeductResources(data.cost);
-                                    occupiedCells.Add(cellPosition);
-                                    PlaySound(buildSound);
-                                }
-                            }
-                            else
-                            {
-                                Debug.Log("Недостаточно ресурсов для постройки!");
-                            }
-                        }
-                        else
-                        {
-                            Debug.Log("Невозможно построить: нет дороги рядом.");
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("Эта клетка уже занята!");
-                    }
-                }
-            }
-        }
-        //режим бульдозера
+        if (bulldozerMode)
+            HandleBulldozerMode(cellPosition, placePosition);
         else
-        {
-            if (ghostInstance != null)
-                ghostInstance.SetActive(false);
-
-            //если bulldozerGhostInstance существет, то перемещаем призрак под курсором и отображем его
-            if (bulldozerGhostInstance != null)
-            {
-                bulldozerGhostInstance.transform.position = placePosition;
-                bulldozerGhostInstance.SetActive(true);
-            }
-
-            if (Input.GetMouseButtonDown(0)) //при нажатии на ЛКМ
-            {
-                TileBase tile = buildTilemap.GetTile(cellPosition);
-                if (tile != null && roadTile != null && tile == roadTile)
-                {
-                    Debug.Log($"Найдена дорога на {cellPosition} — удаляем тайл дороги.");
-
-                    //приостанавливает все добывающее здания
-                    PopulationManager.Instance.DeactivateAllResourceProducers();
-
-                    //удаляем тайл с tilemap
-                    buildTilemap.SetTile(cellPosition, null);
-
-                    //уведомляем менеджер дорог
-                    if (RoadManager.Instance != null)
-                    {
-                        RoadManager.Instance.RemoveRoad(cellPosition);
-                    }
-
-                    PlaySound(destroySound);
-
-                    //после удаления дороги проверяем отрезанные дома
-                    RoadManager.Instance.CheckBuildingsRoadAccess();
-
-                    return;
-                }
-                //если дорога не удалена, только тогда пытаемся удалить здание
-                DestroyHouse();
-
-            }
-        }
+            HandleBuildMode(cellPosition, placePosition);
     }
 
-    //метод для уничтожения дома
-    public void DestroyHouse()
+    //управление режимом строительства
+    private void HandleBuildMode(Vector3Int cellPosition, Vector3 placePosition)
     {
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int cellPosition = buildTilemap.WorldToCell(mouseWorldPos);
-        Vector3 placePosition = buildTilemap.GetCellCenterWorld(cellPosition);
+        HandleBuildingSelection();
+        HideBulldozerGhost();
+        MoveGhostBuilding(placePosition);
+
+        if (BoostingManager.Instance.isBoostingMode) return;
+
+        ShowOrHideGhost(cellPosition);
+
+        if (Input.GetMouseButtonDown(0))
+            TryPlaceBuilding(cellPosition, placePosition);
+    }
+
+    //управление режимом бульдозера
+    private void HandleBulldozerMode(Vector3Int cellPosition, Vector3 placePosition)
+    {
+        if (ghostInstance != null) ghostInstance.SetActive(false);
+        if (bulldozerGhostInstance != null)
+        {
+            bulldozerGhostInstance.transform.position = placePosition;
+            bulldozerGhostInstance.SetActive(true);
+        }
+
+        if (Input.GetMouseButtonDown(0)) TryDestroy(cellPosition, placePosition);
+    }
+
+    //попытка поставить объект на сцену
+    private void TryPlaceBuilding(Vector3Int cellPosition, Vector3 placePosition)
+    {
+        if (BoostingManager.Instance.isBoostingMode && RoadPainter.Instance.isPainting) return;
+        if (occupiedCells.Contains(cellPosition)) Debug.Log("Эта клетка уже занята!");
+        if (RoadPainter.Instance.buildTilemap.GetTile(cellPosition) != null)
+            RoadPainter.Instance.buildTilemap.SetTile(cellPosition, null);
+        if (!House.HasAdjacentRoad(cellPosition))
+        {
+            Debug.Log("Невозможно построить: нет дороги рядом");
+            return;
+        }
+
+        BuildingData data = buildingDatas[currentBuildingIndex];
+        if (!ResourceStorage.Instance.CanAfford(data.cost))
+        {
+            Debug.Log("Недостаточно ресурсов для постройки!");
+            return;
+        }
+
+        GameObject newBuilding = Instantiate(data.prefab, placePosition, Quaternion.identity);
+
+        BuildingInstance bi = newBuilding.GetComponent<BuildingInstance>();
+        if (bi == null) bi = newBuilding.AddComponent<BuildingInstance>();
+        bi.cost = data.cost;
+
+        if (newBuilding.TryGetComponent(out House house) && !house.PlaceHouse())
+        {
+            Destroy(newBuilding);
+            return;
+        }
+
+        ResourceStorage.Instance.DeductResources(data.cost);
+        occupiedCells.Add(cellPosition);
+        PlaySound(buildSound);
+    }
+
+    //попытка уничтожить объект на сцене
+    private void TryDestroy(Vector3Int cellPosition, Vector3 placePosition)
+    {
+        TileBase tile = buildTilemap.GetTile(cellPosition);
+        if (tile != null && tile == roadTile)
+        {
+            RemoveRoad(cellPosition);
+            return;
+        }
+        DestroyHouse(cellPosition, placePosition);
+    }
+
+    //удаление дорог (contains bugs)
+    private void RemoveRoad(Vector3Int cellPosition)
+    {
+        Debug.Log($"Найдена дорога на {cellPosition} — удаляем тайл дороги.");
+
+        PopulationManager.Instance.DeactivateAllResourceProducers(); //приостанавливает все добывающее здания
+        buildTilemap.SetTile(cellPosition, null);  //удаляем тайл с tilemap
+
+        if (RoadManager.Instance != null) RoadManager.Instance.RemoveRoad(cellPosition); //уведомляем менеджер дорог
+        PlaySound(destroySound);
+        RoadManager.Instance.CheckBuildingsRoadAccess(); //после удаления дороги проверяем отрезанные дома
+        return;
+    }
+
+    //управление выбором здания
+    private void HandleBuildingSelection()
+    {
+        if (!Input.GetMouseButtonDown(0)) return;
+
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+        if (hit.collider == null) return;
+
+        House house = hit.collider.GetComponent<House>();
+        if (house != null)
+            boostingButton.SetTarget(house);
+    }
+
+    //уничтожение дома
+    public void DestroyHouse(Vector3Int cellPosition, Vector3 placePosition)
+    {
         Collider2D hitCollider = Physics2D.OverlapPoint(placePosition);
-        if (hitCollider != null)
-        { 
-            if (hitCollider.CompareTag("Building"))
+        if (hitCollider == null && !hitCollider.CompareTag("Building"))
+            return;
+
+        Vector3Int buildingCell = buildTilemap.WorldToCell(hitCollider.transform.position);
+        bool needsProducerDeactivation = false;
+
+        //возврат базовой стоимости
+        if (hitCollider.TryGetComponent(out BuildingInstance building) && building.cost != null)
+        {
+            ResourceStorage.Instance.AddResources(building.cost);
+            Debug.Log("Ресурсы возвращены");
+        }
+
+        //возврат за тип дома и удаление жителей
+        if (hitCollider.TryGetComponent(out House house))
+        {
+            ResourceCost[] extraRefund = GetRefundForHouseClass(house.houseClass);
+            if (extraRefund.Length > 0)
             {
-                //возвращаем ресурсы, если есть
-                BuildingInstance building = hitCollider.GetComponent<BuildingInstance>();
-                if (building != null && building.cost != null)
-                {
-                    ResourceStorage.Instance.AddResources(building.cost);
-                    Debug.Log("Ресурсы возвращены");
-                }
-
-                //возврат средств за класс жителей и удаляем жителей
-                House house = hitCollider.GetComponent<House>();
-                if (house != null)
-                {
-                    List<ResourceCost> extraRefund = new List<ResourceCost>();
-
-                    if (house.currentClass == HouseClass.Worker)
-                    {
-                        extraRefund.Add(new ResourceCost { resourceType = ResourceType.Stone, amount = 10 });
-                    }
-                    else if (house.currentClass == HouseClass.Engineer)
-                    {
-                        extraRefund.Add(new ResourceCost { resourceType = ResourceType.Iron, amount = 10 });
-                    }
-
-                    //всегда возвращаем 30 древесины
-                    extraRefund.Add(new ResourceCost { resourceType = ResourceType.Wood, amount = 30 });
-
-                    //добавляем в хранилище
-                    ResourceStorage.Instance.AddResources(extraRefund.ToArray());
-
-                    Debug.Log($"Дополнительно возвращено: {string.Join(", ", extraRefund.Select(r => $"{r.amount} {r.resourceType}"))}");
-
-                    //удаляем жителей
-                    PopulationManager.Instance.DeactivateAllResourceProducers();
-                    PopulationManager.Instance.UnregisterHouse(house);
-                    house.RemoveAllCitizens();
-                }
-
-                //удаляем здание
-                Destroy(hitCollider.gameObject);
-                occupiedCells.Remove(cellPosition);
-                PlaySound(destroySound);
-                Debug.Log("Здание удалено");
-
-                //если склад, то приостановить все добывающее здания
-                Storage storage = hitCollider.GetComponent<Storage>();
-                if (storage != null) PopulationManager.Instance.DeactivateAllResourceProducers();
-
-                //если источник комфорта, то приостановить все добывающее здания
-                ComfortSource comfortSource = hitCollider.GetComponent<ComfortSource>();
-                if (comfortSource != null) PopulationManager.Instance.DeactivateAllResourceProducers();
+                ResourceStorage.Instance.AddResources(extraRefund);
+                Debug.Log($"Дополнительно возвращено: {string.Join(", ", extraRefund.Select(r => $"{r.amount} {r.resourceType}"))}");
             }
+
+            PopulationManager.Instance.UnregisterHouse(house);
+            house.RemoveAllCitizens();
+            needsProducerDeactivation = true;
+        }
+
+        //если склад или источник комфорта
+        if (hitCollider.GetComponent<Storage>() || hitCollider.GetComponent<ComfortSource>())
+            needsProducerDeactivation = true;
+
+        //удаление здания
+        occupiedCells.Remove(buildingCell);
+        Destroy(hitCollider.gameObject);
+        PlaySound(destroySound);
+        Debug.Log("Здание удалено");
+
+        //отключение всех добывающих зданий
+        if (needsProducerDeactivation)
+            PopulationManager.Instance.DeactivateAllResourceProducers();
+    }
+
+    //таблица возврата ресурсов по классу дома
+    private static ResourceCost[] GetRefundForHouseClass(HouseClass houseClass)
+    {
+        switch (houseClass)
+        {
+            case HouseClass.Worker:
+                return new[]
+                {
+                new ResourceCost { resourceType = ResourceType.Stone, amount = 10 },
+                new ResourceCost { resourceType = ResourceType.Wood, amount = 30 }
+            };
+            case HouseClass.Engineer:
+                return new[]
+                {
+                new ResourceCost { resourceType = ResourceType.Iron, amount = 10 },
+                new ResourceCost { resourceType = ResourceType.Stone, amount = 10 },
+                new ResourceCost { resourceType = ResourceType.Wood, amount = 30 }
+            };
+            default:
+                return Array.Empty<ResourceCost>();
         }
     }
 
@@ -322,6 +276,38 @@ public class Builder : MonoBehaviour
         Destroy(buildingGO);
         PlaySound(destroySound);
         Debug.Log("Здание удалено (DestroySpecificBuilding)");
+    }
+
+    //перевод позиции мыши с экрана в мировые координаты Unity
+    private Vector3Int GetMouseCellPosition()
+    {
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return buildTilemap.WorldToCell(mouseWorldPos);
+    }
+
+    //спрятать призрак режима бульдозера
+    private void HideBulldozerGhost()
+    {
+        if (bulldozerGhostInstance != null)
+            bulldozerGhostInstance.SetActive(false);
+    }
+
+    //перемещаем призрачное здание на текущую позицию
+    private void MoveGhostBuilding(Vector3 placePosition)
+    {
+        if (ghostInstance != null)
+        {
+            ghostInstance.transform.position = placePosition;
+        }
+    }
+
+    //показать или спрять призрак
+    private void ShowOrHideGhost(Vector3Int cellPosition)
+    {
+        if (ghostInstance == null) return;
+
+        bool isOccupied = occupiedCells.Contains(cellPosition);
+        ghostInstance.SetActive(!isOccupied);
     }
 
 
@@ -433,7 +419,23 @@ public class Builder : MonoBehaviour
             bulldozerMode = false;
             Debug.Log("BulldozerMode: " + (bulldozerMode ? "ON" : "OFF"));
             UpdateBulldozerButtonColor();
-            bulldozerGhostInstance.SetActive(false);
+            if (bulldozerGhostInstance != null) bulldozerGhostInstance.SetActive(false);
         }
+    }
+
+    //игнор ввода
+    private bool ShouldIgnoreInput()
+    {
+        //если мышка наведена на UI, то игнорировать ввод
+        if (EventSystem.current.IsPointerOverGameObject()) return true;
+
+        //получаем мировые координаты мыши
+        if (Input.mousePosition.x < 0 || Input.mousePosition.y < 0 ||
+            Input.mousePosition.x > Screen.width || Input.mousePosition.y > Screen.height)
+        {
+            return true; // мышь вне экрана — ничего не делаем
+        }
+
+        return false;
     }
 }

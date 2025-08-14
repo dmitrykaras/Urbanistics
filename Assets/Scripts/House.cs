@@ -131,16 +131,18 @@ public class House : MonoBehaviour
             return;
         }
 
-        //cоздаём список нужных ресурсов
-        List<ResourceCost> upgradeCost = new List<ResourceCost>
-        {
-        new ResourceCost { resourceType = ResourceType.Stone, amount = 10 }
-        };
+        //создаём список нужных ресурсов в зависимости от текущего класса
+        List<ResourceCost> upgradeCost = new List<ResourceCost>();
 
-        if (currentClass == HouseClass.Worker) // или другой критерий
+        if (currentClass == HouseClass.Peasant)
+        {
+            upgradeCost.Add(new ResourceCost { resourceType = ResourceType.Stone, amount = 10 });
+        }
+        else if (currentClass == HouseClass.Worker)
         {
             upgradeCost.Add(new ResourceCost { resourceType = ResourceType.Iron, amount = 10 });
         }
+
 
         //проверка хватает ли ресурсов
         if (!ResourceStorage.Instance.CanAfford(upgradeCost.ToArray()))

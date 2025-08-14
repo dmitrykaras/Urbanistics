@@ -28,9 +28,10 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\House.cs",
               "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\House.cs",
               "RelativeToolTip": "Assets\\Scripts\\House.cs",
-              "ViewState": "AgIAAHUAAAAAAAAAAAAxwI4AAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAHcAAAAAAAAAAAAqwJAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-12T21:41:30.256Z"
+              "WhenOpened": "2025-08-12T21:41:30.256Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -40,7 +41,7 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\Builder.cs",
               "ToolTip": "D:\\git\\Urbanistics\\Assets\\Scripts\\Builder.cs",
               "RelativeToolTip": "Assets\\Scripts\\Builder.cs",
-              "ViewState": "AgIAAOcAAAAAAAAAAAAAAAEBAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAIEBAAAAAAAAAAAcwJcBAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-11T17:02:01.397Z",
               "EditorCaption": ""
