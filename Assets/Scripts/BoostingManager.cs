@@ -46,6 +46,7 @@ public class BoostingManager : MonoBehaviour
 
         if (RoadPainter.Instance.isPainting) RoadPainter.Instance.DisableRoadMode();
         if (Builder.Instance.bulldozerMode) Builder.Instance.DisableBulldozerMode();
+        if (CursorMode.Instance.CursorModeRun) CursorMode.Instance.DisableCursorMode();
     }
 
     //обновления цвета кнопки BoostingButton

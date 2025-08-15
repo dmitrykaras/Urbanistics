@@ -7,5 +7,6 @@ public class UIManager : MonoBehaviour
         Builder.Instance?.DisableBulldozerMode();
         RoadPainter.Instance?.DisableRoadMode();
         BoostingManager.Instance?.DisableBoostingMode();
+        CursorMode.Instance?.DisableCursorMode();
     }
 }

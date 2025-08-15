@@ -39,7 +39,7 @@ public class RoadManager : MonoBehaviour
             Vector3Int cellPos = Builder.Instance.buildTilemap.WorldToCell(building.transform.position);
             if (!House.HasAdjacentRoad(cellPos))
             {
-                Debug.Log("ƒом потер€л доступ к дороге и будет разрушен.");
+                Debug.Log("ƒом потер€л доступ к дороге и будет разрушен");
                 Builder.Instance.DestroySpecificBuilding(building.gameObject);
             }
         }

@@ -23,7 +23,7 @@ public class Builder : MonoBehaviour
     public AudioClip destroySound;
     private AudioSource audioSource; //источник звука
 
-    private GameObject ghostInstance; //текущий призрак здания на сцене
+    public GameObject ghostInstance; //текущий призрак здания на сцене
     public int currentBuildingIndex = 0; //индекс текущего выбранного здания
     private HashSet<Vector3Int> occupiedCells = new HashSet<Vector3Int>(); //клетки, на которых уже есть здания
     
@@ -41,6 +41,7 @@ public class Builder : MonoBehaviour
     [Header("Строительство дорог")]
     public TileBase roadTile; 
 
+
     void Awake()
     {
         Instance = this;
@@ -52,7 +53,6 @@ public class Builder : MonoBehaviour
             mainCamera = Camera.main;
 
         audioSource = gameObject.AddComponent<AudioSource>();
-        UpdateBulldozerButtonColor();
 
         SpawnGhost(buildingDatas[currentBuildingIndex].prefab); //показывают призрачную модель выбранного здания
     }
@@ -67,10 +67,13 @@ public class Builder : MonoBehaviour
         //получаем центр клетки в мировых координатах
         Vector3 placePosition = buildTilemap.GetCellCenterWorld(cellPosition);
 
-        if (bulldozerMode)
-            HandleBulldozerMode(cellPosition, placePosition);
-        else
-            HandleBuildMode(cellPosition, placePosition);
+        if (!CursorMode.Instance.CursorModeRun)
+        {
+            if (bulldozerMode)
+                HandleBulldozerMode(cellPosition, placePosition);
+            else
+                HandleBuildMode(cellPosition, placePosition);
+        }
     }
 
     //управление режимом строительства
@@ -248,35 +251,53 @@ public class Builder : MonoBehaviour
         }
     }
 
-    //удаление по GameObject
+    //тоже самое что DestroyHouse, но по объекту
     public void DestroySpecificBuilding(GameObject buildingGO)
     {
         if (buildingGO == null) return;
 
-        //определяем cell по позиции самого здания
         Vector3Int buildingCell = buildTilemap.WorldToCell(buildingGO.transform.position);
+        bool needsProducerDeactivation = false;
 
-        //вернуть ресурсы
-        BuildingInstance bi = buildingGO.GetComponent<BuildingInstance>();
-        if (bi != null && bi.cost != null)
+        //базовые ресурсы
+        if (buildingGO.TryGetComponent(out BuildingInstance bi) && bi.cost != null)
         {
             ResourceStorage.Instance.AddResources(bi.cost);
             Debug.Log("Ресурсы возвращены");
         }
 
-        //отключаем коллайдер, удаляем из occupiedCells и уничтожаем объект
+        //бонусы за класс дома
+        if (buildingGO.TryGetComponent(out House house))
+        {
+            ResourceCost[] extraRefund = GetRefundForHouseClass(house.houseClass);
+            if (extraRefund.Length > 0)
+            {
+                ResourceStorage.Instance.AddResources(extraRefund);
+                Debug.Log($"Дополнительно возвращено: {string.Join(", ", extraRefund.Select(r => $"{r.amount} {r.resourceType}"))}");
+            }
+
+            PopulationManager.Instance.UnregisterHouse(house);
+            house.RemoveAllCitizens();
+            needsProducerDeactivation = true;
+        }
+
+        //если склад или источник комфорта
+        if (buildingGO.GetComponent<Storage>() || buildingGO.GetComponent<ComfortSource>())
+            needsProducerDeactivation = true;
+
+        //удаление
         Collider2D col = buildingGO.GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
-        if (occupiedCells.Remove(buildingCell))
-            Debug.Log($"Клетка {buildingCell} освобождена из occupiedCells");
-        else
-            Debug.LogWarning($"Попытка удалить клетку {buildingCell} из occupiedCells — её там не было");
-
+        occupiedCells.Remove(buildingCell);
         Destroy(buildingGO);
         PlaySound(destroySound);
         Debug.Log("Здание удалено (DestroySpecificBuilding)");
+
+        if (needsProducerDeactivation)
+            PopulationManager.Instance.DeactivateAllResourceProducers();
     }
+
 
     //перевод позиции мыши с экрана в мировые координаты Unity
     private Vector3Int GetMouseCellPosition()
@@ -320,6 +341,23 @@ public class Builder : MonoBehaviour
 
         if (RoadPainter.Instance.isPainting) RoadPainter.Instance.DisableRoadMode();
         if (BoostingManager.Instance.isBoostingMode) BoostingManager.Instance.DisableBoostingMode();
+        if (CursorMode.Instance.CursorModeRun) CursorMode.Instance.DisableCursorMode();
+
+        if (bulldozerMode)
+        {
+            // Если призрака ещё нет — создаём
+            if (bulldozerGhostInstance == null && bulldozerGhostPrefab != null)
+            {
+                bulldozerGhostInstance = Instantiate(bulldozerGhostPrefab);
+                SetGhostTransparency(bulldozerGhostInstance); // чтобы он был полупрозрачным
+                bulldozerGhostInstance.SetActive(false);
+            }
+        }
+        else
+        {
+            HideBulldozerGhost();
+        }
+
     }
 
     //обновляет цвет кнопки "бульдозера"

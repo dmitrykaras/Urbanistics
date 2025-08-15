@@ -53,6 +53,11 @@ public class RoadPainter : MonoBehaviour
         //если мышка наведена на UI, то игнорировать ввод
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ToggleRoadPainter();
+        }
+
         RoadGhostRunning(); //обновляем каждый кадр призрак RoadGhost
 
         if (!isPainting) return;
@@ -98,6 +103,7 @@ public class RoadPainter : MonoBehaviour
         Debug.Log("RoadBuilderMode: " + (isPainting ? "ON" : "OFF"));
         if (Builder.Instance.bulldozerMode) Builder.Instance.DisableBulldozerMode();
         if (BoostingManager.Instance.isBoostingMode) BoostingManager.Instance.DisableBoostingMode();
+        if (CursorMode.Instance.CursorModeRun) CursorMode.Instance.DisableCursorMode();
     }
 
     //ставим дорогу
