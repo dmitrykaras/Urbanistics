@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.U2D;
 
-public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов на игровом объекте 
+public class ResourceProducer : MonoBehaviour
 {
     public ResourceType resourceType; //тип ресурса
     public int amountPerCycle = 1; //сколько едениц ресурса производится за один цикл
@@ -17,12 +16,12 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
     public int requiredPeople = 3; //кол-во нужное для работы здания
     public bool isActive = false; //флаг, работает ли здание сейчас
 
-    private Tilemap tilemap;
-
     private float conditionCheckTimer = 0f;
     public float conditionCheckInterval = 3.0f; //как часто проверяем наличие склада/дороги
 
     private bool flagMassage = false;
+
+    public string buildingName;
 
     void Start()
     {
@@ -30,6 +29,8 @@ public class ResourceProducer : MonoBehaviour //автоматическая добыча ресурсов н
         isActive = false;
         timer = 0f;
         conditionCheckTimer = 0f;
+
+        buildingName = gameObject.name.Replace("(Clone)", "");
     }
 
     void Update()

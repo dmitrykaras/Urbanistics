@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class Builder : MonoBehaviour
 {
-    public static Builder Instance { get; private set; } //для ResourceProducer 
+    public static Builder Instance { get; private set; }
 
     [Header("Основные ссылки")]
     public Camera mainCamera; //камера
@@ -300,7 +300,7 @@ public class Builder : MonoBehaviour
 
 
     //перевод позиции мыши с экрана в мировые координаты Unity
-    private Vector3Int GetMouseCellPosition()
+    public Vector3Int GetMouseCellPosition()
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         return buildTilemap.WorldToCell(mouseWorldPos);
@@ -345,11 +345,11 @@ public class Builder : MonoBehaviour
 
         if (bulldozerMode)
         {
-            // Если призрака ещё нет — создаём
+            //если призрака ещё нет — создаём
             if (bulldozerGhostInstance == null && bulldozerGhostPrefab != null)
             {
                 bulldozerGhostInstance = Instantiate(bulldozerGhostPrefab);
-                SetGhostTransparency(bulldozerGhostInstance); // чтобы он был полупрозрачным
+                SetGhostTransparency(bulldozerGhostInstance); //чтобы он был полупрозрачным
                 bulldozerGhostInstance.SetActive(false);
             }
         }

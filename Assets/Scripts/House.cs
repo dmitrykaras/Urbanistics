@@ -24,6 +24,8 @@ public class House : MonoBehaviour
 
     public CitizenClass residentType; //класс жителей, который живёт в этом доме
 
+    public string buildingName;
+
 
     void Update()
     {
@@ -34,6 +36,7 @@ public class House : MonoBehaviour
     private void Start()
     {
         PopulationManager.Instance.RegisterHouse(this); //регестрация дома
+        buildingName = gameObject.name.Replace("(Clone)", "");
     }
 
     //метод вызывается, если объект на сцене
@@ -156,6 +159,7 @@ public class House : MonoBehaviour
 
         //создаём новое здание
         GameObject upgraded = Instantiate(upgradedPrefab, transform.position, Quaternion.identity);
+        buildingName = gameObject.name.Replace("(Clone)", "");
 
         //настройка нового дома
         House upgradedHouse = upgraded.GetComponent<House>();
@@ -164,6 +168,7 @@ public class House : MonoBehaviour
             upgradedHouse.PlaceHouse(); //заселение и комфорт
             upgradedHouse.currentClass = GetNextClass(currentClass); //переход к следующему классу
         }
+
 
         //удаляем старое
         Destroy(gameObject);
