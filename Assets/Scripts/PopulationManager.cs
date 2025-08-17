@@ -103,32 +103,6 @@ public class PopulationManager : MonoBehaviour
         }
     }
 
-    //если здания требуют больше работников, чем есть в городе, то отключать здания, чтобы компенсировать нехватку
-    private void CheckWorkerOverflow(CitizenClass type, ref int working, int total)
-    {
-        if (working > total)
-        {
-            int overflow = working - total;
-            working = total; // оставляем максимум доступных
-            NotifyBuildingsWorkersLost(type, overflow);
-        }
-    }
-
-    //вызывается, если кол-во населения снизилось по какой-то причине
-    private void NotifyBuildingsWorkersLost(CitizenClass type, int lostCount)
-    {
-        foreach (var prod in FindObjectsByType<ResourceProducer>(FindObjectsSortMode.None))
-        {
-            if (prod.requiredType == type && prod.isActive)
-            {
-                prod.ForceDeactivate();
-                lostCount -= prod.requiredPeople;
-                if (lostCount <= 0) break;
-            }
-        }
-    }
-
-
     //обновление UI
     private void UpdateUI()
     {

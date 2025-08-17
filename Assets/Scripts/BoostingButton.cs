@@ -11,7 +11,10 @@ public class BoostingButton : MonoBehaviour
 
     public void SetTarget(House house)
     {
-        selectedHouse = house;
-        Debug.Log("Цель установлена: " + house.name);
+        if (BoostingManager.Instance.isBoostingMode)
+        {
+            selectedHouse = house;
+            Debug.Log("Цель установлена: " + house.name);
+        }
     }
 }

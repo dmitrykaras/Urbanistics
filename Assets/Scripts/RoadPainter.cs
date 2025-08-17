@@ -14,17 +14,9 @@ public class RoadPainter : MonoBehaviour
 
     [Header("Настройки")]
     public KeyCode toggleKey = KeyCode.R;
-    public int brushSize = 1; //1 = одна клетка, 2 = 3x3 и т.д. (несколько реализаций)
-    public float placeInterval = 0.02f; //минимальный интервал между постановками при drag
-    public bool requireHoldMouse = true; //true — рисуем только при зажатой ЛКМ
-
-    [Header("Стоимость")]
-    //ресурсы на тайл
-    public ResourceCost[] costPerTile; // если у тебя есть ResourceCost struct
 
     [Header("Остальные настройки")]
     public bool isPainting = false; //включение и выключение режима строительства дорог
-    private float lastPlaceTime = 0f;
 
     public GameObject RoadGhostInstance;
 
@@ -50,6 +42,10 @@ public class RoadPainter : MonoBehaviour
 
     void Update()
     {
+        Vector3 mouseWorldPos = Builder.Instance.GetMouseCellPosition();
+        Vector3Int cellPosition = Builder.Instance.buildTilemap.WorldToCell(mouseWorldPos);
+        Vector3 placePosition = Builder.Instance.buildTilemap.GetCellCenterWorld(cellPosition);
+
         //если мышка наведена на UI, то игнорировать ввод
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
@@ -58,13 +54,9 @@ public class RoadPainter : MonoBehaviour
             ToggleRoadPainter();
         }
 
-        RoadGhostRunning(); //обновляем каждый кадр призрак RoadGhost
+        RoadGhostRunning(cellPosition, placePosition); //обновляем каждый кадр призрак RoadGhost
 
         if (!isPainting) return;
-
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int cellPosition = Builder.Instance.buildTilemap.WorldToCell(mouseWorldPos);
-        Vector3 placePosition = Builder.Instance.buildTilemap.GetCellCenterWorld(cellPosition);
 
         //показываем RoadGhost под мышью
         if (RoadGhost != null)
@@ -73,26 +65,9 @@ public class RoadPainter : MonoBehaviour
             RoadGhost.gameObject.SetActive(true);
         }
 
-        bool shouldPaint = !requireHoldMouse || Input.GetMouseButton(0);
-
-        if (shouldPaint)
+        if (Input.GetMouseButtonDown(0) && (!RoadManager.Instance.IsRoadAt(cellPosition)))
         {
-            if (Time.time - lastPlaceTime < placeInterval) return;
-
-            if (!RoadManager.Instance.IsRoadAt(cellPosition))
-            {
-                if (ResourceStorage.Instance.CanAfford(costPerTile))
-                {
-                    ResourceStorage.Instance.DeductResources(costPerTile);
-                    PlaceRoadAt(cellPosition);
-                    Builder.Instance.PlaySound(sand);
-                    lastPlaceTime = Time.time;
-                }
-                else
-                {
-                    Debug.Log("Не хватает ресурсов на постройку дороги");
-                }
-            }
+            PlaceRoadAt(cellPosition);
         }
 
     }
@@ -107,39 +82,29 @@ public class RoadPainter : MonoBehaviour
     }
 
     //ставим дорогу
-    private void PlaceRoadAt(Vector3Int cell)
+    private void PlaceRoadAt(Vector3Int cellPosition)
     {
-        if (RoadManager.Instance.IsRoadAt(cell)) return; //уже дорога
-
-        //списываем ресурсы за одну клетку
-        if (costPerTile != null && costPerTile.Length > 0)
+        if (!Builder.Instance.occupiedCells.Add(cellPosition))
         {
-            if (!ResourceStorage.Instance.CanAfford(costPerTile))
-            {
-                return;
-            }
-            ResourceStorage.Instance.DeductResources(costPerTile);
+            Debug.Log("Невозможно поставить дорогу: клетка уже занята!");
+            return;
         }
 
-        //ставим тайл
-        buildTilemap.SetTile(cell, RoadTile);
+        buildTilemap.SetTile(cellPosition, RoadTile); //ставим тайл
 
-        //добавляем в логическую структуру
-        RoadManager.Instance.AddRoad(cell);
+        RoadManager.Instance.AddRoad(cellPosition); //добавляем в логическую структуру
 
-        Builder.Instance.PlaySound(sand);
+        Builder.Instance.occupiedCells.Add(cellPosition); //занимаем клетку дорогой
+
+        Builder.Instance.PlaySound(sand); 
     }
 
     //настройка призрак RoadGhost 
-    private void RoadGhostRunning()
+    private void RoadGhostRunning(Vector3Int cellPosition, Vector3 placePosition)
     {
         if (isPainting)
         {
-            Builder.Instance.DestroyGhost();
-
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int cellPosition = Builder.Instance.buildTilemap.WorldToCell(mouseWorldPos);
-            Vector3 placePosition = Builder.Instance.buildTilemap.GetCellCenterWorld(cellPosition);
+            Builder.Instance.DisablingGhost();
 
             if (RoadGhostInstance != null)
             {

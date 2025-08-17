@@ -2643,10 +2643,6 @@ MonoBehaviour:
   RoadGhost: {fileID: 3588717631637192380, guid: 48849ec242abcdb48b473ae069ef2c0f, type: 3}
   mainCamera: {fileID: 519420031}
   toggleKey: 114
-  brushSize: 1
-  placeInterval: 0.02
-  requireHoldMouse: 1
-  costPerTile: []
   isPainting: 0
   RoadGhostInstance: {fileID: 0}
   sand: {fileID: 8300000, guid: 3c23d34d20b23c141ad297e1ebe83d16, type: 3}
@@ -5274,7 +5270,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1357220812
 RectTransform:
   m_ObjectHideFlags: 0

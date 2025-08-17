@@ -25,7 +25,7 @@ public class Builder : MonoBehaviour
 
     public GameObject ghostInstance; //текущий призрак здания на сцене
     public int currentBuildingIndex = 0; //индекс текущего выбранного здания
-    private HashSet<Vector3Int> occupiedCells = new HashSet<Vector3Int>(); //клетки, на которых уже есть здания
+    public HashSet<Vector3Int> occupiedCells = new HashSet<Vector3Int>(); //клетки, на которых уже есть здания
     
 
     [Header("Данные Bulldozer Mode")]
@@ -107,14 +107,23 @@ public class Builder : MonoBehaviour
     //попытка поставить объект на сцену
     private void TryPlaceBuilding(Vector3Int cellPosition, Vector3 placePosition)
     {
-        if (BoostingManager.Instance.isBoostingMode && RoadPainter.Instance.isPainting) return;
-        if (occupiedCells.Contains(cellPosition)) Debug.Log("Эта клетка уже занята!");
+        if (BoostingManager.Instance.isBoostingMode) return;
+        if (RoadPainter.Instance.isPainting) return;
+        if (occupiedCells.Contains(cellPosition))
+        {
+            Debug.Log("Эта клетка уже занята!");
+            return;
+        }
         if (RoadPainter.Instance.buildTilemap.GetTile(cellPosition) != null)
             RoadPainter.Instance.buildTilemap.SetTile(cellPosition, null);
-        if (!House.HasAdjacentRoad(cellPosition))
+
+        if (!RoadPainter.Instance.isPainting)
         {
-            Debug.Log("Невозможно построить: нет дороги рядом");
-            return;
+            if (!House.HasAdjacentRoad(cellPosition))
+            {
+                Debug.Log("Невозможно построить: нет дороги рядом");
+                return;
+            }
         }
 
         BuildingData data = buildingDatas[currentBuildingIndex];
@@ -159,7 +168,7 @@ public class Builder : MonoBehaviour
         Debug.Log($"Найдена дорога на {cellPosition} — удаляем тайл дороги.");
 
         PopulationManager.Instance.DeactivateAllResourceProducers(); //приостанавливает все добывающее здания
-        buildTilemap.SetTile(cellPosition, null);  //удаляем тайл с tilemap
+        buildTilemap.SetTile(cellPosition, null); //удаляем тайл с tilemap
 
         if (RoadManager.Instance != null) RoadManager.Instance.RemoveRoad(cellPosition); //уведомляем менеджер дорог
         PlaySound(destroySound);
@@ -297,7 +306,6 @@ public class Builder : MonoBehaviour
         if (needsProducerDeactivation)
             PopulationManager.Instance.DeactivateAllResourceProducers();
     }
-
 
     //перевод позиции мыши с экрана в мировые координаты Unity
     public Vector3Int GetMouseCellPosition()
@@ -443,7 +451,7 @@ public class Builder : MonoBehaviour
     }
 
     //убирает все остальны призраки кроме одного
-    public void DestroyGhost()
+    public void DisablingGhost()
     {
         if (ghostInstance != null)
             ghostInstance.SetActive(false);

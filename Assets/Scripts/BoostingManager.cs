@@ -70,7 +70,7 @@ public class BoostingManager : MonoBehaviour
     {
         if (isBoostingMode)
         {
-            Builder.Instance.DestroyGhost();
+            Builder.Instance.DisablingGhost();
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             //преобразуем в координаты клетки тайлмапа

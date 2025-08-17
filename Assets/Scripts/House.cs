@@ -20,18 +20,10 @@ public class House : MonoBehaviour
 
     public GameObject upgradedPrefab; //улучшенная версия дома
 
-    private bool isPlaced = false; //флаг, чтобы не заселять дом дважды
-
     public CitizenClass residentType; //класс жителей, который живёт в этом доме
 
     public string buildingName;
 
-
-    void Update()
-    {
-        if (isPlaced)
-        CalculateComfortAndPopulate();
-    }
     //регестрируем дом при его создании
     private void Start()
     {
@@ -42,9 +34,6 @@ public class House : MonoBehaviour
     //метод вызывается, если объект на сцене
     public bool PlaceHouse()
     {
-        if (isPlaced) return true;
-        isPlaced = true;
-
         Vector3Int cellPos = Builder.Instance.buildTilemap.WorldToCell(transform.position);
 
         if (!HasAdjacentRoad(cellPos))
@@ -55,14 +44,6 @@ public class House : MonoBehaviour
 
         CalculateComfortAndPopulate();
         return true;
-    }
-
-    //метод для добавления жителей в дом
-    public void AddCitizens(int amount)
-    {
-        //заселяем, но не привышаем лимит дома
-        currentCitizens  = Mathf.Min(currentCitizens  + amount, capacity);
-        PopulationManager.Instance.RecalculatePopulation(); //обновляем общее состояние населения в игре
     }
 
     //метод для удаления жителей при сносе
@@ -112,7 +93,7 @@ public class House : MonoBehaviour
         if (hasMarket) maxResidents += 3; //+3 за рынок
 
         //заселяем дом максимально возможным количеством жителей с учётом комфорта
-        AddCitizens(maxResidents);
+        currentCitizens = Mathf.Min(maxResidents, capacity);
 
         PopulationManager.Instance.RecalculatePopulation();
     }

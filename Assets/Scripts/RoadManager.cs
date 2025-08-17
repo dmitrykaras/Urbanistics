@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoadManager : MonoBehaviour
@@ -15,19 +14,20 @@ public class RoadManager : MonoBehaviour
         Instance = this;
     }
 
-    public void AddRoad(Vector3Int position)
+    public void AddRoad(Vector3Int cellPosition)
     {
-        roadPositions.Add(position);
+        roadPositions.Add(cellPosition);
     }
 
-    public void RemoveRoad(Vector3Int position)
+    public void RemoveRoad(Vector3Int cellPosition)
     {
-        roadPositions.Remove(position);
+        roadPositions.Remove(cellPosition);
+        Builder.Instance.occupiedCells.Remove(cellPosition);
     }
 
-    public bool IsRoadAt(Vector3Int position)
+    public bool IsRoadAt(Vector3Int cellPosition)
     {
-        return roadPositions.Contains(position);
+        return roadPositions.Contains(cellPosition);
     }
 
     //проверка отрезанных зданий после удаления дороги
