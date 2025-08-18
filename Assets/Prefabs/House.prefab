@@ -148,11 +148,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   houseClass: 0
-  currentPopulation: 0
   currentClass: 0
   capacity: 10
   currentCitizens: 0
   upgradedPrefab: {fileID: 2830131232320713556, guid: 8cb985e2601d689489c82f9dc2306ec9, type: 3}
-  upgradedToWorkerPrefab: {fileID: 0}
-  upgradedToEngineerPrefab: {fileID: 0}
-  citizensCount: 0
+  residentType: 0
+  buildingName: 
+  BoostingSound: {fileID: 8300000, guid: 044378b5c26a84141ad9a815d34e8891, type: 3}

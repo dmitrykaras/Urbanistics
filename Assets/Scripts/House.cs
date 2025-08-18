@@ -27,6 +27,8 @@ public class House : MonoBehaviour
     private bool hasBar = false;
     private bool hasMarket = false;
 
+    public AudioClip BoostingSound;
+
     //регестрируем дом при его создании
     private void Start()
     {
@@ -159,12 +161,13 @@ public class House : MonoBehaviour
             upgradedHouse.currentClass = GetNextClass(currentClass); //переход к следующему классу
         }
 
+        //воспроизводим звук
+        Builder.Instance.PlaySound(BoostingSound);
 
         //удаляем старое
         Destroy(gameObject);
         RemoveAllCitizens();
         PopulationManager.Instance.RecalculatePopulation();
-        Debug.Log("Дом улучшен!");
         PopulationManager.Instance.DeactivateAllResourceProducers();
     }
 

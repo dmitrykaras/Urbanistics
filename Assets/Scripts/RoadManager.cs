@@ -34,8 +34,12 @@ public class RoadManager : MonoBehaviour
     public void CheckBuildingsRoadAccess()
     {
         GameObject[] buildings = GameObject.FindGameObjectsWithTag("Building");
+
         foreach (GameObject building in buildings)
         {
+            if (building.layer == LayerMask.NameToLayer("RoadLayer"))
+                continue;
+
             Vector3Int cellPos = Builder.Instance.buildTilemap.WorldToCell(building.transform.position);
             if (!House.HasAdjacentRoad(cellPos))
             {
@@ -43,5 +47,6 @@ public class RoadManager : MonoBehaviour
                 Builder.Instance.DestroySpecificBuilding(building.gameObject);
             }
         }
+
     }
 }

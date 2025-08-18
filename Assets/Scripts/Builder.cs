@@ -162,11 +162,9 @@ public class Builder : MonoBehaviour
         DestroyHouse(cellPosition, placePosition);
     }
 
-    //удаление дорог (contains bugs)
+    //удаление дорог
     private void RemoveRoad(Vector3Int cellPosition)
     {
-        Debug.Log($"Найдена дорога на {cellPosition} — удаляем тайл дороги.");
-
         PopulationManager.Instance.DeactivateAllResourceProducers(); //приостанавливает все добывающее здания
         buildTilemap.SetTile(cellPosition, null); //удаляем тайл с tilemap
 
