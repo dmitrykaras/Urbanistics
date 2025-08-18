@@ -56,11 +56,12 @@ public class PopulationManager : MonoBehaviour
             }
         }
 
-        if (freePeasants > totalPeasants || freePeasants == 0)
+        //либо вообще убрать следующие 3 проверки тк они расчитаны на баги
+        if (freePeasants > totalPeasants)
             freePeasants = totalPeasants;
-        if (freeWorkers > totalWorkers || freeWorkers == 0)
+        if (freeWorkers > totalWorkers)
             freeWorkers = totalWorkers;
-        if (freeEngineers > totalEngineers || freeEngineers == 0)
+        if (freeEngineers > totalEngineers)
             freeEngineers = totalEngineers;
 
         UpdateUI();
@@ -71,8 +72,9 @@ public class PopulationManager : MonoBehaviour
     {
         if (!allHouses.Contains(house))
         {
+            DeactivateAllResourceProducers();
             allHouses.Add(house);
-            freePeasants += house.currentCitizens;
+            AddAndAssignFreeAndCurrent(house);
             RecalculatePopulation();
         }
     }
@@ -87,6 +89,12 @@ public class PopulationManager : MonoBehaviour
             if (freePeasants < 0) freePeasants = 0;
             RecalculatePopulation();
         }
+    }
+
+    //добавление жителей 
+    public void AddAndAssignFreeAndCurrent(House house)
+    {
+        freePeasants += house.currentCitizens;
     }
 
     //для всех добывающих зданий isActive = false (GENIUS SOLUTION)

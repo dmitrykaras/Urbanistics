@@ -219,6 +219,7 @@ public class Builder : MonoBehaviour
 
             PopulationManager.Instance.UnregisterHouse(house);
             house.RemoveAllCitizens();
+            PopulationManager.Instance.RecalculatePopulation();
             needsProducerDeactivation = true;
         }
 
@@ -287,6 +288,7 @@ public class Builder : MonoBehaviour
 
             PopulationManager.Instance.UnregisterHouse(house);
             house.RemoveAllCitizens();
+            PopulationManager.Instance.RecalculatePopulation();
             needsProducerDeactivation = true;
         }
 

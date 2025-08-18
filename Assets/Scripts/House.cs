@@ -24,6 +24,9 @@ public class House : MonoBehaviour
 
     public string buildingName;
 
+    private bool hasBar = false;
+    private bool hasMarket = false;
+
     //регестрируем дом при его создании
     private void Start()
     {
@@ -50,7 +53,6 @@ public class House : MonoBehaviour
     public void RemoveAllCitizens()
     {
         currentCitizens  = 0; //становится 0
-        PopulationManager.Instance.RecalculatePopulation(); //обновляем
     }
 
     //метод для вычисления комфорта
@@ -60,13 +62,30 @@ public class House : MonoBehaviour
 
         RemoveAllCitizens(); //очищаем дом от предыдущих жителей перед перерасчётом
 
-        bool hasBar = false;
-        bool hasMarket = false;
+        hasBar = false;
+        hasMarket = false;
 
+        BypassingRadiusOfFiveCells();
+
+        //рассчитываем население
+        int maxResidents = 5; //начинаем с 5
+        if (hasBar) maxResidents += 2; //+2 за бар
+        if (hasMarket) maxResidents += 3; //+3 за рынок
+
+        //заселяем дом максимально возможным количеством жителей с учётом комфорта
+        currentCitizens = Mathf.Min(maxResidents, capacity);
+
+        //где-то здесь добавить фришных 
+        PopulationManager.Instance.AddAndAssignFreeAndCurrent(this);
+
+        PopulationManager.Instance.RecalculatePopulation();
+    }
+
+    //обходим радиус 5 клеток
+    private void BypassingRadiusOfFiveCells()
+    {
         //получаем центральную клетку, где стоит дом
         Vector3Int centerCell = Builder.Instance.buildTilemap.WorldToCell(transform.position);
-
-        //обходим радиус 5 клеток
         for (int x = -5; x <= 5; x++)
         {
             for (int y = -5; y <= 5; y++)
@@ -86,16 +105,6 @@ public class House : MonoBehaviour
                 }
             }
         }
-
-        //рассчитываем население
-        int maxResidents = 5; //начинаем с 5
-        if (hasBar) maxResidents += 2; //+2 за бар
-        if (hasMarket) maxResidents += 3; //+3 за рынок
-
-        //заселяем дом максимально возможным количеством жителей с учётом комфорта
-        currentCitizens = Mathf.Min(maxResidents, capacity);
-
-        PopulationManager.Instance.RecalculatePopulation();
     }
 
     //улучшение здания
@@ -154,6 +163,7 @@ public class House : MonoBehaviour
         //удаляем старое
         Destroy(gameObject);
         RemoveAllCitizens();
+        PopulationManager.Instance.RecalculatePopulation();
         Debug.Log("Дом улучшен!");
         PopulationManager.Instance.DeactivateAllResourceProducers();
     }

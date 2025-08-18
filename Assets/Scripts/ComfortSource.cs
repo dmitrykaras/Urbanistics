@@ -18,6 +18,7 @@ public class ComfortSource : MonoBehaviour
             var house = col.GetComponent<House>();
             if (house != null)
             {
+                PopulationManager.Instance.DeactivateAllResourceProducers();
                 house.CalculateComfortAndPopulate();
             }
         }
@@ -31,8 +32,8 @@ public class ComfortSource : MonoBehaviour
             var house = col.GetComponent<House>();
             if (house != null)
             {
+                PopulationManager.Instance.DeactivateAllResourceProducers();
                 house.CalculateComfortAndPopulate();
-                PopulationManager.Instance.RecalculatePopulation();
             }
         }
     }
