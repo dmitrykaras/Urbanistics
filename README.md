@@ -21,11 +21,16 @@ The player builds buildings, extracts resources, manages the inhabitants (peasan
 
 -	Trade: exchange of resources on the market
 
-**Gameplay demo**
+## **Gameplay demo:**
+
 ![Gameplay demo](screenshots/gameplay.gif)
-**Trading system**
+
+## **Trading system:**
+
 ![Trading system](screenshots/tradingsystem.gif)
-**Modes**
+
+## **Modes:**
+
 ![Modes](screenshots/modes.gif)
 
 ## ⚙️ Controls
@@ -38,7 +43,7 @@ The player builds buildings, extracts resources, manages the inhabitants (peasan
 
 - Mouse wheel — zoom
 
-## 🚀 Запуск проекта
+## 🚀 Project launch
 
 1. Install Unity 6000.1.6
 2. Clone the repository: git clone https://github.com/dmitrykaras/Urbanistics
