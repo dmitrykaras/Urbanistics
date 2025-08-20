@@ -21,8 +21,11 @@ The player builds buildings, extracts resources, manages the inhabitants (peasan
 
 -	Trade: exchange of resources on the market
 
+**Gameplay demo**
 ![Gameplay demo](screenshots/gameplay.gif)
+**Trading system**
 ![Trading system](screenshots/tradingsystem.gif)
+**Modes**
 ![Modes](screenshots/modes.gif)
 
 ## ⚙️ Controls
