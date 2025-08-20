@@ -77,10 +77,14 @@ public class CursorMode : MonoBehaviour
             //ищем здание
             Collider2D hitCollider = Physics2D.OverlapPoint(placePosition);
 
+            if (hitCollider.GetComponent<Market>())
+            {
+                return;
+            }
+
             if (hitCollider != null)
             {
                 GameObject building = hitCollider.gameObject;
-                Debug.Log("Нашли здание: " + building.name);
                 BuildingInfo.Instance.ShowUIBuilding(building); 
             }
         }
@@ -99,6 +103,6 @@ public class CursorMode : MonoBehaviour
     public void DisableCursorMode()
     {
         CursorModeRun = false;
-
+        UpdateButtonImage();
     }
 }

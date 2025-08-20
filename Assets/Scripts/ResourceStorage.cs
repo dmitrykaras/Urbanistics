@@ -36,6 +36,11 @@ public class ResourceStorage : MonoBehaviour
         UpdateResourceUI(); //обновляют интерфейс с ресурсами
     }
 
+    void Update()
+    {
+        UpdateResourceUI();
+    }
+
     //проверяет достаточно ли ресурсов заданного типа у игрока 
     public bool HasEnough(ResourceType type, int amount)
     {
